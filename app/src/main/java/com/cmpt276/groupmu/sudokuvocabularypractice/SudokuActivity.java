@@ -17,18 +17,29 @@ import android.widget.Toast;
 
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView gridtext;
+//    private final String[] puzzle = {
+//            "five", "three", "", "", "seven", "", "", "", "",
+//            "six", "", "", "one", "nine", "five", "", "", "",
+//            "", "nine", "eight", "", "", "", "", "six", "",
+//
+//            "eight", "", "", "", "six", "", "", "", "three",
+//            "four", "", "", "eight", "", "three", "", "", "one",
+//            "seven", "", "three", "", "two", "", "", "", "six",
+//
+//            "", "six", "", "", "", "", "", "eight", "",
+//            "two", "", "", "four", "one", "nine", "", "", "five",
+//            "", "four", "five", "", "eight", "", "", "seven", "nine"
+//    };
     private final String[] puzzle = {
-            "five", "three", "", "", "seven", "", "", "", "",
-            "six", "", "", "one", "nine", "five", "", "", "",
-            "", "nine", "eight", "", "", "", "", "six", "",
-
-            "eight", "", "", "", "six", "", "", "", "three",
-            "four", "", "", "eight", "", "three", "", "", "one",
-            "seven", "", "three", "", "two", "", "", "", "six",
-
-            "", "six", "", "", "", "", "", "eight", "",
-            "two", "", "", "four", "one", "nine", "", "", "five",
-            "", "four", "five", "", "eight", "", "", "seven", "nine"
+            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
+           "four", "five",  "six","seven","eight", "nine",  "one",  "two","three",
+          "seven","eight", "nine",  "one",  "two","three", "four", "five",  "six",
+            "two","three", "four", "five",  "six","seven","eight", "nine",  "one",
+           "five",  "six","seven","eight", "nine",  "one",  "two",     "",     "",
+          "eight", "nine",  "one",  "two","three", "four", "five",  "six","seven",
+          "three", "four", "five",  "six","seven","eight", "nine",  "one",  "two",
+            "six","seven","eight", "nine",  "one",  "two","three", "four", "five",
+           "nine",  "one",  "two","three", "four", "five",  "six","seven","eight",
     };
     private GridView grid;
     Button resetButton;
