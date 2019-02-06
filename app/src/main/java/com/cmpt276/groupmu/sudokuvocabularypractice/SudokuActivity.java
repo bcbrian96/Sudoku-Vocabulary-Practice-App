@@ -144,6 +144,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
             //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
+
     public String[] getRow(int rowNum) {
         String[] row = new String[9];
         for (int i = 0; i < 9; i++) {
@@ -158,6 +159,20 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             column[i] = grid.getItemAtPosition(columnNum + i * 9).toString();
         }
         return column;
+    }
+
+    public String[] getBox(int boxNum) {
+        String[] box = new String[9];
+        int firstRow = (boxNum - (boxNum % 3));
+        int firstCol = 3 * (boxNum % 3);
+        // Go through the box, left-to-right top-to-bottom.
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                int position = (firstCol + col) + (firstRow + row) * 9;
+                box[col + 3*row] = grid.getItemAtPosition(position).toString();
+            }
+        }
+        return box;
     }
 
     public boolean realCheckSudoku(String[] rowArray, String[] columnArray) {
