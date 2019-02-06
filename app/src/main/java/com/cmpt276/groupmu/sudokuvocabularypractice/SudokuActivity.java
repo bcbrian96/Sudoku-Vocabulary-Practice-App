@@ -134,11 +134,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 return;
             }
         }
-            for (int j = 0; j < grid.getCount(); j++) {
-                int rowNumber = j / 9;
-                int columnNumber = j % 9;
-                result = realCheckSudoku(getRow(rowNumber), getColumn(columnNumber));
-                }
+        result = true;
+        for (int regionNum = 0; regionNum < 9; regionNum++) {
+            result = result && !containsDuplicates(getRow(regionNum));
+            result = result && !containsDuplicates(getColumn(regionNum));
+            result = result && !containsDuplicates(getBox(regionNum));
+        }
         if (result == true) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
             //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
@@ -175,49 +176,19 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         return box;
     }
 
-    public boolean realCheckSudoku(String[] rowArray, String[] columnArray) {
-        int repeatedCount = 0;
-        for (int curIndex = 0; curIndex < rowArray.length; curIndex++) {
-            if (rowArray[curIndex].equals(frenchWords[0]) || rowArray[curIndex].equals(englishWords[0]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[1]) || rowArray[curIndex].equals(englishWords[1]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[2]) || rowArray[curIndex].equals(englishWords[2]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[3]) || rowArray[curIndex].equals(englishWords[3]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[4]) || rowArray[curIndex].equals(englishWords[4]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[5]) || rowArray[curIndex].equals(englishWords[5]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[6]) || rowArray[curIndex].equals(englishWords[6]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[7]) || rowArray[curIndex].equals(englishWords[7]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[8]) || rowArray[curIndex].equals(englishWords[8]))
-                repeatedCount += 1;
+    public boolean containsDuplicates(String[] region) {
+        boolean[] seen_yet = new boolean[9];
+        for(String word : region){
+            for(int i = 0; i < 9; i++){
+                if (word.equals(frenchWords[i]) || word.equals(englishWords[i])) {
+                    if (seen_yet[i]) {
+                        return true; // we already saw this word
+                    }
+                    seen_yet[i] = true;
+//                    break;
+                }
+            }
         }
-        for (int curIndex = 0; curIndex < columnArray.length; curIndex++) {
-            if (columnArray[curIndex].equals(frenchWords[0]) || columnArray[curIndex].equals(englishWords[0]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[1]) || columnArray[curIndex].equals(englishWords[1]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[2]) || columnArray[curIndex].equals(englishWords[2]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[3]) || columnArray[curIndex].equals(englishWords[3]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[4]) || columnArray[curIndex].equals(englishWords[4]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[5]) || columnArray[curIndex].equals(englishWords[5]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[6]) || columnArray[curIndex].equals(englishWords[6]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[7]) || columnArray[curIndex].equals(englishWords[7]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[8]) || columnArray[curIndex].equals(englishWords[8]))
-                repeatedCount += 1;
-        }
-        if (repeatedCount > 1) return false;
-        else return true;
+        return false;
     }
 }
