@@ -155,7 +155,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public String[] getColumn(int columnNum) {
         String[] column = new String[9];
         for (int i = 0; i < 9; i++) {
-            column[i] = grid.getItemAtPosition(i + columnNum * 9).toString();
+            column[i] = grid.getItemAtPosition(columnNum + i * 9).toString();
         }
         return column;
     }
