@@ -47,7 +47,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         grid = findViewById(R.id.grid);
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
-        checkSudokuButton = findViewById(R.id.CheckSudoku);
+        checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
         //TextView gridtext = findViewById(R.id.gridText);
         generateGrid();
@@ -104,7 +104,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
                 }
-            case R.id.CheckSudoku:
+                break;
+            case R.id.checkSudoku:
                 try {
                     checkSudoku();
                 } catch (Exception e) {
@@ -114,14 +115,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
     public void checkSudoku() {
         boolean result = false;
-//        for (int i = 0; i < grid.getCount(); i++) {
-//            currentItem = grid.getItemAtPosition(i).toString();
-//            if (currentItem.equals("")) {
-//                Log.d("false triggered", "false");
-//                Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//        }
+        for (int i = 0; i < grid.getCount(); i++) {
+            currentItem = grid.getItemAtPosition(i).toString();
+            if (currentItem.equals("")) {
+                Log.d("false triggered", "false");
+                Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
             for (int j = 0; j < grid.getCount(); j++) {
                 int rowNumber = j / 9;
                 int columnNumber = j % 9;
