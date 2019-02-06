@@ -127,7 +127,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void checkSudoku() {
         boolean result = false;
         for (int i = 0; i < grid.getCount(); i++) {
-            currentItem = grid.getItemAtPosition(i).toString();
+            currentItem = getDisplayedText(i);
             if (currentItem.equals("")) {
                 Log.d("false triggered", "false");
                 Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
@@ -146,10 +146,16 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
 
+    private String getDisplayedText(int position) {
+        // This is needed because only the TextView's content is modified, not
+        // the puzzle array's content, and using getView() would reset those values.
+        return ((TextView) grid.getChildAt(position)).getText().toString();
+    }
+
     public String[] getRow(int rowNum) {
         String[] row = new String[9];
         for (int i = 0; i < 9; i++) {
-            row[i] = grid.getItemAtPosition(i + rowNum * 9).toString();
+            row[i] = getDisplayedText(i + rowNum * 9);
         }
         return row;
     }
@@ -157,7 +163,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public String[] getColumn(int columnNum) {
         String[] column = new String[9];
         for (int i = 0; i < 9; i++) {
-            column[i] = grid.getItemAtPosition(columnNum + i * 9).toString();
+            column[i] = getDisplayedText(columnNum + i * 9);
         }
         return column;
     }
@@ -170,7 +176,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 int position = (firstCol + col) + (firstRow + row) * 9;
-                box[col + 3*row] = grid.getItemAtPosition(position).toString();
+                box[col + 3*row] = getDisplayedText(position);
             }
         }
         return box;
