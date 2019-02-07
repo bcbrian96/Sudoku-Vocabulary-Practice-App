@@ -30,12 +30,25 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             "two", "", "", "four", "one", "nine", "", "", "five",
             "", "four", "five", "", "eight", "", "", "seven", "nine"
     };
+    //    private final String[] puzzle = {
+//            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
+//           "four", "five",  "six","seven","eight", "nine",  "one",  "two","three",
+//          "seven","eight", "nine",  "one",  "two","three", "four", "five",  "six",
+//            "two","three", "four", "five",  "six","seven","eight", "nine",  "one",
+//           "five",  "six","seven","eight", "nine",  "one",  "two",     "",     "",
+//          "eight", "nine",  "one",  "two","three", "four", "five",  "six","seven",
+//          "three", "four", "five",  "six","seven","eight", "nine",  "one",  "two",
+//            "six","seven","eight", "nine",  "one",  "two","three", "four", "five",
+//           "nine",  "one",  "two","three", "four", "five",  "six","seven","eight",
+//    };
     private GridView grid;
     Button resetButton;
     private String mText = "";
     private int dialogChoice;
     private String currentItem = "";
     Button checkSudokuButton;
+    Switch languageSwitch;
+    Boolean switchState;
     private final String[] frenchWords = {"un", "deux", "Trois", "quatre", "cinq", "six", "sept", "huit", "nine"};
     private final String[] englishWords = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
 
@@ -50,6 +63,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
         //TextView gridtext = findViewById(R.id.gridText);
+        languageSwitch = (Switch) findViewById(R.id.language_switch);
+        languageSwitch.setOnClickListener(this);
+        languageSwitch.setChecked(true);
+        switchState = languageSwitch.isChecked();
         generateGrid();
     }
     public void dialogBuilder(final TextView set) {
@@ -111,32 +128,48 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 } catch (Exception e) {
                     Log.d("Check Sudoku error", "" + e);
                 }
+                break;
+            case R.id.language_switch:
+                try {
+                    changeLanguage();
+                } catch (Exception e) {
+                    Log.d("Check switch eror", "" + e);
+                }
+                break;
         }
     }
     public void checkSudoku() {
         boolean result = false;
         for (int i = 0; i < grid.getCount(); i++) {
-            currentItem = grid.getItemAtPosition(i).toString();
+            currentItem = getDisplayedText(i);
             if (currentItem.equals("")) {
                 Log.d("false triggered", "false");
                 Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
-            for (int j = 0; j < grid.getCount(); j++) {
-                int rowNumber = j / 9;
-                int columnNumber = j % 9;
-                result = realCheckSudoku(getRow(rowNumber), getColumn(columnNumber));
-                }
+        result = true;
+        for (int regionNum = 0; regionNum < 9; regionNum++) {
+            result = result && !containsDuplicates(getRow(regionNum));
+            result = result && !containsDuplicates(getColumn(regionNum));
+            result = result && !containsDuplicates(getBox(regionNum));
+        }
         if (result == true) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
+
+    private String getDisplayedText(int position) {
+        // This is needed because only the TextView's content is modified, not
+        // the puzzle array's content, and using getView() would reset those values.
+        return ((TextView) grid.getChildAt(position)).getText().toString();
+    }
+
     public String[] getRow(int rowNum) {
         String[] row = new String[9];
         for (int i = 0; i < 9; i++) {
-            row[i] = grid.getItemAtPosition(i + rowNum * 9).toString();
+            row[i] = getDisplayedText(i + rowNum * 9);
         }
         return row;
     }
@@ -144,54 +177,43 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public String[] getColumn(int columnNum) {
         String[] column = new String[9];
         for (int i = 0; i < 9; i++) {
-            column[i] = grid.getItemAtPosition(i + columnNum * 9).toString();
+            column[i] = getDisplayedText(columnNum + i * 9);
         }
         return column;
     }
 
-    public boolean realCheckSudoku(String[] rowArray, String[] columnArray) {
-        int repeatedCount = 0;
-        for (int curIndex = 0; curIndex < rowArray.length; curIndex++) {
-            if (rowArray[curIndex].equals(frenchWords[0]) || rowArray[curIndex].equals(englishWords[0]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[1]) || rowArray[curIndex].equals(englishWords[1]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[2]) || rowArray[curIndex].equals(englishWords[2]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[3]) || rowArray[curIndex].equals(englishWords[3]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[4]) || rowArray[curIndex].equals(englishWords[4]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[5]) || rowArray[curIndex].equals(englishWords[5]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[6]) || rowArray[curIndex].equals(englishWords[6]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[7]) || rowArray[curIndex].equals(englishWords[7]))
-                repeatedCount += 1;
-            if (rowArray[curIndex].equals(frenchWords[8]) || rowArray[curIndex].equals(englishWords[8]))
-                repeatedCount += 1;
+    public String[] getBox(int boxNum) {
+        String[] box = new String[9];
+        int firstRow = (boxNum - (boxNum % 3));
+        int firstCol = 3 * (boxNum % 3);
+        // Go through the box, left-to-right top-to-bottom.
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                int position = (firstCol + col) + (firstRow + row) * 9;
+                box[col + 3*row] = getDisplayedText(position);
+            }
         }
-        for (int curIndex = 0; curIndex < columnArray.length; curIndex++) {
-            if (columnArray[curIndex].equals(frenchWords[0]) || columnArray[curIndex].equals(englishWords[0]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[1]) || columnArray[curIndex].equals(englishWords[1]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[2]) || columnArray[curIndex].equals(englishWords[2]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[3]) || columnArray[curIndex].equals(englishWords[3]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[4]) || columnArray[curIndex].equals(englishWords[4]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[5]) || columnArray[curIndex].equals(englishWords[5]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[6]) || columnArray[curIndex].equals(englishWords[6]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[7]) || columnArray[curIndex].equals(englishWords[7]))
-                repeatedCount += 1;
-            if (columnArray[curIndex].equals(frenchWords[8]) || columnArray[curIndex].equals(englishWords[8]))
-                repeatedCount += 1;
+        return box;
+    }
+
+    public boolean containsDuplicates(String[] region) {
+        boolean[] seen_yet = new boolean[9];
+        for(String word : region){
+            for(int i = 0; i < 9; i++){
+                if (word.equals(frenchWords[i]) || word.equals(englishWords[i])) {
+                    if (seen_yet[i]) {
+                        return true; // we already saw this word
+                    }
+                    seen_yet[i] = true;
+//                    break;
+                }
+            }
         }
-        if (repeatedCount > 1) return false;
-        else return true;
+        return false;
+    }
+
+    public void changeLanguage(){
+        Toast.makeText(this, "Language Switched", Toast.LENGTH_SHORT).show();
+
     }
 }
