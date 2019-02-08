@@ -1,5 +1,6 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -145,7 +146,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Generate Grid
     public void generateGrid() {
         if(switchState == true){
-            grid.setAdapter(new SudokuAdapter(this, savedPuzzle));
+            grid.setAdapter(new SudokuAdapter(this, Englishpuzzle));
         }else{
             grid.setAdapter(new SudokuAdapter(this, Frenchpuzzle));
         }
@@ -160,6 +161,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 else if (Englishpuzzle[position] == "" || Frenchpuzzle[position] == "") {
                     TextView textViewClicked = (TextView) v;
                     dialogBuilder(textViewClicked);
+                } else{
+                    makeAToast(position);
+
                 }
                 return;
                 //Toast.makeText(this, "" , Toast.LENGTH_SHORT).show();
@@ -192,6 +196,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Check switch eror", "" + e);
                 }
                 break;
+
         }
     }
 //    Check Sudoku solutions
@@ -284,6 +289,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch.setText(state);
         generateGrid();
         Toast.makeText(this, "Language Switched: " + state, Toast.LENGTH_SHORT).show();
+    }
+
+    public void makeAToast(int position){
+        if(switchState){
+            Toast.makeText(this, Frenchpuzzle[position], Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, Englishpuzzle[position], Toast.LENGTH_SHORT).show();
+        }
     }
 //    public void copyGrid() {
 //        for (int i = 0; i < 81; i++) {
