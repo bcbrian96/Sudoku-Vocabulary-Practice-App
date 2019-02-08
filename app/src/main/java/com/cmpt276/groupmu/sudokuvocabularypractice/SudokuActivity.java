@@ -222,6 +222,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
 
+
     private String getDisplayedText(int position) {
         // This is needed because only the TextView's content is modified, not
         // the puzzle array's content, and using getView() would reset those values.
