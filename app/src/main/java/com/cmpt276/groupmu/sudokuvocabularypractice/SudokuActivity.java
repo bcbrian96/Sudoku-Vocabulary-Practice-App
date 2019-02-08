@@ -1,5 +1,6 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -15,41 +16,64 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
+
+//    Global Variables
     private TextView gridtext;
-//    private final String[] puzzle = {
-//            "five", "three", "", "", "seven", "", "", "", "",
-//            "six", "", "", "one", "nine", "five", "", "", "",
-//            "", "nine", "eight", "", "", "", "", "six", "",
-//
-//            "eight", "", "", "", "six", "", "", "", "three",
-//            "four", "", "", "eight", "", "three", "", "", "one",
-//            "seven", "", "three", "", "two", "", "", "", "six",
-//
-//            "", "six", "", "", "", "", "", "eight", "",
-//            "two", "", "", "four", "one", "nine", "", "", "five",
-//            "", "four", "five", "", "eight", "", "", "seven", "nine"
-//    };
-    private final String[] puzzle = {
-            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
-           "four", "five",  "six","seven","eight", "nine",  "one",  "two","three",
-          "seven","eight", "nine",  "one",  "two","three", "four", "five",  "six",
-            "two","three", "four", "five",  "six","seven","eight", "nine",  "one",
-           "five",  "six","seven","eight", "nine",  "one",  "two",     "",     "",
-          "eight", "nine",  "one",  "two","three", "four", "five",  "six","seven",
-          "three", "four", "five",  "six","seven","eight", "nine",  "one",  "two",
-            "six","seven","eight", "nine",  "one",  "two","three", "four", "five",
-           "nine",  "one",  "two","three", "four", "five",  "six","seven","eight",
+    private final String[] Englishpuzzle = {
+            "five", "three", "", "", "seven", "", "", "", "",
+            "six", "", "", "one", "nine", "five", "", "", "",
+            "", "nine", "eight", "", "", "", "", "six", "",
+
+            "eight", "", "", "", "six", "", "", "", "three",
+            "four", "", "", "eight", "", "three", "", "", "one",
+            "seven", "", "three", "", "two", "", "", "", "six",
+
+            "", "six", "", "", "", "", "", "eight", "",
+            "two", "", "", "four", "one", "nine", "", "", "five",
+            "", "four", "five", "", "eight", "", "", "seven", "nine"
     };
+
+    private final String[] Frenchpuzzle = {
+            "cinq", "trois", "", "", "sept", "", "", "", "",
+            "six", "", "", "un", "neuf", "cinq", "", "", "",
+            "", "neuf", "huit", "", "", "", "", "six", "",
+
+            "huit", "", "", "", "six", "", "", "", "trois",
+            "quatre", "", "", "huit", "", "trois", "", "", "un",
+            "sept", "", "trois", "", "deux", "", "", "", "six",
+
+            "", "six", "", "", "", "", "", "huit", "",
+            "deux", "", "", "quatre", "un", "neuf", "", "", "cinq",
+            "", "quatre", "cinq", "", "huit", "", "", "spt", "neuf"
+    };
+    //    private final String[] puzzle = {
+//            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
+//           "four", "five",  "six","seven","eight", "nine",  "one",  "two","three",
+//          "seven","eight", "nine",  "one",  "two","three", "four", "five",  "six",
+//            "two","three", "four", "five",  "six","seven","eight", "nine",  "one",
+//           "five",  "six","seven","eight", "nine",  "one",  "two",     "",     "",
+//          "eight", "nine",  "one",  "two","three", "four", "five",  "six","seven",
+//          "three", "four", "five",  "six","seven","eight", "nine",  "one",  "two",
+//            "six","seven","eight", "nine",  "one",  "two","three", "four", "five",
+//           "nine",  "one",  "two","three", "four", "five",  "six","seven","eight",
+//    };
     private GridView grid;
     Button resetButton;
     private String mText = "";
     private int dialogChoice;
     private String currentItem = "";
     Button checkSudokuButton;
+    Switch languageSwitch;
+    Boolean switchState;
     private final String[] frenchWords = {"un", "deux", "Trois", "quatre", "cinq", "six", "sept", "huit", "nine"};
     private final String[] englishWords = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    private String[] savedPuzzle = new String[Englishpuzzle.length];
+    public String state;
 
+//    Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,28 +84,56 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         resetButton.setOnClickListener(this);
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
-        //TextView gridtext = findViewById(R.id.gridText);
+        languageSwitch = (Switch) findViewById(R.id.language_switch);
+        languageSwitch.setOnClickListener(this);
+        languageSwitch.setChecked(true);
+        languageSwitch.setText("English");
+
+        switchState = languageSwitch.isChecked();
+        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
         generateGrid();
     }
+//    Drop Down Menue
     public void dialogBuilder(final TextView set) {
         AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
-        sudokuWords.setSingleChoiceItems(frenchWords, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialogChoice = which;
-            }
-        });
+//        Check Language Mdde
+        if(switchState == true){
+            sudokuWords.setSingleChoiceItems(frenchWords, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialogChoice = which;
+                }
+            });
+        }
+        else{
+            sudokuWords.setSingleChoiceItems(englishWords, 0, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialogChoice = which;
+                }
+            });
+        }
+//        Set value to grid
         sudokuWords.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
-                    mText = frenchWords[dialogChoice];
+                    if(switchState == true){
+                        mText = frenchWords[dialogChoice];
+                    }else {
+                        mText = englishWords[dialogChoice];
+                    }
+
                     set.setText(mText);
+
                 }
+
             }
+
         });
+//
         sudokuWords.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -89,23 +141,37 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
         sudokuWords.show();
+//        Toast.makeText(this, mText, Toast.LENGTH_SHORT).show();
     }
+//    Generate Grid
     public void generateGrid() {
-        grid.setAdapter(new SudokuAdapter(this, puzzle));
+        if(switchState == true){
+            grid.setAdapter(new SudokuAdapter(this, Englishpuzzle));
+        }else{
+            grid.setAdapter(new SudokuAdapter(this, Frenchpuzzle));
+        }
+
+
+
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (v == null)
                     return;
-                else if (puzzle[position] == "") {
+                else if (Englishpuzzle[position] == "" || Frenchpuzzle[position] == "") {
                     TextView textViewClicked = (TextView) v;
                     dialogBuilder(textViewClicked);
+                } else{
+                    makeAToast(position);
+
                 }
                 return;
                 //Toast.makeText(this, "" , Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    //    Button Click methods
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -122,8 +188,18 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 } catch (Exception e) {
                     Log.d("Check Sudoku error", "" + e);
                 }
+                break;
+            case R.id.language_switch:
+                try {
+                    changeLanguage();
+                } catch (Exception e) {
+                    Log.d("Check switch eror", "" + e);
+                }
+                break;
+
         }
     }
+//    Check Sudoku solutions
     public void checkSudoku() {
         boolean result = false;
         for (int i = 0; i < grid.getCount(); i++) {
@@ -142,9 +218,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (result == true) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
+
 
     private String getDisplayedText(int position) {
         // This is needed because only the TextView's content is modified, not
@@ -182,6 +259,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         return box;
     }
 
+//    Check if rows and columns contain duplicates
     public boolean containsDuplicates(String[] region) {
         boolean[] seen_yet = new boolean[9];
         for(String word : region){
@@ -197,4 +275,50 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         }
         return false;
     }
+
+//    Switch Language (French & English)
+    public void changeLanguage(){
+        if(switchState){
+            switchState = false;
+            state = "French";
+
+        } else{
+            switchState = true;
+            state = "English";
+        }
+//        copyGrid();
+        languageSwitch.setText(state);
+        generateGrid();
+        Toast.makeText(this, "Language Switched: " + state, Toast.LENGTH_SHORT).show();
+    }
+
+    public void makeAToast(int position){
+        if(switchState){
+            Toast.makeText(this, Frenchpuzzle[position], Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, Englishpuzzle[position], Toast.LENGTH_SHORT).show();
+        }
+    }
+//    public void copyGrid() {
+//        for (int i = 0; i < 81; i++) {
+//            if (savedPuzzle[i] != "") {
+//                savedPuzzle[i] = swapLanguage(switchState, savedPuzzle[i]);
+//
+//            }
+//        }
+//    }
+//    public String swapLanguage(Boolean language, String word){
+//        for(int i = 0; i < 9; i++){
+//            if(savedPuzzle[i] != ""){
+//                if(word == frenchWords[i]){
+//                    return englishWords[i];
+//                }else if(word == englishWords[i]){
+//                    return frenchWords[i];
+//                }
+//                continue;
+//            }
+//
+//        }
+//        return null;
+//    }
 }
