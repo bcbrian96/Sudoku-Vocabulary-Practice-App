@@ -47,7 +47,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
             "", "six", "", "", "", "", "", "huit", "",
             "deux", "", "", "quatre", "un", "neuf", "", "", "cinq",
-            "", "quatre", "cinq", "", "huit", "", "", "spt", "neuf"
+            "", "quatre", "cinq", "", "huit", "", "", "sept", "neuf"
     };
     //    private final String[] puzzle = {
 //            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
@@ -68,7 +68,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Switch languageSwitch;
     Boolean switchState;
-    private final String[] frenchWords = {"un", "deux", "Trois", "quatre", "cinq", "six", "sept", "huit", "nine"};
+    private final String[] frenchWords = {"un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private String[] savedPuzzle = new String[Englishpuzzle.length];
     public String state;
