@@ -162,6 +162,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.resetBtn:
                 try {
+                    resetPuzzle();
                     generateGrid();
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
@@ -182,6 +183,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
 
+        }
+    }
+    // Reset workingPuzzle to originalPuzzle
+    public void resetPuzzle() {
+        for(int i = 0; i < workingPuzzle.length; i++) {
+            workingPuzzle[i] = originalPuzzle[i];
         }
     }
 //    Check Sudoku solutions
