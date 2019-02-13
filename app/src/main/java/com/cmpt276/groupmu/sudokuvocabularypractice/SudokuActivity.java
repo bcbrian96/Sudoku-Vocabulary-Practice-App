@@ -22,44 +22,33 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Global Variables
     private TextView gridtext;
-    private final String[] Englishpuzzle = {
-            "five", "three", "", "", "seven", "", "", "", "",
-            "six", "", "", "one", "nine", "five", "", "", "",
-            "", "nine", "eight", "", "", "", "", "six", "",
+    private final int[] originalPuzzle = {
+            5, 4, 0,  0, 7, 0,  0, 0, 0,
+            6, 0, 0,  1, 9, 5,  0, 0, 0,
+            0, 9, 8,  0, 0, 0,  0, 6, 0,
 
-            "eight", "", "", "", "six", "", "", "", "three",
-            "four", "", "", "eight", "", "three", "", "", "one",
-            "seven", "", "three", "", "two", "", "", "", "six",
+            8, 0, 0,  0, 6, 0,  0, 0, 3,
+            4, 0, 0,  8, 0, 3,  0, 0, 1,
+            7, 0, 3,  0, 2, 0,  0, 0, 6,
 
-            "", "six", "", "", "", "", "", "eight", "",
-            "two", "", "", "four", "one", "nine", "", "", "five",
-            "", "four", "five", "", "eight", "", "", "seven", "nine"
+            0, 6, 0,  0, 0, 0,  0, 8, 0,
+            2, 0, 0,  4, 1, 9,  0, 0, 5,
+            0, 4, 5,  0, 8, 0,  0, 7, 9
     };
-
-    private final String[] Frenchpuzzle = {
-            "cinq", "trois", "", "", "sept", "", "", "", "",
-            "six", "", "", "un", "neuf", "cinq", "", "", "",
-            "", "neuf", "huit", "", "", "", "", "six", "",
-
-            "huit", "", "", "", "six", "", "", "", "trois",
-            "quatre", "", "", "huit", "", "trois", "", "", "un",
-            "sept", "", "trois", "", "deux", "", "", "", "six",
-
-            "", "six", "", "", "", "", "", "huit", "",
-            "deux", "", "", "quatre", "un", "neuf", "", "", "cinq",
-            "", "quatre", "cinq", "", "huit", "", "", "sept", "neuf"
-    };
-    //    private final String[] puzzle = {
-//            "one",  "two","three", "four", "five",  "six","seven","eight", "nine",
-//           "four", "five",  "six","seven","eight", "nine",  "one",  "two","three",
-//          "seven","eight", "nine",  "one",  "two","three", "four", "five",  "six",
-//            "two","three", "four", "five",  "six","seven","eight", "nine",  "one",
-//           "five",  "six","seven","eight", "nine",  "one",  "two",     "",     "",
-//          "eight", "nine",  "one",  "two","three", "four", "five",  "six","seven",
-//          "three", "four", "five",  "six","seven","eight", "nine",  "one",  "two",
-//            "six","seven","eight", "nine",  "one",  "two","three", "four", "five",
-//           "nine",  "one",  "two","three", "four", "five",  "six","seven","eight",
+//    private final int[] originalPuzzle = {
+//            1, 2, 3,  4, 5, 6,  7, 8, 9,
+//            4, 5, 6,  7, 8, 9,  1, 2, 3,
+//            7, 8, 9,  1, 2, 3,  4, 5, 6,
+//
+//            2, 3, 4,  5, 6, 7,  8, 9, 1,
+//            5, 6, 7,  8, 9, 1,  2, 0, 0,
+//            8, 9, 1,  2, 3, 4,  5, 6, 7,
+//
+//            3, 4, 5,  6, 7, 8,  9, 1, 2,
+//            6, 7, 8,  9, 1, 2,  3, 4, 5,
+//            9, 1, 2,  3, 4, 5,  6, 7, 8
 //    };
+    private final int[] workingPuzzle = originalPuzzle.clone();
     private GridView grid;
     Button resetButton;
     private String mText = "";
@@ -68,9 +57,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Switch languageSwitch;
     Boolean switchState;
-    private final String[] frenchWords = {"un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
-    private final String[] englishWords = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    private String[] savedPuzzle = new String[Englishpuzzle.length];
+    private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    private int[] savedPuzzle = new int[originalPuzzle.length];
     public String state;
 
 //    Initialization
@@ -90,7 +79,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch.setText("English");
 
         switchState = languageSwitch.isChecked();
-        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
+//        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
         generateGrid();
     }
 //    Drop Down Menue
@@ -146,9 +135,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Generate Grid
     public void generateGrid() {
         if(switchState == true){
-            grid.setAdapter(new SudokuAdapter(this, Englishpuzzle));
+            grid.setAdapter(new SudokuAdapter(this, workingPuzzle, englishWords));
         }else{
-            grid.setAdapter(new SudokuAdapter(this, Frenchpuzzle));
+            grid.setAdapter(new SudokuAdapter(this, workingPuzzle, frenchWords));
         }
 
 
@@ -158,7 +147,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                                     int position, long id) {
                 if (v == null)
                     return;
-                else if (Englishpuzzle[position] == "" || Frenchpuzzle[position] == "") {
+                else if (originalPuzzle[position] == 0) {
                     TextView textViewClicked = (TextView) v;
                     dialogBuilder(textViewClicked);
                 } else{
@@ -203,8 +192,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void checkSudoku() {
         boolean result = false;
         for (int i = 0; i < grid.getCount(); i++) {
-            currentItem = getDisplayedText(i);
-            if (currentItem.equals("")) {
+            if (workingPuzzle[i] == 0) {
                 Log.d("false triggered", "false");
                 Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
                 return;
@@ -229,49 +217,45 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         return ((TextView) grid.getChildAt(position)).getText().toString();
     }
 
-    public String[] getRow(int rowNum) {
-        String[] row = new String[9];
+    public int[] getRow(int rowNum) {
+        int[] row = new int[9];
         for (int i = 0; i < 9; i++) {
-            row[i] = getDisplayedText(i + rowNum * 9);
+            row[i] = workingPuzzle[(i + rowNum * 9)];
         }
         return row;
     }
 
-    public String[] getColumn(int columnNum) {
-        String[] column = new String[9];
+    public int[] getColumn(int columnNum) {
+        int[] column = new int[9];
         for (int i = 0; i < 9; i++) {
-            column[i] = getDisplayedText(columnNum + i * 9);
+            column[i] = workingPuzzle[(columnNum + i * 9)];
         }
         return column;
     }
 
-    public String[] getBox(int boxNum) {
-        String[] box = new String[9];
+    public int[] getBox(int boxNum) {
+        int[] box = new int[9];
         int firstRow = (boxNum - (boxNum % 3));
         int firstCol = 3 * (boxNum % 3);
         // Go through the box, left-to-right top-to-bottom.
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 int position = (firstCol + col) + (firstRow + row) * 9;
-                box[col + 3*row] = getDisplayedText(position);
+                box[col + 3*row] = workingPuzzle[(position)];
             }
         }
         return box;
     }
 
 //    Check if rows and columns contain duplicates
-    public boolean containsDuplicates(String[] region) {
-        boolean[] seen_yet = new boolean[9];
-        for(String word : region){
-            for(int i = 0; i < 9; i++){
-                if (word.equals(frenchWords[i]) || word.equals(englishWords[i])) {
-                    if (seen_yet[i]) {
-                        return true; // we already saw this word
-                    }
-                    seen_yet[i] = true;
-//                    break;
-                }
+    public boolean containsDuplicates(int[] region) {
+        boolean[] seen_yet = new boolean[10];
+        for(int value : region){
+            if (seen_yet[value]) {
+                return true; // we already saw this word
             }
+            seen_yet[value] = true;
+//            break;
         }
         return false;
     }
@@ -294,9 +278,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
     public void makeAToast(int position){
         if(switchState){
-            Toast.makeText(this, Frenchpuzzle[position], Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, frenchWords[originalPuzzle[position]], Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this, Englishpuzzle[position], Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, englishWords[originalPuzzle[position]], Toast.LENGTH_SHORT).show();
         }
     }
 //    public void copyGrid() {

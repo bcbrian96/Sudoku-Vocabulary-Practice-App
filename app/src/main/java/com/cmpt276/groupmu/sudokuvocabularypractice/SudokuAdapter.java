@@ -12,19 +12,21 @@ import android.widget.TextView;
 public class SudokuAdapter extends BaseAdapter {
 
     private Context context;
-    private String[] textViewVals;
+    private int[] puzzle;
+    private String[] languageWords;
 
-    public SudokuAdapter(Context c, String[] textViewVals) {
+    public SudokuAdapter(Context c, int[] puzzle, String[] languageWords) {
         this.context = c;
-        this.textViewVals = textViewVals;
+        this.puzzle = puzzle;
+        this.languageWords = languageWords;
     }
 
     public int getCount() {
-        return textViewVals.length;
+        return puzzle.length;
     }
 
     public Object getItem(int position) {
-        return textViewVals[position];
+        return puzzle[position];
     }
 
     public long getItemId(int position) {
@@ -42,7 +44,7 @@ public class SudokuAdapter extends BaseAdapter {
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
             textView.setBackgroundColor(Color.LTGRAY);
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 122));
-            textView.setText(textViewVals[position].toString());
+            textView.setText(languageWords[puzzle[position]]);
 
             // set value into textview
 //            TextView textView = (TextView) gridView
