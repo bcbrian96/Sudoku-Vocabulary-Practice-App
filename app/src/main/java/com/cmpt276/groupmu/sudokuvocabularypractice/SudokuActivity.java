@@ -59,6 +59,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Boolean switchState;
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    private final String[][] Words = {englishWords, frenchWords};
     private int[] savedPuzzle = new int[originalPuzzle.length];
     public String state;
 
@@ -83,7 +84,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         generateGrid();
     }
 //    Drop Down Menue
-    public void dialogBuilder(final TextView set) {
+    public void dialogBuilder(final TextView set, final int position) {
         AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
@@ -116,6 +117,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     }
 
                     set.setText(mText);
+                    workingPuzzle[position] = dialogChoice;
 
                 }
 
@@ -134,12 +136,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 //    Generate Grid
     public void generateGrid() {
-        if(switchState == true){
-            grid.setAdapter(new SudokuAdapter(this, workingPuzzle, englishWords));
-        }else{
-            grid.setAdapter(new SudokuAdapter(this, workingPuzzle, frenchWords));
-        }
-
+        grid.setAdapter(new SudokuAdapter(this, workingPuzzle, originalPuzzle, Words, switchState));
 
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -148,8 +145,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (v == null)
                     return;
                 else if (originalPuzzle[position] == 0) {
-                    TextView textViewClicked = (TextView) v;
-                    dialogBuilder(textViewClicked);
+                    dialogBuilder((TextView) v, position);
                 } else{
                     makeAToast(position);
 
