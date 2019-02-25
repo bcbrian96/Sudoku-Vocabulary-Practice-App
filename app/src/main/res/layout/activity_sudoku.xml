@@ -16,26 +16,26 @@
         android:layout_gravity="right"/>
 
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <GridView
+            android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <GridView
-                android:id="@+id/grid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="4dp"
-                android:numColumns="9"
-                android:textAlignment="center"
-                android:verticalSpacing="4dp">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:horizontalSpacing="4dp"
+            android:numColumns="9"
+            android:textAlignment="center"
+            android:verticalSpacing="4dp">
 
 
-            </GridView>
+        </GridView>
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <LinearLayout

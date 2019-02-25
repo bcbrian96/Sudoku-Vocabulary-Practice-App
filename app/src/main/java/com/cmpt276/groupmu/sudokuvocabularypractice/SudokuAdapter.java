@@ -2,14 +2,21 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import static android.app.PendingIntent.getActivity;
+import static java.security.AccessController.getContext;
+
 public class SudokuAdapter extends BaseAdapter {
+
 
     private Context context;
     private String[] textViewVals;
@@ -41,7 +48,9 @@ public class SudokuAdapter extends BaseAdapter {
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
             textView.setBackgroundColor(Color.LTGRAY);
-            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 122));
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            //textView.setTextSize(32);
+            textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
             textView.setText(textViewVals[position].toString());
 
             // set value into textview
