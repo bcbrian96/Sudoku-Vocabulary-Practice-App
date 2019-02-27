@@ -17,16 +17,12 @@ public class SudokuAdapter extends BaseAdapter {
     private String[][] words;
     private int language;
 
-    public SudokuAdapter(Context c, int[] workingPuzzle, int[] originalPuzzle, String[][] Words, Boolean switchState) {
+    public SudokuAdapter(Context c, int[] workingPuzzle, int[] originalPuzzle, String[][] Words, int languageIndex) {
         this.context = c;
         this.workingPuzzle = workingPuzzle;
         this.originalPuzzle = originalPuzzle;
         this.words = Words;
-        if(switchState){
-            this.language = 1;
-        } else {
-            this.language = 0;
-        }
+        this.language = languageIndex;
     }
 
     public int getCount() {
@@ -55,7 +51,7 @@ public class SudokuAdapter extends BaseAdapter {
             if(originalPuzzle[position]==0) {
                 textView.setText(words[language][workingPuzzle[position]]);
             } else {
-                textView.setText(words[1-language][workingPuzzle[position]]);
+                textView.setText(words[language^1][workingPuzzle[position]]);
             }
 
             // set value into textview

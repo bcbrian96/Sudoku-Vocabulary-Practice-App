@@ -56,6 +56,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Switch languageSwitch;
     Boolean switchState;
+    int languageIndex;
+    public String languageNames[] = {"French","English"};
+    // Note: languageNames[] is in the opposite order of Words[].
     public String currentLanguage;
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
@@ -76,10 +79,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch = (Switch) findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        currentLanguage = "English";
+        languageIndex = 1;
+        currentLanguage = languageNames[languageIndex];
         languageSwitch.setText(currentLanguage);
 
-        switchState = languageSwitch.isChecked();
+//        switchState = languageSwitch.isChecked();
 //        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
         generateGrid();
     }
@@ -89,40 +93,23 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
 //        Check Language Mdde
-        if(switchState){
-            sudokuWords.setSingleChoiceItems(Words[1], 0, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialogChoice = which;
-                }
-            });
-        }
-        else{
-            sudokuWords.setSingleChoiceItems(Words[0], 0, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialogChoice = which;
-                }
-            });
-        }
+        sudokuWords.setSingleChoiceItems(Words[languageIndex], 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialogChoice = which;
+            }
+        });
 //        Set value to grid
         sudokuWords.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
-                    if(switchState){
-                        mText = Words[1][dialogChoice];
-                    }else {
-                        mText = Words[0][dialogChoice];
-                    }
+                    mText = Words[languageIndex][dialogChoice];
 
                     set.setText(mText);
                     workingPuzzle[position] = dialogChoice;
-
                 }
-
             }
-
         });
 //
         sudokuWords.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -136,7 +123,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 //    Generate Grid
     public void generateGrid() {
-        grid.setAdapter(new SudokuAdapter(this, workingPuzzle, originalPuzzle, Words, switchState));
+        grid.setAdapter(new SudokuAdapter(this, workingPuzzle, originalPuzzle, Words, languageIndex));
 
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -258,13 +245,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Switch Language (French & English)
     public void changeLanguage(){
-        if(switchState){
-            switchState = false;
-            currentLanguage = "French";
-        } else{
-            switchState = true;
-            currentLanguage = "English";
-        }
+        languageIndex ^= 1;
+        currentLanguage = languageNames[languageIndex];
 //        copyGrid();
         languageSwitch.setText(currentLanguage);
         generateGrid();
@@ -272,11 +254,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void makeAToast(int position){
-        if(switchState){
-            Toast.makeText(this, Words[1][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(this, Words[0][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this, Words[languageIndex][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
     }
 //    public void copyGrid() {
 //        for (int i = 0; i < 81; i++) {
