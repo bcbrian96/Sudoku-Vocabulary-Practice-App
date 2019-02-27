@@ -176,15 +176,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 //    Check Sudoku solutions
     public void checkSudoku() {
-        boolean result = false;
-        for (int i = 0; i < grid.getCount(); i++) {
-            if (workingPuzzle[i] == 0) {
-                Log.d("false triggered", "false");
-                Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if (checkSudokuIncomplete()) {
+            Log.d("checkSudoku", "sudoku incomplete");
+            Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
+            return;
         }
-        result = true;
+        boolean result = true;
         for (int regionNum = 0; regionNum < 9; regionNum++) {
             result = result && !containsDuplicates(getRow(regionNum));
             result = result && !containsDuplicates(getColumn(regionNum));
@@ -194,6 +191,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean checkSudokuIncomplete() {
+        for (int value : workingPuzzle) {
+            if (value == 0) return true; // Incomplete
+        }
+        return false; // Puzzle is complete
     }
 
     public int[] getRow(int rowNum) {
