@@ -53,15 +53,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button resetButton;
     private String mText = "";
     private int dialogChoice;
-    private String currentItem = "";
     Button checkSudokuButton;
     Switch languageSwitch;
     Boolean switchState;
+    public String currentLanguage;
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
     private int[] savedPuzzle = new int[originalPuzzle.length];
-    public String state;
 
 //    Initialization
     @Override
@@ -77,7 +76,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch = (Switch) findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        languageSwitch.setText("English");
+        currentLanguage = "English";
+        languageSwitch.setText(currentLanguage);
 
         switchState = languageSwitch.isChecked();
 //        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
@@ -89,8 +89,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
 //        Check Language Mdde
-        if(switchState == true){
-            sudokuWords.setSingleChoiceItems(frenchWords, 0, new DialogInterface.OnClickListener() {
+        if(switchState){
+            sudokuWords.setSingleChoiceItems(Words[1], 0, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialogChoice = which;
@@ -98,7 +98,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             });
         }
         else{
-            sudokuWords.setSingleChoiceItems(englishWords, 0, new DialogInterface.OnClickListener() {
+            sudokuWords.setSingleChoiceItems(Words[0], 0, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialogChoice = which;
@@ -110,10 +110,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
-                    if(switchState == true){
-                        mText = frenchWords[dialogChoice];
+                    if(switchState){
+                        mText = Words[1][dialogChoice];
                     }else {
-                        mText = englishWords[dialogChoice];
+                        mText = Words[0][dialogChoice];
                     }
 
                     set.setText(mText);
@@ -207,7 +207,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             result = result && !containsDuplicates(getColumn(regionNum));
             result = result && !containsDuplicates(getBox(regionNum));
         }
-        if (result == true) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
+        if (result) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
@@ -267,23 +267,22 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void changeLanguage(){
         if(switchState){
             switchState = false;
-            state = "French";
-
+            currentLanguage = "French";
         } else{
             switchState = true;
-            state = "English";
+            currentLanguage = "English";
         }
 //        copyGrid();
-        languageSwitch.setText(state);
+        languageSwitch.setText(currentLanguage);
         generateGrid();
-        Toast.makeText(this, "Language Switched: " + state, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Language Switched: " + currentLanguage, Toast.LENGTH_SHORT).show();
     }
 
     public void makeAToast(int position){
         if(switchState){
-            Toast.makeText(this, frenchWords[originalPuzzle[position]], Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, Words[1][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this, englishWords[originalPuzzle[position]], Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, Words[0][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
         }
     }
 //    public void copyGrid() {
