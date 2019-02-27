@@ -62,7 +62,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
-    private int[] savedPuzzle = new int[originalPuzzle.length];
 
 //    Initialization
     @Override
@@ -82,7 +81,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         currentLanguage = languageNames[languageIndex];
         languageSwitch.setText(currentLanguage);
 
-//        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
         generateGrid();
     }
 //    Drop Down Menue
@@ -245,7 +243,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void changeLanguage(){
         languageIndex ^= 1;
         currentLanguage = languageNames[languageIndex];
-//        copyGrid();
         languageSwitch.setText(currentLanguage);
         generateGrid();
         Toast.makeText(this, "Language Switched: " + currentLanguage, Toast.LENGTH_SHORT).show();
@@ -254,26 +251,4 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void makeAToast(int position){
         Toast.makeText(this, Words[languageIndex][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
     }
-//    public void copyGrid() {
-//        for (int i = 0; i < 81; i++) {
-//            if (savedPuzzle[i] != "") {
-//                savedPuzzle[i] = swapLanguage(switchState, savedPuzzle[i]);
-//
-//            }
-//        }
-//    }
-//    public String swapLanguage(Boolean language, String word){
-//        for(int i = 0; i < 9; i++){
-//            if(savedPuzzle[i] != ""){
-//                if(word == frenchWords[i]){
-//                    return englishWords[i];
-//                }else if(word == englishWords[i]){
-//                    return frenchWords[i];
-//                }
-//                continue;
-//            }
-//
-//        }
-//        return null;
-//    }
 }
