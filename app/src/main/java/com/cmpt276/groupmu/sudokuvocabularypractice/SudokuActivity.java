@@ -128,13 +128,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (v == null)
                     return;
                 else if (originalPuzzle[position] == 0) {
-                    dialogBuilder((TextView) v, position);
-                } else{
-                    makeAToast(position);
-
+                    dialogBuilder((TextView) v, position); // Choose a value for the cell.
+                } else {
+                    hintPresetCellTranslation(position);
                 }
-                return;
-                //Toast.makeText(this, "" , Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -170,7 +167,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
     // Reset workingPuzzle to originalPuzzle
     public void resetPuzzle() {
-        for(int i = 0; i < workingPuzzle.length; i++) {
+        for (int i = 0; i < workingPuzzle.length; i++) {
             workingPuzzle[i] = originalPuzzle[i];
         }
     }
@@ -189,8 +186,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (result) Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, "Sudoku not correct", Toast.LENGTH_SHORT).show();
     }
 
     public boolean checkSudokuIncomplete() {
@@ -233,7 +228,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Check if rows and columns contain duplicates
     public boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[10];
-        for(int value : region){
+        for (int value : region) {
             if (seen_yet[value]) {
                 return true; // we already saw this word
             }
@@ -244,7 +239,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 //    Switch Language (French & English)
-    public void changeLanguage(){
+    public void changeLanguage() {
         languageIndex ^= 1;
         currentLanguage = languageNames[languageIndex];
         languageSwitch.setText(currentLanguage);
@@ -252,7 +247,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(this, "Language Switched: " + currentLanguage, Toast.LENGTH_SHORT).show();
     }
 
-    public void makeAToast(int position){
+    public void hintPresetCellTranslation(int position) {
         Toast.makeText(this, Words[languageIndex][originalPuzzle[position]], Toast.LENGTH_SHORT).show();
     }
 }
