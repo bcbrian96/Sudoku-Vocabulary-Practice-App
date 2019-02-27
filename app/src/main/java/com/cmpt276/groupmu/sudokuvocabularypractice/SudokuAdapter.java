@@ -19,19 +19,29 @@ public class SudokuAdapter extends BaseAdapter {
 
 
     private Context context;
-    private String[] textViewVals;
+    private int[] workingPuzzle;
+    private int[] originalPuzzle;
+    private String[][] words;
+    private int language;
 
-    public SudokuAdapter(Context c, String[] textViewVals) {
+    public SudokuAdapter(Context c, int[] workingPuzzle, int[] originalPuzzle, String[][] Words, Boolean switchState) {
         this.context = c;
-        this.textViewVals = textViewVals;
+        this.workingPuzzle = workingPuzzle;
+        this.originalPuzzle = originalPuzzle;
+        this.words = Words;
+        if(switchState){
+            this.language = 1;
+        } else {
+            this.language = 0;
+        }
     }
 
     public int getCount() {
-        return textViewVals.length;
+        return workingPuzzle.length;
     }
 
     public Object getItem(int position) {
-        return textViewVals[position];
+        return workingPuzzle[position];
     }
 
     public long getItemId(int position) {
@@ -51,7 +61,11 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, ViewGroup.LayoutParams.WRAP_CONTENT));
             //textView.setTextSize(32);
             textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
-            textView.setText(textViewVals[position].toString());
+            if(originalPuzzle[position]==0) {
+                textView.setText(words[language][workingPuzzle[position]]);
+            } else {
+                textView.setText(words[1-language][workingPuzzle[position]]);
+            }
 
             // set value into textview
 //            TextView textView = (TextView) gridView
