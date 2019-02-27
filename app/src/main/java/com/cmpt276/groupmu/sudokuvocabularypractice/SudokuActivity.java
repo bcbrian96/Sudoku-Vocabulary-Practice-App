@@ -55,7 +55,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     private int dialogChoice;
     Button checkSudokuButton;
     Switch languageSwitch;
-    Boolean switchState;
     int languageIndex;
     public String languageNames[] = {"French","English"};
     // Note: languageNames[] is in the opposite order of Words[].
@@ -83,7 +82,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         currentLanguage = languageNames[languageIndex];
         languageSwitch.setText(currentLanguage);
 
-//        switchState = languageSwitch.isChecked();
 //        savedPuzzle = Arrays.copyOf(Englishpuzzle, Englishpuzzle.length);
         generateGrid();
     }
