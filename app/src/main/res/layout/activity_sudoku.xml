@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,10 +18,25 @@
 
 
         <LinearLayout
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            tools:ignore="InvalidId">
 
+            <!--<GridLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:columnCount="9"-->
+                <!--android:rowCount="9"-->
+                <!--android:id="@+id/grid"-->
+                <!--android:textAlignment="center"-->
+                <!--android:paddingVertical="4dp">-->
+                <!---->
+            <!--</GridLayout>-->
             <GridView
                 android:id="@+id/grid"
                 android:layout_width="match_parent"
@@ -28,8 +44,9 @@
                 android:gravity="center"
                 android:horizontalSpacing="4dp"
                 android:numColumns="9"
-                android:textAlignment="center"
-                android:verticalSpacing="4dp">
+                android:textAlignment="gravity"
+                android:verticalSpacing="4dp"
+                android:background="@color/colorAccent">
 
 
             </GridView>
