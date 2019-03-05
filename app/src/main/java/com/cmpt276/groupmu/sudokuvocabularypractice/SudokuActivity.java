@@ -90,12 +90,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                if (v == null)
-                    return;
-                else if (puzzle.originalPuzzle[position] == 0) {
-                    dialogBuilder((TextView) v, position); // Choose a value for the cell.
-                } else {
-                    hintPresetCellTranslation(position);
+                if (v != null) {
+                    if (puzzle.isNotPreset(position)) {
+                        dialogBuilder((TextView) v, position); // Choose a value for the cell.
+                    } else {
+                        hintPresetCellTranslation(position);
+                    }
                 }
             }
         });
@@ -145,8 +145,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Switch Language (French & English)
     public void changeLanguage() {
-        puzzle.languageIndex ^= 1;
-        puzzle.currentLanguage = puzzle.languageNames[puzzle.languageIndex];
+        puzzle.swapLanguage();
         languageSwitch.setText(puzzle.currentLanguage);
         generateGrid();
         Toast.makeText(this, "Language Switched: " + puzzle.currentLanguage, Toast.LENGTH_SHORT).show();

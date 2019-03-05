@@ -42,17 +42,26 @@ class SudokuPuzzle {
     }
 
     String getWordAtPosition(int position) {
-        if (originalPuzzle[position]==0) {
+        if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
         }
         return Words[languageIndex^1][workingPuzzle[position]];
     }
 
     String getTranslationAtPosition(int position) {
-        if (originalPuzzle[position]==0) {
+        if (isNotPreset(position)) {
             return Words[languageIndex^1][workingPuzzle[position]];
         }
         return Words[languageIndex][workingPuzzle[position]];
+    }
+
+    boolean isNotPreset(int position) {
+        return originalPuzzle[position]==0;
+    }
+
+    void swapLanguage() {
+        languageIndex ^= 1;
+        currentLanguage = languageNames[languageIndex];
     }
 
     // Reset workingPuzzle to originalPuzzle
