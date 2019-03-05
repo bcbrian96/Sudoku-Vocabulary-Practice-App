@@ -1,31 +1,24 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
-
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
 //    Global Variables
     public SudokuPuzzle puzzle;
-    private TextView gridtext;
     private GridView grid;
     Button resetButton;
-    private String mText = "";
     private int dialogChoice;
     Button checkSudokuButton;
     Switch languageSwitch;
@@ -55,7 +48,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
 //        Check Language Mdde
-        sudokuWords.setSingleChoiceItems(puzzle.getWords(), 0, new DialogInterface.OnClickListener() {
+        sudokuWords.setSingleChoiceItems(puzzle.getChoiceWords(), 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;

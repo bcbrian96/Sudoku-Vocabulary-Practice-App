@@ -37,7 +37,7 @@ class SudokuPuzzle {
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     final String[][] Words = {englishWords, frenchWords};
 
-    String[] getWords() {
+    String[] getChoiceWords() {
         return Words[languageIndex];
     }
 
