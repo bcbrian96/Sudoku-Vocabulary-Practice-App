@@ -1,7 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 class SudokuPuzzle {
-    final int[] originalPuzzle = {
+    private final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
             0, 9, 8,  0, 0, 0,  0, 6, 0,
@@ -29,13 +29,13 @@ class SudokuPuzzle {
 //    };
     final int[] workingPuzzle = originalPuzzle.clone();
 
-    int languageIndex = 1;
-    public String languageNames[] = {"French","English"};
+    private int languageIndex = 1;
+    private String languageNames[] = {"French","English"};
     // Note: languageNames[] is in the opposite order of Words[].
-    public String currentLanguage = languageNames[languageIndex];
+    String currentLanguage = languageNames[languageIndex];
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    final String[][] Words = {englishWords, frenchWords};
+    private final String[][] Words = {englishWords, frenchWords};
 
     String[] getChoiceWords() {
         return Words[languageIndex];
@@ -55,6 +55,10 @@ class SudokuPuzzle {
         return Words[languageIndex][workingPuzzle[position]];
     }
 
+    void setValueAtPosition(int position, int value) {
+        //assert (0<=value) && (value<=9);
+        workingPuzzle[position] = value;
+    }
     boolean isNotPreset(int position) {
         return originalPuzzle[position]==0;
     }
@@ -88,7 +92,7 @@ class SudokuPuzzle {
         return false; // Puzzle is complete
     }
 
-    int[] getRow(int rowNum) {
+    private int[] getRow(int rowNum) {
         int[] row = new int[9];
         for (int i = 0; i < 9; i++) {
             row[i] = workingPuzzle[(i + rowNum * 9)];
@@ -96,7 +100,7 @@ class SudokuPuzzle {
         return row;
     }
 
-    int[] getColumn(int columnNum) {
+    private int[] getColumn(int columnNum) {
         int[] column = new int[9];
         for (int i = 0; i < 9; i++) {
             column[i] = workingPuzzle[(columnNum + i * 9)];
@@ -104,7 +108,7 @@ class SudokuPuzzle {
         return column;
     }
 
-    int[] getBox(int boxNum) {
+    private int[] getBox(int boxNum) {
         int[] box = new int[9];
         int firstRow = (boxNum - (boxNum % 3));
         int firstCol = 3 * (boxNum % 3);
@@ -119,7 +123,7 @@ class SudokuPuzzle {
     }
 
     //    Check if rows and columns contain duplicates
-    boolean containsDuplicates(int[] region) {
+    private boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[10];
         for (int value : region) {
             if (seen_yet[value]) {

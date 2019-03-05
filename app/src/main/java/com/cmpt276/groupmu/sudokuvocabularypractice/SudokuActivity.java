@@ -34,7 +34,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         resetButton.setOnClickListener(this);
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
-        languageSwitch = (Switch) findViewById(R.id.language_switch);
+        languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
         puzzle = new SudokuPuzzle();
@@ -59,8 +59,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
-                    // puzzle.setValueAtPosition(position, dialogChoice)
-                    puzzle.workingPuzzle[position] = dialogChoice;
+                    puzzle.setValueAtPosition(position, dialogChoice);
                     set.setText(puzzle.getWordAtPosition(position));
                 }
             }
