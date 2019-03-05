@@ -66,10 +66,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
-                    mText = puzzle.getWords()[dialogChoice];
-
-                    set.setText(mText);
+                    // puzzle.setValueAtPosition(position, dialogChoice)
                     puzzle.workingPuzzle[position] = dialogChoice;
+                    set.setText(puzzle.getWordAtPosition(position));
                 }
             }
         });
@@ -154,6 +153,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void hintPresetCellTranslation(int position) {
-        Toast.makeText(this, puzzle.getWords()[puzzle.originalPuzzle[position]], Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, puzzle.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
     }
 }

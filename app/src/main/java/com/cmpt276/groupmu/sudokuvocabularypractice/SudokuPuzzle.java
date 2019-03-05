@@ -41,6 +41,20 @@ class SudokuPuzzle {
         return Words[languageIndex];
     }
 
+    String getWordAtPosition(int position) {
+        if (originalPuzzle[position]==0) {
+            return Words[languageIndex][workingPuzzle[position]];
+        }
+        return Words[languageIndex^1][workingPuzzle[position]];
+    }
+
+    String getTranslationAtPosition(int position) {
+        if (originalPuzzle[position]==0) {
+            return Words[languageIndex^1][workingPuzzle[position]];
+        }
+        return Words[languageIndex][workingPuzzle[position]];
+    }
+
     // Reset workingPuzzle to originalPuzzle
     void resetPuzzle() {
         for (int i = 0; i < workingPuzzle.length; i++) {

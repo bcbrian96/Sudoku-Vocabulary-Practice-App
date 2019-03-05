@@ -12,25 +12,19 @@ import android.widget.TextView;
 public class SudokuAdapter extends BaseAdapter {
 
     private Context context;
-    private int[] workingPuzzle;
-    private int[] originalPuzzle;
-    private String[][] words;
-    private int language;
+    private SudokuPuzzle puzzle;
 
     public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
-        this.workingPuzzle = puzzle.workingPuzzle;
-        this.originalPuzzle = puzzle.originalPuzzle;
-        this.words = puzzle.Words;
-        this.language = puzzle.languageIndex;
+        this.puzzle = puzzle;
     }
 
     public int getCount() {
-        return workingPuzzle.length;
+        return puzzle.workingPuzzle.length;
     }
 
     public Object getItem(int position) {
-        return workingPuzzle[position];
+        return puzzle.workingPuzzle[position];
     }
 
     public long getItemId(int position) {
@@ -48,16 +42,8 @@ public class SudokuAdapter extends BaseAdapter {
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
             textView.setBackgroundColor(Color.LTGRAY);
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 122));
-            if(originalPuzzle[position]==0) {
-                textView.setText(words[language][workingPuzzle[position]]);
-            } else {
-                textView.setText(words[language^1][workingPuzzle[position]]);
-            }
+            textView.setText(puzzle.getWordAtPosition(position));
 
-            // set value into textview
-//            TextView textView = (TextView) gridView
-//                    .findViewById(R.id.the_grid_label);
-//            textView.setText(textViewVals[position]);
         } else {
             textView = (TextView) convertView;
         }
