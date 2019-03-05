@@ -29,6 +29,18 @@ class SudokuPuzzle {
 //    };
     final int[] workingPuzzle = originalPuzzle.clone();
 
+    int languageIndex = 1;
+    public String languageNames[] = {"French","English"};
+    // Note: languageNames[] is in the opposite order of Words[].
+    public String currentLanguage = languageNames[languageIndex];
+    private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    final String[][] Words = {englishWords, frenchWords};
+
+    String[] getWords() {
+        return Words[languageIndex];
+    }
+
     // Reset workingPuzzle to originalPuzzle
     void resetPuzzle() {
         for (int i = 0; i < workingPuzzle.length; i++) {

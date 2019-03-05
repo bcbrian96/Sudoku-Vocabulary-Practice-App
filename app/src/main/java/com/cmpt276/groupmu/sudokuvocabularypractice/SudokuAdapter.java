@@ -17,12 +17,12 @@ public class SudokuAdapter extends BaseAdapter {
     private String[][] words;
     private int language;
 
-    public SudokuAdapter(Context c, int[] workingPuzzle, int[] originalPuzzle, String[][] Words, int languageIndex) {
+    public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
-        this.workingPuzzle = workingPuzzle;
-        this.originalPuzzle = originalPuzzle;
-        this.words = Words;
-        this.language = languageIndex;
+        this.workingPuzzle = puzzle.workingPuzzle;
+        this.originalPuzzle = puzzle.originalPuzzle;
+        this.words = puzzle.Words;
+        this.language = puzzle.languageIndex;
     }
 
     public int getCount() {
