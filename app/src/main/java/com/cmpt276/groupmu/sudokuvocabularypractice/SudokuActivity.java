@@ -47,7 +47,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //        Declared Variables
         grid = findViewById(R.id.grid);
-        grid.setTextAlignment(3);
 //        linear = findViewById(R.id.linear);
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
@@ -57,14 +56,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
         puzzle = new SudokuPuzzle();
-        languageSwitch.setText(puzzle.currentLanguage);
+        languageSwitch.setText(puzzle.getCurrentLanguage());
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS){
 
-                    int result = mTTS.setLanguage(Locale.FRENCH);
+                    int result = mTTS.setLanguage(puzzle.getVoiceLocale());
 
                     if(result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED){
@@ -181,15 +180,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Switch Language (French & English)
     public void changeLanguage() {
         puzzle.swapLanguage();
-        languageSwitch.setText(puzzle.currentLanguage);
-        if(puzzle.languageIndex == 1){
-            mTTS.setLanguage(Locale.FRENCH);
-        } else {
-            mTTS.setLanguage((Locale.ENGLISH));
-        }
+        languageSwitch.setText(puzzle.getCurrentLanguage());
+        mTTS.setLanguage(puzzle.getVoiceLocale());
 
         generateGrid();
-        Toast.makeText(this, "Language Switched: " + puzzle.currentLanguage, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Language Switched: " + puzzle.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
     }
 
     public void hintPresetCellTranslation(int position) {

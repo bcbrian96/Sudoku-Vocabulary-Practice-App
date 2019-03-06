@@ -1,5 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import java.util.Locale;
+
 class SudokuPuzzle {
     private final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
@@ -31,8 +33,8 @@ class SudokuPuzzle {
 
     private int languageIndex = 1;
     private String languageNames[] = {"French","English"};
+    private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    String currentLanguage = languageNames[languageIndex];
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
@@ -65,7 +67,14 @@ class SudokuPuzzle {
 
     void swapLanguage() {
         languageIndex ^= 1;
-        currentLanguage = languageNames[languageIndex];
+    }
+
+    Locale getVoiceLocale() {
+        return locales[languageIndex];
+    }
+
+    String getCurrentLanguage() {
+        return languageNames[languageIndex];
     }
 
     // Reset workingPuzzle to originalPuzzle
