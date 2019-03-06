@@ -1,7 +1,11 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,27 +13,42 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
 //    Global Variables
     public SudokuPuzzle puzzle;
     private GridView grid;
+//    private LinearLayout linear;
     Button resetButton;
     private int dialogChoice;
     Button checkSudokuButton;
     Switch languageSwitch;
 
+//    TextToSpeech
+    private TextToSpeech mTTS;
+    float pitch = (float)0.7;
+    float speed = (float)0.7;
+
+
 //    Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+//        For every activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
+
+//        Declared Variables
         grid = findViewById(R.id.grid);
+        grid.setTextAlignment(3);
+//        linear = findViewById(R.id.linear);
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
         checkSudokuButton = findViewById(R.id.checkSudoku);
@@ -40,7 +59,29 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         puzzle = new SudokuPuzzle();
         languageSwitch.setText(puzzle.currentLanguage);
 
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+
+                    int result = mTTS.setLanguage(Locale.FRENCH);
+
+                    if(result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("TTS", "Language No Supported");
+                        Toast.makeText(null, "Failed to set language", Toast.LENGTH_SHORT).show();
+                    }
+                } else{
+                    Log.e("TTS", "Initialization Failed");
+                }
+            }
+        });
+
         generateGrid();
+
+
+
+
     }
 //    Drop Down Menue
     public void dialogBuilder(final TextView set, final int position) {
@@ -61,6 +102,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (dialogChoice != -1) {
                     puzzle.setValueAtPosition(position, dialogChoice);
                     set.setText(puzzle.getWordAtPosition(position));
+//                    set.setTextColor(1255);
                 }
             }
         });
@@ -87,6 +129,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
                         hintPresetCellTranslation(position);
+                        speak(position);
                     }
                 }
             }
@@ -139,11 +182,39 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void changeLanguage() {
         puzzle.swapLanguage();
         languageSwitch.setText(puzzle.currentLanguage);
+        if(puzzle.languageIndex == 1){
+            mTTS.setLanguage(Locale.FRENCH);
+        } else {
+            mTTS.setLanguage((Locale.ENGLISH));
+        }
+
         generateGrid();
         Toast.makeText(this, "Language Switched: " + puzzle.currentLanguage, Toast.LENGTH_SHORT).show();
     }
 
     public void hintPresetCellTranslation(int position) {
         Toast.makeText(this, puzzle.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
+    }
+
+//    Speaking functions
+    public void speak(int position) {
+        String text = puzzle.getTranslationAtPosition(position);
+        mTTS.setPitch(pitch);
+        mTTS.setSpeechRate(speed);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
+//        } else {
+//            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+//        }
+
+    }
+//    Make sure the mTTS variable is destroyed
+    @Override
+    protected void onDestroy() {
+        if(mTTS != null){
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+        super.onDestroy();
     }
 }
