@@ -1,6 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import java.util.Locale;
+import com.opencsv.CSVReader;
 
 class SudokuPuzzle {
     private final int[] originalPuzzle = {
