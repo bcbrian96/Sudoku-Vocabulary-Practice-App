@@ -61,9 +61,6 @@ class SudokuPuzzle {
     String getWordAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
-        } else if (mode==Mode.LISTENING) {
-            // display number instead of word
-            return ""+workingPuzzle[position];
         }
         return Words[languageIndex^1][workingPuzzle[position]];
     }

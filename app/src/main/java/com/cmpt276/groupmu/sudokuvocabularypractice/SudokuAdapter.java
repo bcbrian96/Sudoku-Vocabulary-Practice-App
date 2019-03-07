@@ -47,7 +47,11 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            textView.setText(puzzle.getWordAtPosition(position));
+            if (puzzle.isNormalMode() || puzzle.isNotPreset(position)) {
+                textView.setText(puzzle.getWordAtPosition(position));
+            } else {
+                textView.setText(getItem(position).toString());
+            }
 
         } else {
             textView = (TextView) convertView;
