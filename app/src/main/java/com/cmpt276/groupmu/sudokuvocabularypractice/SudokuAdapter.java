@@ -2,9 +2,15 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
+<<<<<<< HEAD
 import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
+=======
+import android.graphics.Typeface;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+>>>>>>> master
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -19,19 +25,19 @@ public class SudokuAdapter extends BaseAdapter {
 
 
     private Context context;
-    private String[] textViewVals;
+    private SudokuPuzzle puzzle;
 
-    public SudokuAdapter(Context c, String[] textViewVals) {
+    public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
-        this.textViewVals = textViewVals;
+        this.puzzle = puzzle;
     }
 
     public int getCount() {
-        return textViewVals.length;
+        return puzzle.workingPuzzle.length;
     }
 
     public Object getItem(int position) {
-        return textViewVals[position];
+        return puzzle.workingPuzzle[position];
     }
 
     public long getItemId(int position) {
@@ -48,15 +54,19 @@ public class SudokuAdapter extends BaseAdapter {
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
             textView.setBackgroundColor(Color.LTGRAY);
+<<<<<<< HEAD
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
             //textView.setTextSize(32);
             textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
             textView.setText(textViewVals[position].toString());
+=======
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 122));
+            textView.setGravity(Gravity.CENTER);
+            textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            // set value into textview
-//            TextView textView = (TextView) gridView
-//                    .findViewById(R.id.the_grid_label);
-//            textView.setText(textViewVals[position]);
+            textView.setText(puzzle.getWordAtPosition(position));
+>>>>>>> master
+
         } else {
             textView = (TextView) convertView;
         }
