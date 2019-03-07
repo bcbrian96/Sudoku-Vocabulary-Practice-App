@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SudokuActivity"
-            android:screenOrientation="sensorLandscape"
+
             android:configChanges="orientation|screenSize">
 
             <intent-filter>

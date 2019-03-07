@@ -73,7 +73,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     private String[] savedPuzzle = new String[Englishpuzzle.length];
     public String state;
 
-//    Initialization
+
+
+    //    Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
