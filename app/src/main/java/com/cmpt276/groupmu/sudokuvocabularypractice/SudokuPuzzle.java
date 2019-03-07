@@ -1,6 +1,16 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
+
 
 class SudokuPuzzle {
     private final int[] originalPuzzle = {
@@ -30,6 +40,7 @@ class SudokuPuzzle {
 //            9, 1, 2,  3, 4, 5,  6, 7, 8
 //    };
     final int[] workingPuzzle = originalPuzzle.clone();
+    private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
     private int languageIndex = 1;
     private String languageNames[] = {"French","English"};
@@ -38,6 +49,46 @@ class SudokuPuzzle {
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
+    private int currentPuzzleIndex = -1;
+
+    private void readPuzzlesFromInputStream(InputStream inputStream) {
+        // This assumes each puzzle is on a separate line, as in .sdm format.
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = br.readLine()) != null) {
+                int[] arr = convertPuzzleStringToArray(line);
+                if (arr!=null) allPuzzles.add(arr);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+//    Puzzles are sourced from http://forum.enjoysudoku.com/low-stepper-puzzles-t4200.html
+    private int[] convertPuzzleStringToArray(String puzzleString) {
+//        if (puzzleString.startsWith("#")) return null;
+        int[] puzzleArray = new int[81];
+        int puzzleSize=0;
+        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
+            char c = puzzleString.charAt(j);
+            if (Character.isDigit(c)) {
+                puzzleArray[puzzleSize++] = Character.digit(c,10);
+            } else if (c=='.') {
+                puzzleArray[puzzleSize++] = 0;
+            }
+        }
+        if (puzzleSize < 81) {
+            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
+//            throw new Exception("Invalid puzzle string");
+            return null;
+        }
+        return puzzleArray;
+    }
+
+    SudokuPuzzle(Context mContext) {
+        readPuzzlesFromInputStream(mContext.getResources().openRawResource(R.raw.puzzles));
+        newPuzzle();
+    }
 
     String[] getChoiceWords() {
         return Words[languageIndex];
@@ -75,6 +126,27 @@ class SudokuPuzzle {
 
     String getCurrentLanguage() {
         return languageNames[languageIndex];
+    }
+
+    private void setPuzzle(int puzzleIndex) {
+        // Check that puzzle index is valid.
+        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
+            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
+            return;
+        }
+        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
+        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+    }
+
+    void newPuzzle() {
+        if (allPuzzles.size()==0) {
+            Log.d("newPuzzle","No puzzles from file");
+            return;
+        }
+//        Random random = new Random();
+//        currentPuzzleIndex = random.nextInt(allPuzzles.size());
+        currentPuzzleIndex = (currentPuzzleIndex + 1) % allPuzzles.size();
+        setPuzzle(currentPuzzleIndex);
     }
 
     // Reset workingPuzzle to originalPuzzle

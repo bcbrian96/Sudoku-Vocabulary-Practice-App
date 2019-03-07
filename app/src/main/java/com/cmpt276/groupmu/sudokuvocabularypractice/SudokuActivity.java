@@ -55,7 +55,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        puzzle = new SudokuPuzzle();
+        puzzle = new SudokuPuzzle(this);
         languageSwitch.setText(puzzle.getCurrentLanguage());
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
