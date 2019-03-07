@@ -39,6 +39,21 @@ class SudokuPuzzle {
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
 
+    enum Mode {NORMAL, LISTENING}
+    private Mode mode = Mode.NORMAL;
+
+    boolean isNormalMode() {
+        return mode==Mode.NORMAL;
+    }
+
+    void swapMode() {
+        if (isNormalMode()) {
+            mode = Mode.LISTENING;
+        } else {
+            mode = Mode.NORMAL;
+        }
+    }
+
     String[] getChoiceWords() {
         return Words[languageIndex];
     }
@@ -46,6 +61,9 @@ class SudokuPuzzle {
     String getWordAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
+        } else if (mode==Mode.LISTENING) {
+            // display number instead of word
+            return ""+workingPuzzle[position];
         }
         return Words[languageIndex^1][workingPuzzle[position]];
     }
