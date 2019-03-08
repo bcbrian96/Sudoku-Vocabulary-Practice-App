@@ -68,6 +68,7 @@ class SudokuPuzzle {
     String[] newEnglishWordsArray;
 
     String[][] Words = {englishWords, frenchWords};
+    int[] numHints = new int[10]; // update when puzzleSize changes, or on new game/new puzzle
     private int currentPuzzleIndex = -1;
 
     void setPuzzleSize (int gridScale){
@@ -317,6 +318,14 @@ class SudokuPuzzle {
 //        }
         // This is faster
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+    }
+
+    /**
+     * Reset hints when making a new puzzle.
+     */
+    void resetHints() {
+        // Reset the number of hints for each word.
+        numHints = new int[10]; // replace with puzzleSize+1
     }
 
     /**

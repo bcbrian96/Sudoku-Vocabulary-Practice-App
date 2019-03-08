@@ -318,6 +318,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * @param position  The position within the GridView array
      */
     public void hintPresetCellTranslation(int position) {
+        // create function in sudokuPuzzle for this? eg. puzzle.logHint(position)
+        puzzle.numHints[puzzle.workingPuzzle[position]]++;
+        Log.d("hints", "Hint Position: " + position);
+        Log.d("hints", "NumHint Value: " + puzzle.numHints[puzzle.workingPuzzle[position]]);
         Toast.makeText(this, puzzle.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
     }
 
