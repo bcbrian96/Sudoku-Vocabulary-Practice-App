@@ -25,7 +25,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Global Variables
     public SudokuPuzzle puzzle;
-    private GridView grid;
+    protected GridView grid;
 //    private LinearLayout linear;
     Button resetButton;
     private int dialogChoice;

@@ -1,9 +1,11 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.widget.TextView;
+
 import java.util.Locale;
 
-class SudokuPuzzle {
-    private final int[] originalPuzzle = {
+public class SudokuPuzzle {
+    protected final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
             0, 9, 8,  0, 0, 0,  0, 6, 0,
@@ -31,7 +33,7 @@ class SudokuPuzzle {
 //    };
     final int[] workingPuzzle = originalPuzzle.clone();
 
-    private int languageIndex = 1;
+    public int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
@@ -39,18 +41,18 @@ class SudokuPuzzle {
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
 
-    String[] getChoiceWords() {
+    protected String[] getChoiceWords() {
         return Words[languageIndex];
     }
 
-    String getWordAtPosition(int position) {
+    protected String getWordAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
         }
         return Words[languageIndex^1][workingPuzzle[position]];
     }
 
-    String getTranslationAtPosition(int position) {
+    protected String getTranslationAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex^1][workingPuzzle[position]];
         }
@@ -61,7 +63,7 @@ class SudokuPuzzle {
         //assert (0<=value) && (value<=9);
         workingPuzzle[position] = value;
     }
-    boolean isNotPreset(int position) {
+    public boolean isNotPreset(int position) {
         return originalPuzzle[position]==0;
     }
 
@@ -69,11 +71,11 @@ class SudokuPuzzle {
         languageIndex ^= 1;
     }
 
-    Locale getVoiceLocale() {
+    public Locale getVoiceLocale() {
         return locales[languageIndex];
     }
 
-    String getCurrentLanguage() {
+    public String getCurrentLanguage() {
         return languageNames[languageIndex];
     }
 
@@ -101,7 +103,7 @@ class SudokuPuzzle {
         return false; // Puzzle is complete
     }
 
-    private int[] getRow(int rowNum) {
+    public int[] getRow(int rowNum) {
         int[] row = new int[9];
         for (int i = 0; i < 9; i++) {
             row[i] = workingPuzzle[(i + rowNum * 9)];
@@ -109,7 +111,7 @@ class SudokuPuzzle {
         return row;
     }
 
-    private int[] getColumn(int columnNum) {
+    protected int[] getColumn(int columnNum) {
         int[] column = new int[9];
         for (int i = 0; i < 9; i++) {
             column[i] = workingPuzzle[(columnNum + i * 9)];
@@ -117,7 +119,7 @@ class SudokuPuzzle {
         return column;
     }
 
-    private int[] getBox(int boxNum) {
+    protected int[] getBox(int boxNum) {
         int[] box = new int[9];
         int firstRow = (boxNum - (boxNum % 3));
         int firstCol = 3 * (boxNum % 3);
@@ -132,7 +134,7 @@ class SudokuPuzzle {
     }
 
     //    Check if rows and columns contain duplicates
-    private boolean containsDuplicates(int[] region) {
+    protected boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[10];
         for (int value : region) {
             if (seen_yet[value]) {
