@@ -68,7 +68,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     if(result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED){
                         Log.e("TTS", "Language No Supported");
-                        Toast.makeText(null, "Failed to set language", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(null, "Failed to set language", Toast.LENGTH_SHORT).show();
                     }
                 } else{
                     Log.e("TTS", "Initialization Failed");
