@@ -1,5 +1,6 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 class SudokuPuzzle {
@@ -31,6 +32,10 @@ class SudokuPuzzle {
 //    };
     final int[] workingPuzzle = originalPuzzle.clone();
 
+    ArrayList<String> enWords = new ArrayList<>();
+    ArrayList<String> frWords = new ArrayList<>();
+
+
     private int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
@@ -38,6 +43,7 @@ class SudokuPuzzle {
     private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
     private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     private final String[][] Words = {englishWords, frenchWords};
+
 
     String[] getChoiceWords() {
         return Words[languageIndex];
