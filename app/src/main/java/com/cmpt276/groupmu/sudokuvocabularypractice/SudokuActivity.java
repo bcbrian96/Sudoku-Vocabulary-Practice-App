@@ -47,7 +47,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sudoku);
 
 //        Declared Variables
-        puzzle = new SudokuPuzzle(this);
+        puzzle = new SudokuPuzzle();
+        puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
+        puzzle.newPuzzle();
         grid = findViewById(R.id.grid);
 //        linear = findViewById(R.id.linear);
         resetButton = findViewById(R.id.resetBtn);

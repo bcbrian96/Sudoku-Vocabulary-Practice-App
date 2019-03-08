@@ -1,6 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -51,7 +50,7 @@ class SudokuPuzzle {
     private final String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
 
-    private void readPuzzlesFromInputStream(InputStream inputStream) {
+    void readPuzzlesFromInputStream(InputStream inputStream) {
         // This assumes each puzzle is on a separate line, as in .sdm format.
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -85,9 +84,7 @@ class SudokuPuzzle {
         return puzzleArray;
     }
 
-    SudokuPuzzle(Context mContext) {
-        readPuzzlesFromInputStream(mContext.getResources().openRawResource(R.raw.puzzles));
-        newPuzzle();
+    SudokuPuzzle() {
     }
 
     String[] getChoiceWords() {
