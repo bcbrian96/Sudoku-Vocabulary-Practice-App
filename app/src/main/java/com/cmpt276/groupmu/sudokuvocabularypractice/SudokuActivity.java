@@ -25,7 +25,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Global Variables
     public SudokuPuzzle puzzle;
-    private GridView grid;
+    protected GridView grid;
 //    private LinearLayout linear;
     Button resetButton;
     private int dialogChoice;
@@ -39,7 +39,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float speed = (float)0.7;
 
 
-//    Initialization
+
+
+    //    Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        For every activity

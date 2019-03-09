@@ -4,57 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <Switch
-        android:id="@+id/language_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFeatureSettings="bold"
-
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:checked="false"
-
-        android:layout_gravity="right"/>
-
-
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="match_parent"
+        <Switch
+            android:id="@+id/language_switch"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:fontFeatureSettings="bold"
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
+            android:checked="false"
+            android:layout_gravity="end"/>
+
+        <GridView
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_gravity="center"
-            tools:ignore="InvalidId">
+            android:horizontalSpacing="4dp"
+            android:numColumns="9"
+            android:textAlignment="center"
+            android:verticalSpacing="4dp"
+            android:layout_weight="1"
+            >
+        </GridView>
 
-            <!--<GridLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:columnCount="9"-->
-                <!--android:rowCount="9"-->
-                <!--android:id="@+id/grid"-->
-                <!--android:textAlignment="center"-->
-                <!--android:paddingVertical="4dp">-->
-                <!---->
-            <!--</GridLayout>-->
-            <GridView
-                android:id="@+id/grid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="4dp"
-                android:numColumns="9"
-                android:textAlignment="gravity"
-                android:verticalSpacing="4dp"
-                android:background="@color/colorAccent">
-
-
-            </GridView>
-
-
-        </LinearLayout>
-
-
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_weight="0"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,10 +55,5 @@
         android:layout_gravity="right"
         android:text="Check Sudoku"/>
     </LinearLayout>
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/gridText"/>
-
 
 </LinearLayout>
