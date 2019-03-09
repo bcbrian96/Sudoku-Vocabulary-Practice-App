@@ -35,14 +35,17 @@ class SudokuPuzzle {
     ArrayList<String> enWords = new ArrayList<>();
     ArrayList<String> frWords = new ArrayList<>();
 
+    String[] english = {"", "", "", "", "", "", "", "", ""};
+    String[] french = {"", "", "", "", "", "", "", "", ""};
+
 
     private int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
-    private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    private final String[][] Words = {englishWords, frenchWords};
+    final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    String[][] Words = {englishWords, frenchWords};
 
 
     String[] getChoiceWords() {
@@ -149,5 +152,7 @@ class SudokuPuzzle {
         }
         return false;
     }
+
+
 
 }

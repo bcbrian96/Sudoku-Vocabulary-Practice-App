@@ -25,6 +25,7 @@ import com.opencsv.CSVReader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -312,8 +313,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 puzzle.frWords.add(nextLine[1]);
             }
 
+
             dataRead.close();
-//
+            fix_size();
 //            System.out.println("English: ");
 //            System.out.println(Arrays.toString(frWords.toArray()));
 //            System.out.println("French: ");
@@ -323,6 +325,30 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         catch (Exception e) {
             Log.e("TAG",e.toString());
         }
+    }
+
+    public void fix_size(){
+        int size = puzzle.enWords.size();
+        if(size < 9){
+            for(int i = 1; i < 9-size+1; i++){
+                puzzle.enWords.add(puzzle.englishWords[i]);
+                puzzle.frWords.add(puzzle.frenchWords[i]);
+            }
+        } else if(size > 9){
+            for(int i = 0; i > size - 9; i++){
+                puzzle.enWords.remove(i);
+                puzzle.frWords.remove(i);
+            }
+
+        }
+        puzzle.enWords.add(0, "");
+        puzzle.frWords.add(0, "");
+
+        puzzle.english = (String[])puzzle.enWords.toArray(puzzle.english);
+        puzzle.french = (String[])puzzle.frWords.toArray(puzzle.french);
+        puzzle.Words = new String[][]{puzzle.english, puzzle.french};
+        generateGrid();
+        System.out.println(Arrays.toString(puzzle.english));
     }
 
 
