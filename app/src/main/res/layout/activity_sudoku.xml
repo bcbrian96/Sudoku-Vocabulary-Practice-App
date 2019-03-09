@@ -22,48 +22,28 @@
             android:layout_height="wrap_content"
             android:fontFeatureSettings="bold"
 
+            android:layout_marginLeft="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_gravity="end"
             android:layout_alignParentRight="true"
             android:checked="false"/>
     </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/linear"
+        <GridView
+            android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_gravity="center"
-            tools:ignore="InvalidId">
+            android:horizontalSpacing="4dp"
+            android:numColumns="9"
+            android:textAlignment="center"
+            android:verticalSpacing="4dp"
+            android:layout_weight="1"
+            >
+        </GridView>
 
-            <!--<GridLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:columnCount="9"-->
-                <!--android:rowCount="9"-->
-                <!--android:id="@+id/grid"-->
-                <!--android:textAlignment="center"-->
-                <!--android:paddingVertical="4dp">-->
-                <!---->
-            <!--</GridLayout>-->
-            <GridView
-                android:id="@+id/grid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:horizontalSpacing="4dp"
-                android:numColumns="9"
-                android:textAlignment="gravity"
-                android:verticalSpacing="4dp"
-                android:background="@color/colorAccent">
-
-
-            </GridView>
-
-
-        </LinearLayout>
-
-
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_weight="0"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,13 +55,32 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:text="reset"/>
+        <Button
+            android:id="@+id/newPuzzle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="2"
+            android:text="New Puzzle"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkSudoku"
-        android:layout_weight="2"
+        android:layout_weight="4"
         android:layout_gravity="right"
         android:text="Check Sudoku"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+        <Button xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/get_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open CSV"
+            android:onClick="openFile"/>
     </LinearLayout>
     <TextView
     android:layout_width="wrap_content"
