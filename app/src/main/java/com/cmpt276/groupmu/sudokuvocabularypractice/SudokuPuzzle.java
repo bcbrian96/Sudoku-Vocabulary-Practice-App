@@ -52,9 +52,9 @@ class SudokuPuzzle {
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    private final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
-    private final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    private final String[][] Words = {englishWords, frenchWords};
+    final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
 
     void readPuzzlesFromInputStream(InputStream inputStream) {
