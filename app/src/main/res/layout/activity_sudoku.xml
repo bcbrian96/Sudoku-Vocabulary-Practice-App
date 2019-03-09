@@ -4,11 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
         <Switch
             android:id="@+id/language_switch"
             android:layout_width="wrap_content"
@@ -32,33 +27,8 @@
             >
         </GridView>
 
-        <LinearLayout
-            android:id="@+id/linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:layout_weight="0"
-            >
-            <Button
-                android:id="@+id/resetBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:text="reset"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkSudoku"
-                android:layout_weight="2"
-                android:layout_gravity="bottom"
-                android:text="Check Sudoku"
-                />
-
-        </LinearLayout>
-
-
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_weight="0"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,10 +55,5 @@
         android:layout_gravity="right"
         android:text="Check Sudoku"/>
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gridText"
-        android:textSize="30sp"/>
 
 </LinearLayout>
