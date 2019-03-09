@@ -11,8 +11,8 @@ import java.util.Locale;
 import java.util.Random;
 
 
-public class SudokuPuzzle {
-    protected final int[] originalPuzzle = {
+class SudokuPuzzle {
+    final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
             0, 9, 8,  0, 0, 0,  0, 6, 0,
@@ -41,7 +41,7 @@ public class SudokuPuzzle {
     final int[] workingPuzzle = originalPuzzle.clone();
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
-    public int languageIndex = 1;
+    int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
@@ -87,18 +87,18 @@ public class SudokuPuzzle {
     SudokuPuzzle() {
     }
 
-    protected String[] getChoiceWords() {
+    String[] getChoiceWords() {
         return Words[languageIndex];
     }
 
-    protected String getWordAtPosition(int position) {
+    String getWordAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
         }
         return Words[languageIndex^1][workingPuzzle[position]];
     }
 
-    protected String getTranslationAtPosition(int position) {
+    String getTranslationAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex^1][workingPuzzle[position]];
         }
@@ -109,7 +109,7 @@ public class SudokuPuzzle {
         //assert (0<=value) && (value<=9);
         workingPuzzle[position] = value;
     }
-    public boolean isNotPreset(int position) {
+    boolean isNotPreset(int position) {
         return originalPuzzle[position]==0;
     }
 
@@ -117,11 +117,11 @@ public class SudokuPuzzle {
         languageIndex ^= 1;
     }
 
-    public Locale getVoiceLocale() {
+    Locale getVoiceLocale() {
         return locales[languageIndex];
     }
 
-    public String getCurrentLanguage() {
+    String getCurrentLanguage() {
         return languageNames[languageIndex];
     }
 
@@ -170,7 +170,7 @@ public class SudokuPuzzle {
         return false; // Puzzle is complete
     }
 
-    public int[] getRow(int rowNum) {
+    int[] getRow(int rowNum) {
         int[] row = new int[9];
         for (int i = 0; i < 9; i++) {
             row[i] = workingPuzzle[(i + rowNum * 9)];
@@ -178,7 +178,7 @@ public class SudokuPuzzle {
         return row;
     }
 
-    protected int[] getColumn(int columnNum) {
+    int[] getColumn(int columnNum) {
         int[] column = new int[9];
         for (int i = 0; i < 9; i++) {
             column[i] = workingPuzzle[(columnNum + i * 9)];
@@ -186,7 +186,7 @@ public class SudokuPuzzle {
         return column;
     }
 
-    protected int[] getBox(int boxNum) {
+    int[] getBox(int boxNum) {
         int[] box = new int[9];
         int firstRow = (boxNum - (boxNum % 3));
         int firstCol = 3 * (boxNum % 3);
@@ -201,7 +201,7 @@ public class SudokuPuzzle {
     }
 
     //    Check if rows and columns contain duplicates
-    protected boolean containsDuplicates(int[] region) {
+    boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[10];
         for (int value : region) {
             if (seen_yet[value]) {
