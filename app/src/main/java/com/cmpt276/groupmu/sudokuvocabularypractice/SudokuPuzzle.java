@@ -1,7 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.widget.TextView;
-
 import java.util.Locale;
 
 public class SudokuPuzzle {
