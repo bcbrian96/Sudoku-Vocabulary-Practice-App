@@ -150,6 +150,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
+        Log.i(null, "generateGrid()");
     }
 
     //    Button Click methods
@@ -340,6 +341,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 puzzle.frWords.remove(i);
             }
 
+        } else{
+//            Do nothing
         }
         puzzle.enWords.add(0, "");
         puzzle.frWords.add(0, "");
@@ -351,6 +354,45 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         System.out.println(Arrays.toString(puzzle.english));
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        Log.i(null, "Saved Instance");
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
+        savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
+        savedInstanceState.putStringArray("english", puzzle.english);
+        savedInstanceState.putStringArray("french", puzzle.french);
+        savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
 
+
+
+        // etc.
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(null, "generate instance");
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+
+        int[] wp = savedInstanceState.getIntArray("workingPuzzle");
+        System.arraycopy(wp, 0, puzzle.workingPuzzle, 0, 81);
+
+        int[] op = savedInstanceState.getIntArray("originalPuzzle");
+        System.arraycopy(op, 0, puzzle.originalPuzzle, 0, 81);
+
+        puzzle.english = savedInstanceState.getStringArray("english");
+        puzzle.french = savedInstanceState.getStringArray("french");
+        puzzle.languageIndex = savedInstanceState.getInt("languageIndex");
+        puzzle.Words[0] = puzzle.english;
+        puzzle.Words[1] = puzzle.french;
+
+    }
 
 }

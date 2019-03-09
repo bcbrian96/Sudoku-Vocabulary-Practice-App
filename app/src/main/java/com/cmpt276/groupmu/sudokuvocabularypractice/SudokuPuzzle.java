@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 class SudokuPuzzle {
-    private final int[] originalPuzzle = {
+    final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
             0, 9, 8,  0, 0, 0,  0, 6, 0,
@@ -39,7 +39,7 @@ class SudokuPuzzle {
     String[] french = {"", "", "", "", "", "", "", "", ""};
 
 
-    private int languageIndex = 1;
+    int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
