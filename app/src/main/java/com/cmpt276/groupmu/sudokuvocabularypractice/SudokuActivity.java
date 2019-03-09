@@ -30,6 +30,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button resetButton;
     private int dialogChoice;
     Button checkSudokuButton;
+    Button newPuzzleButton;
     Switch languageSwitch;
 
 //    TextToSpeech
@@ -46,16 +47,21 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sudoku);
 
 //        Declared Variables
+        puzzle = new SudokuPuzzle();
+        puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
+        puzzle.newPuzzle();
         grid = findViewById(R.id.grid);
 //        linear = findViewById(R.id.linear);
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
+        newPuzzleButton = findViewById(R.id.newPuzzle);
+        newPuzzleButton.setOnClickListener(this);
+
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        puzzle = new SudokuPuzzle();
         languageSwitch.setText(puzzle.getCurrentLanguage());
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -161,6 +167,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Check switch eror", "" + e);
                 }
                 break;
+            case R.id.newPuzzle:
+                try {
+                    puzzle.newPuzzle();
+                    generateGrid();
+                } catch (Exception e) {
+                    Log.d("New Puzzle error:","" + e);
+                }
 
         }
     }
