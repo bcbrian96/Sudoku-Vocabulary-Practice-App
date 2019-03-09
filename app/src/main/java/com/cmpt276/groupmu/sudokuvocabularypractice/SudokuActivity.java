@@ -1,5 +1,6 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,18 +9,29 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
+import java.util.List;
 
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,11 +49,19 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float pitch = (float)0.7;
     float speed = (float)0.7;
 
+    private List<String> englishWords = new ArrayList<String>();
+    private List<String> frenchWords = new ArrayList<String>();
+    private String [][] Words;
+    //private String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    //private String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    //private String[][] Words = {englishWords, frenchWords};
+
+    private Integer[] numHints;
 
 //    Initialization
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        For every activity
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
 
@@ -77,12 +97,42 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         generateGrid();
-
-
-
-
     }
-//    Drop Down Menue
+
+    private void readData() {
+        InputStream is = getResources().openRawResource(R.raw.words);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+        String line;
+        englishWords.add("");
+        frenchWords.add("");
+        try{
+            while ( (line = reader.readLine()) != null) {
+
+                String[] tokens = line.split(",");
+                englishWords.add(tokens[0]);
+                frenchWords.add(tokens[1]);
+                Log.d("MyActivity", "Just added: " + tokens[0] + "AND" + tokens[1]);
+                Log.d("MyActivity", "Length of array = " + englishWords.size() + "AND" + frenchWords.size());
+
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        String english[] = new String[englishWords.size()];
+        english = (String[]) englishWords.toArray(english);
+        String french[] = new String[frenchWords.size()];
+        french = (String[]) frenchWords.toArray(french);
+
+        Words = new String[][]{english, french};
+
+        numHints = new Integer[englishWords.size()]; //for number of hints asked by user
+        Arrays.fill(numHints,0);
+    }
+
+
+    //    Drop Down Menue
     public void dialogBuilder(final TextView set, final int position) {
         AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
@@ -129,6 +179,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     } else {
                         hintPresetCellTranslation(position);
                         speak(position);
+                        Log.d("MyActivity", "Hint Position: " + position);
+                        numHints[puzzle.workingPuzzle[position]]++;
+                        Log.d("MyActivity", "NumHint Value: " + numHints[puzzle.workingPuzzle[position]]);
                     }
                 }
             }
