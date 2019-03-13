@@ -94,6 +94,21 @@ class SudokuPuzzle {
     SudokuPuzzle() {
     }
 
+    enum Mode {NORMAL, LISTENING}
+    private Mode mode = Mode.NORMAL;
+
+    boolean isNormalMode() {
+        return mode==Mode.NORMAL;
+    }
+
+    void swapMode() {
+        if (isNormalMode()) {
+            mode = Mode.LISTENING;
+        } else {
+            mode = Mode.NORMAL;
+        }
+    }
+
     String[] getChoiceWords() {
         return Words[languageIndex];
     }

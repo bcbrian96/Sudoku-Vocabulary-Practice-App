@@ -40,6 +40,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Button newPuzzleButton;
     Switch languageSwitch;
+    Switch modeSwitch;
     private static final int READ_REQUEST_CODE = 42;
 
 //    TextToSpeech
@@ -74,6 +75,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
         languageSwitch.setText(puzzle.getCurrentLanguage());
+        modeSwitch = findViewById(R.id.mode_switch);
+        modeSwitch.setOnClickListener(this);
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
@@ -152,8 +155,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     if (puzzle.isNotPreset(position)) {
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
-                        hintPresetCellTranslation(position);
-                        speak(position);
+                        if(puzzle.isNormalMode()) {
+                            hintPresetCellTranslation(position);
+                        } else {
+                            speak(position);
+                        }
                     }
                 }
             }
@@ -187,6 +193,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Check switch eror", "" + e);
                 }
                 break;
+            case R.id.mode_switch:
+                try {
+                    changeMode();
+                } catch (Exception e) {
+                    Log.d("Mode switch error",""+e);
+                }
+                break;
             case R.id.newPuzzle:
                 try {
                     puzzle.newPuzzle();
@@ -218,6 +231,16 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         generateGrid();
         Toast.makeText(this, "Language Switched: " + puzzle.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
+    }
+
+    public void changeMode() {
+        puzzle.swapMode();
+        if (puzzle.isNormalMode()) {
+            modeSwitch.setText(R.string.mode_normal);
+        } else {
+            modeSwitch.setText(R.string.mode_listening);
+        }
+        generateGrid();
     }
 
     public void hintPresetCellTranslation(int position) {
