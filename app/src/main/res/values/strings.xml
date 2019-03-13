@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Sudoku Vocabulary Practice</string>
-    <string name="mode_normal">Normal</string>
-    <string name="mode_listening">Listening</string>
+    <string name="mode_normal">Reading Mode</string>
+    <string name="mode_listening">Listening Mode</string>
 </resources>
