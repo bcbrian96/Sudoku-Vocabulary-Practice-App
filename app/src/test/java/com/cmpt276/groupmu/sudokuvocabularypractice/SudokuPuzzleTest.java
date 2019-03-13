@@ -121,6 +121,7 @@ public class SudokuPuzzleTest {
     public void testResetPuzzle(){
             SudokuPuzzle testReset = new SudokuPuzzle();
             int [] expect = testReset.originalPuzzle;
+            testReset.setValueAtPosition(35,5);
             testReset.resetPuzzle();
             int [] actual = testReset.workingPuzzle;
             assertArrayEquals(expect,actual);
