@@ -155,9 +155,10 @@ class SudokuPuzzle {
 
     // Reset workingPuzzle to originalPuzzle
     void resetPuzzle() {
+
         for (int i = 0; i < workingPuzzle.length; i++) {
             workingPuzzle[i] = originalPuzzle[i];
-        }
+      }
     }
 
     boolean checkSudokuCorrect() {

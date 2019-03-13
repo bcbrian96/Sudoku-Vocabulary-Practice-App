@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.opencsv.CSVReader;
 
 import java.io.InputStream;

@@ -51,10 +51,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/checkSudoku"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:layout_gravity="bottom"
                     android:text="Check Sudoku"/>
+                <Button
+                    android:id="@+id/newPuzzle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:text="New Puzzle"/>
+                <Button xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/get_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open CSV"
+                    android:onClick="openFile"
+                    android:layout_weight="1"
+                    android:layout_gravity="bottom"/>
             </LinearLayout>
+
         </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
