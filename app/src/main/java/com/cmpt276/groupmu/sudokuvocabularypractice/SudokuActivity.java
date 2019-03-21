@@ -249,7 +249,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Speaking functions
     public void speak(int position) {
-        String text = puzzle.getTranslationAtPosition(position);
+        String text = puzzle.getForeignWordAtPosition(position);
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
