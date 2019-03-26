@@ -151,6 +151,10 @@ class SudokuPuzzle {
         return languageNames[languageIndex];
     }
 
+    String getForeignLanguage() {
+        return languageNames[0];
+    }
+
     private void setPuzzle(int puzzleIndex) {
         // Check that puzzle index is valid.
         if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {

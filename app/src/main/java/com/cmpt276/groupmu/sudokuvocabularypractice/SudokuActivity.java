@@ -85,10 +85,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
                     int result = mTTS.setLanguage(puzzle.getVoiceLocale());
 
-                    if(result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
-                        Log.e("TTS", "Language No Supported");
-                        Toast.makeText(getApplicationContext(), "Failed to set language", Toast.LENGTH_SHORT).show();
+                    if (result == TextToSpeech.LANG_MISSING_DATA){
+                        Toast.makeText(getApplicationContext(),
+                                "Your device does not have voice data for "+puzzle.getForeignLanguage()
+                                +". Please download it from language settings.",Toast.LENGTH_LONG).show();
+                    } else if (result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("TTS", "Language Not Supported");
+                        Toast.makeText(getApplicationContext(), "Sorry, Speech is not supported for "+puzzle.getForeignLanguage(), Toast.LENGTH_SHORT).show();
                     }
                 } else{
                     Log.e("TTS", "Initialization Failed");
@@ -239,6 +242,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             modeSwitch.setText(R.string.mode_normal);
         } else {
             modeSwitch.setText(R.string.mode_listening);
+            // move TTS initialization here
         }
         generateGrid();
     }
