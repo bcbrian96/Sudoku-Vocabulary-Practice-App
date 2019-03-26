@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static org.apache.commons.lang3.text.WordUtils.capitalize;
+
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
 //    Global Variables
@@ -128,7 +130,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
                     puzzle.setValueAtPosition(position, dialogChoice);
-                    set.setText(puzzle.getWordAtPosition(position));
+                    set.setText(capitalize(puzzle.getWordAtPosition(position)));
                     set.setTextColor(Color.parseColor("#ffc107"));
                 }
             }
@@ -348,9 +350,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             String[] nextLine;
 
             while ((nextLine = dataRead.readNext()) != null) {
+                String str = "this";
 
-                puzzle.enWords.add(nextLine[0]);
-                puzzle.frWords.add(nextLine[1]);
+                puzzle.enWords.add(capitalize(nextLine[0]));
+                puzzle.frWords.add(capitalize(nextLine[1]));
             }
 
 

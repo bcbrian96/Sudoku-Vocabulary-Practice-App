@@ -51,19 +51,29 @@
         android:orientation="vertical">
 
         <Switch
+            android:switchPadding="30dp"
+            android:layoutDirection="rtl"
             android:id="@+id/mode_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFeatureSettings="bold"
 
             android:text="@string/mode_normal"
+            android:textSize="20dp"
             android:textColor="@color/colorAccent"
-            android:layout_alignParentLeft="true"
+
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
 
             android:checked="false"/>
+
+
         <Switch
+            android:switchPadding="30dp"
+            android:layoutDirection="rtl"
+            android:textSize="20dp"
+            android:paddingRight="10dp"
             android:id="@+id/language_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,6 +136,18 @@
             android:background="@color/colorAccent"
             android:text="Open CSV"
             android:onClick="openFile"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_marginTop="10dp"
+            android:text="SUDOKU"/>
     </LinearLayout>
     <TextView
     android:layout_width="wrap_content"
