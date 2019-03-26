@@ -2,8 +2,11 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.graphics.drawable.IconCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.TextViewCompat;
 import android.util.TypedValue;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
@@ -40,6 +43,7 @@ public class SudokuAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //LayoutInflater inflater = (LayoutInflater) context         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,10 +54,13 @@ public class SudokuAdapter extends BaseAdapter {
             textView = new TextView(context);
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
-            textView.setBackgroundColor(Color.LTGRAY);
+            textView.setBackgroundColor(Color.parseColor("#007080"));
+            textView.setTextColor(Color.WHITE);
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
             //textView.setTextSize(32);
-            textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
+//            textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 

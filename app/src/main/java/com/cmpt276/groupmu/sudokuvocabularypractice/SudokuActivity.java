@@ -3,6 +3,7 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -109,7 +110,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
-//    Drop Down Menue
+//    Drop Down Menu
     public void dialogBuilder(final TextView set, final int position) {
         AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
@@ -128,7 +129,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (dialogChoice != -1) {
                     puzzle.setValueAtPosition(position, dialogChoice);
                     set.setText(puzzle.getWordAtPosition(position));
-//                    set.setTextColor(1255);
+                    set.setTextColor(Color.parseColor("#ffc107"));
                 }
             }
         });
@@ -145,7 +146,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Generate Grid
     public void generateGrid() {
         grid.setAdapter(new SudokuAdapter(this, puzzle));
-
+//        grid.setBackgroundColor(Color.parseColor("#29434e"));
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -163,6 +164,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
+        grid.bringToFront();
         Log.i(null, "generateGrid()");
     }
 
