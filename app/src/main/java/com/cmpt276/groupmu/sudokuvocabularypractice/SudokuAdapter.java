@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -51,7 +52,9 @@ public class SudokuAdapter extends BaseAdapter {
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
             textView.setBackgroundColor(Color.LTGRAY);
-            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
+
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 120));
+
             //textView.setTextSize(32);
             textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
             textView.setGravity(Gravity.CENTER);

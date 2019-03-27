@@ -1,6 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,9 +11,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
+import static android.content.ContentValues.TAG;
+
 
 class SudokuPuzzle {
-    final int[] originalPuzzle = {
+     int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
             0, 9, 8,  0, 0, 0,  0, 6, 0,
@@ -25,6 +28,10 @@ class SudokuPuzzle {
             2, 0, 0,  4, 1, 9,  0, 0, 5,
             0, 4, 5,  0, 8, 0,  0, 7, 9
     };
+    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
+
+
+
     //    private final int[] originalPuzzle = {
 //            1, 2, 3,  4, 5, 6,  7, 8, 9,
 //            4, 5, 6,  7, 8, 9,  1, 2, 3,
@@ -38,7 +45,9 @@ class SudokuPuzzle {
 //            6, 7, 8,  9, 1, 2,  3, 4, 5,
 //            9, 1, 2,  3, 4, 5,  6, 7, 8
 //    };
-    final int[] workingPuzzle = originalPuzzle.clone();
+
+    int detected_User_Choice_Size ;
+    int[] workingPuzzle =new int [81];
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
     ArrayList<String> enWords = new ArrayList<>();
@@ -56,7 +65,30 @@ class SudokuPuzzle {
     final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
     String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
+    void setOriginalPuzzle (int gridScale){
+        Log.d(TAG, "setOriginalPuzzle: "+gridScale);
+        switch (gridScale) {
+            case 0:
+                try {
+                    detected_User_Choice_Size = gridScale;
 
+                    Log.d("okok", "Ok, the case actually goes to here");
+                    Log.d("wantSize", "the size:" + detected_User_Choice_Size);
+
+                } catch (Exception e) {
+                    Log.d("Can not reset", " " + e);
+                }
+                break;
+            case 1:
+                 {
+                     detected_User_Choice_Size = gridScale;
+                    Log.d("okok", "Ok?");
+                    Log.d("wantSize", "the size:" + detected_User_Choice_Size);
+
+                }
+                break;
+        }
+    }
     void readPuzzlesFromInputStream(InputStream inputStream) {
         // This assumes each puzzle is on a separate line, as in .sdm format.
         try {
@@ -71,7 +103,7 @@ class SudokuPuzzle {
         }
     }
 //    Puzzles are sourced from http://forum.enjoysudoku.com/low-stepper-puzzles-t4200.html
-    private int[] convertPuzzleStringToArray(String puzzleString) {
+     private int[] convertPuzzleStringToArray(String puzzleString) {
 //        if (puzzleString.startsWith("#")) return null;
         int[] puzzleArray = new int[81];
         int puzzleSize=0;
@@ -93,6 +125,7 @@ class SudokuPuzzle {
 
     SudokuPuzzle() {
     }
+
 
     String[] getChoiceWords() {
         return Words[languageIndex];
@@ -132,7 +165,7 @@ class SudokuPuzzle {
         return languageNames[languageIndex];
     }
 
-    private void setPuzzle(int puzzleIndex) {
+     void setPuzzle(int puzzleIndex) {
         // Check that puzzle index is valid.
         if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
             Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");

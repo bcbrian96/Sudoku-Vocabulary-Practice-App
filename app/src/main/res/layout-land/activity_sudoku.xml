@@ -3,20 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <Switch
-                android:id="@+id/language_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFeatureSettings="bold"
-                android:layout_marginLeft="50dp"
-                android:layout_marginStart="50dp"
-                android:checked="false"
-                android:layout_gravity="end"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,10 +28,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_gravity="bottom"
                 android:layout_weight="4"
                 >
+                <Switch
+                    android:id="@+id/language_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFeatureSettings="bold"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginStart="50dp"
+                    android:checked="false"
+                    android:layout_gravity="end"/>
                 <Button
                     android:id="@+id/resetBtn"
                     android:layout_width="wrap_content"
@@ -69,9 +70,14 @@
                     android:onClick="openFile"
                     android:layout_weight="1"
                     android:layout_gravity="bottom"/>
+                <Button xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/NewGame"
+                    android:text="New Game"/>
             </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

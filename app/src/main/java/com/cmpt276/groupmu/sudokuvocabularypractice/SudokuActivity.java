@@ -9,8 +9,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,13 +38,15 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Button newPuzzleButton;
     Switch languageSwitch;
+    Button newGameButton;
     private static final int READ_REQUEST_CODE = 42;
-
+    //int detected_User_Choice_Size;
+    int GridSizeChoice;
 //    TextToSpeech
     private TextToSpeech mTTS;
     float pitch = (float)0.7;
     float speed = (float)0.7;
-
+    int detected_User_Choice_Size;
 
 
 
@@ -55,10 +56,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //        For every activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
+        final int puzzleSize= getIntent().getIntExtra("USER_REQUEST_SIZE", 2);
 
 //        Declared Variables
         puzzle = new SudokuPuzzle();
+        detected_User_Choice_Size = puzzleSize;
+        puzzle.setOriginalPuzzle(puzzleSize);
         puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
+       // puzzle.setOriginalPuzzle(detected_User_Choice_Size);
         puzzle.newPuzzle();
         grid = findViewById(R.id.grid);
 //        linear = findViewById(R.id.linear);
@@ -68,6 +73,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         checkSudokuButton.setOnClickListener(this);
         newPuzzleButton = findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(this);
+        newGameButton = findViewById(R.id.NewGame);
+        newGameButton.setOnClickListener(this);
 
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
@@ -112,30 +119,18 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
 //        Check Language Mdde
-        sudokuWords.setSingleChoiceItems(puzzle.getChoiceWords(), 0, new DialogInterface.OnClickListener() {
+        sudokuWords.setItems(puzzle.getChoiceWords(),  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;
+                if (dialogChoice != -1){
+                puzzle.setValueAtPosition(position, dialogChoice);
+                set.setText(puzzle.getWordAtPosition(position));}
+
             }
         });
 //        Set value to grid
-        sudokuWords.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
-                if (dialogChoice != -1) {
-                    puzzle.setValueAtPosition(position, dialogChoice);
-                    set.setText(puzzle.getWordAtPosition(position));
-//                    set.setTextColor(1255);
-                }
-            }
-        });
-//
-        sudokuWords.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+
         sudokuWords.show();
 //        Toast.makeText(this, mText, Toast.LENGTH_SHORT).show();
     }
@@ -193,8 +188,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
                 }
+                break;
 
         }
+
     }
 
 //    Check Sudoku solutions
@@ -313,6 +310,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         }
+
     }
 
     public void parseCSV( Uri uri){
@@ -344,6 +342,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
     public void fix_size(){
         int size = puzzle.enWords.size();
+       // int var = detected_User_Choice_Size;
         if(size < 9){
             for(int i = 1; i < 9-size+1; i++){
                 puzzle.enWords.add(puzzle.englishWords[i]);
@@ -408,5 +407,28 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         puzzle.Words[1] = puzzle.french;
 
     }
+//    public void sizeChoosingDialogBuilder() {
+//        AlertDialog.Builder gridSelect = new AlertDialog.Builder(this);
+//        //GridSizeChoice = 2;
+//        gridSelect.setTitle("Select a grid size");
+//        gridSelect.setItems(puzzle.gridSizeArray, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                GridSizeChoice = which;
+//                puzzle.setOriginalPuzzle(GridSizeChoice);
+//                if (GridSizeChoice == 1){
+//                    //puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.testpuzzles));
+//                    puzzle.newPuzzle();
+//                    Log.d ("testPuzzle", "The dialog is working fine");
+//                    generateGrid();
+//                }
+//
+//            }
+//        });
+//        gridSelect.show();
+//
+    }
 
-}
+
+
+

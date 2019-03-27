@@ -11,10 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".SudokuActivity"
+        <activity
+            android:name=".SudokuActivity"
+            android:configChanges="orientation">
 
-            android:configChanges="orientation|screenSize">
-
+        </activity>
+        <activity android:name=".HomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
