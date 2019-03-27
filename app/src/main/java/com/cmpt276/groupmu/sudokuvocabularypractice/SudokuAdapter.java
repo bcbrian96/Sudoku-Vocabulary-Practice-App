@@ -49,7 +49,9 @@ public class SudokuAdapter extends BaseAdapter {
         if (convertView == null) {
             textView = (TextView) inflater.inflate(R.layout.grid_item, parent, false);
             textView.setBackgroundColor(Color.LTGRAY);
-            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
+            // set background based on preset / incorrect
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, parent.getHeight()/10));
+            // replace 10 with (puzzle size + 1), or something like that
             textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
 
             if (puzzle.isNormalMode() || puzzle.isNotPreset(position)) {
