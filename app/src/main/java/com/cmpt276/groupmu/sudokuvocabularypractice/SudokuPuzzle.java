@@ -113,6 +113,10 @@ class SudokuPuzzle {
         return Words[languageIndex];
     }
 
+    String getForeignWordAtPosition(int position) {
+        return Words[1][workingPuzzle[position]];
+    }
+
     String getWordAtPosition(int position) {
         if (isNotPreset(position)) {
             return Words[languageIndex][workingPuzzle[position]];
@@ -140,11 +144,15 @@ class SudokuPuzzle {
     }
 
     Locale getVoiceLocale() {
-        return locales[languageIndex];
+        return locales[1]; // The foreign language
     }
 
     String getCurrentLanguage() {
         return languageNames[languageIndex];
+    }
+
+    String getForeignLanguage() {
+        return languageNames[0];
     }
 
     private void setPuzzle(int puzzleIndex) {

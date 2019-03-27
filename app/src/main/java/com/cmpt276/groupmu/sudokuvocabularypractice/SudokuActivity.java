@@ -84,10 +84,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
                     int result = mTTS.setLanguage(puzzle.getVoiceLocale());
 
-                    if(result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
-                        Log.e("TTS", "Language No Supported");
-                        Toast.makeText(getApplicationContext(), "Failed to set language", Toast.LENGTH_SHORT).show();
+                    if (result == TextToSpeech.LANG_MISSING_DATA){
+                        Toast.makeText(getApplicationContext(),
+                                "Your device does not have voice data for "+puzzle.getForeignLanguage()
+                                +". Please download it from language settings.",Toast.LENGTH_LONG).show();
+                    } else if (result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("TTS", "Language Not Supported");
+                        Toast.makeText(getApplicationContext(), "Sorry, Speech is not supported for "+puzzle.getForeignLanguage(), Toast.LENGTH_SHORT).show();
                     }
                 } else{
                     Log.e("TTS", "Initialization Failed");
@@ -236,8 +239,20 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         puzzle.swapMode();
         if (puzzle.isNormalMode()) {
             modeSwitch.setText(R.string.mode_normal);
+            languageSwitch.setEnabled(true);
         } else {
             modeSwitch.setText(R.string.mode_listening);
+            // Listening mode: ensure foreign language is spoken (prefilled)
+            // and native language is input.
+            if (!puzzle.getCurrentLanguage().equals(puzzle.getForeignLanguage())) {
+                puzzle.swapLanguage();
+                languageSwitch.setText(puzzle.getCurrentLanguage());
+                languageSwitch.setChecked(false);
+            }
+            languageSwitch.setEnabled(false); // disable changing language
+            // possible todo: refactor so Normal, Alt-language, Listening are all different
+            // eg. when starting new puzzle, choose mode from 3 above
+            // move TTS initialization here ?
         }
         generateGrid();
     }
@@ -248,7 +263,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 //    Speaking functions
     public void speak(int position) {
-        String text = puzzle.getTranslationAtPosition(position);
+        String text = puzzle.getForeignWordAtPosition(position);
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
