@@ -311,7 +311,7 @@ class SudokuPuzzle {
     boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[detected_User_Choice_Size+1];
         for (int value : region) {
-            if (seen_yet[value]) {
+            if (value!=0 && seen_yet[value]) {
                 return true; // we already saw this word
             }
             seen_yet[value] = true;
