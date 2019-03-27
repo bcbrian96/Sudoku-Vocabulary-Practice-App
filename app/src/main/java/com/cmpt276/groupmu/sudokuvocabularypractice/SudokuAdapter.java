@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -42,24 +43,19 @@ public class SudokuAdapter extends BaseAdapter {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //LayoutInflater inflater = (LayoutInflater) context         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         TextView textView;
+
         if (convertView == null) {
-
-            textView = new TextView(context);
-
-            //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
+            textView = (TextView) inflater.inflate(R.layout.grid_item, parent, false);
             textView.setBackgroundColor(Color.LTGRAY);
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
-            //textView.setTextSize(32);
             textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
-            textView.setGravity(Gravity.CENTER);
-            textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
             if (puzzle.isNormalMode() || puzzle.isNotPreset(position)) {
                 textView.setText(puzzle.getWordAtPosition(position));
             } else {
+                // Show numbers in preset cells in Listening Mode.
                 textView.setText(getItem(position).toString());
             }
 
