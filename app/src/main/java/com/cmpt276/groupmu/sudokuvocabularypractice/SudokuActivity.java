@@ -240,9 +240,20 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         puzzle.swapMode();
         if (puzzle.isNormalMode()) {
             modeSwitch.setText(R.string.mode_normal);
+            languageSwitch.setEnabled(true);
         } else {
             modeSwitch.setText(R.string.mode_listening);
-            // move TTS initialization here
+            // Listening mode: ensure foreign language is spoken (prefilled)
+            // and native language is input.
+            if (!puzzle.getCurrentLanguage().equals(puzzle.getForeignLanguage())) {
+                puzzle.swapLanguage();
+                languageSwitch.setText(puzzle.getCurrentLanguage());
+                languageSwitch.setChecked(false);
+            }
+            languageSwitch.setEnabled(false); // disable changing language
+            // possible todo: refactor so Normal, Alt-language, Listening are all different
+            // eg. when starting new puzzle, choose mode from 3 above
+            // move TTS initialization here ?
         }
         generateGrid();
     }
