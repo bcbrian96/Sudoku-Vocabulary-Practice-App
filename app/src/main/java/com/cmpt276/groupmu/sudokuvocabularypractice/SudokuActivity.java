@@ -404,8 +404,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // killed and restarted.
         savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
         savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
-        savedInstanceState.putStringArray("english", puzzle.english);
-        savedInstanceState.putStringArray("french", puzzle.french);
+        savedInstanceState.putStringArray("english", puzzle.englishWords);
+        savedInstanceState.putStringArray("french", puzzle.frenchWords );
         savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
 
 
