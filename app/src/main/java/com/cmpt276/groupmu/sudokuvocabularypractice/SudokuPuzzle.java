@@ -259,12 +259,13 @@ class SudokuPuzzle {
       }
     }
 
-    boolean checkSudokuCorrect() {
-        boolean result = true;
+    boolean checkSudokuIncorrect() {
+        // If any rows/columns/boxes contain duplicates, sudoku is incorrect: return true.
+        boolean result = false;
         for (int regionNum = 0; regionNum < detected_User_Choice_Size; regionNum++) {
-            result = result && !containsDuplicates(getRow(regionNum));
-            result = result && !containsDuplicates(getColumn(regionNum));
-            result = result && !containsDuplicates(getBox(regionNum));
+            result = result || containsDuplicates(getRow(regionNum));
+            result = result || containsDuplicates(getColumn(regionNum));
+            result = result || containsDuplicates(getBox(regionNum));
         }
         return result;
     }

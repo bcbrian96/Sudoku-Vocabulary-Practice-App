@@ -68,10 +68,10 @@ public class SudokuPuzzleTest {
             assertEquals(expect,actual);
     }
     @Test
-    public void testCheckSudokuCorrect(){
+    public void testCheckSudokuIncorrect(){
         SudokuPuzzle testCheckSudoku = new SudokuPuzzle();
         boolean expect = false;
-        boolean acutal = testCheckSudoku.checkSudokuCorrect();
+        boolean acutal = testCheckSudoku.checkSudokuIncorrect();
         assertEquals(expect,acutal);
     }
     @Test
