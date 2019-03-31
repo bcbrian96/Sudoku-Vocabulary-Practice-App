@@ -126,4 +126,17 @@ public class SudokuPuzzleTest {
             int [] actual = testReset.workingPuzzle;
             assertArrayEquals(expect,actual);
     }
+
+    @Test
+    public void testSwapMode(){
+        SudokuPuzzle testMode = new SudokuPuzzle();
+        testMode.swapMode();
+        assertNotEquals(true, testMode.isNormalMode());
+
+    }
+
+    @Test
+    public void testFromInputStream(){
+
+    }
 }
