@@ -55,7 +55,10 @@ public class SudokuAdapter extends BaseAdapter {
             textView = new TextView(context);
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
-            textView.setBackgroundColor(Color.parseColor("#007080"));
+            textView.setBackgroundColor(Color.parseColor("#455a64"));
+            if(puzzle.isNotPreset(position)){
+                textView.setBackgroundColor(Color.parseColor("#007080"));
+            }
             textView.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
                 textView.isAllCaps();
