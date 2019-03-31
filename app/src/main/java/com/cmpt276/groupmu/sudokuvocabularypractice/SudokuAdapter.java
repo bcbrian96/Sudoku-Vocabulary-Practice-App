@@ -22,12 +22,16 @@ import static android.app.PendingIntent.getActivity;
 import static java.security.AccessController.getContext;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
+/**
+ * The Sudoku Adapter allows Java to interact with the GUI
+ */
 public class SudokuAdapter extends BaseAdapter {
 
-
+    // Global Variables
     private Context context;
     private SudokuPuzzle puzzle;
 
+    // Initialization
     public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
         this.puzzle = puzzle;
@@ -44,6 +48,15 @@ public class SudokuAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+
+    /**
+     * This is called everytime the app is started, or is restored from a landscape change
+     * @param position  The position within the GridView
+     * @param convertView   The reused view. Set to null so that we don't have recycling
+     * @param parent    The parent of the view, used to inflate our textview to the proper
+     *                  dimensions
+     * @return  A TextView
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -55,6 +68,9 @@ public class SudokuAdapter extends BaseAdapter {
             textView = new TextView(context);
 
             //textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));//inflater.inflate(R.layout.item, null);
+
+            // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
+            // scales to fit the parent, has the appropriate colours/contrasts etc...
             textView.setBackgroundColor(Color.parseColor("#455a64"));
             if(puzzle.isNotPreset(position)){
                 textView.setBackgroundColor(Color.parseColor("#007080"));
@@ -63,7 +79,6 @@ public class SudokuAdapter extends BaseAdapter {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
                 textView.isAllCaps();
             }
-
 
             textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
             //textView.setTextSize(32);
