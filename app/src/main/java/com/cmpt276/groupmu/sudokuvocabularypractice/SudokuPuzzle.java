@@ -12,6 +12,7 @@ import java.util.Random;
 
 
 class SudokuPuzzle {
+//    9x9
     final int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
             6, 0, 0,  1, 9, 5,  0, 0, 0,
@@ -25,19 +26,7 @@ class SudokuPuzzle {
             2, 0, 0,  4, 1, 9,  0, 0, 5,
             0, 4, 5,  0, 8, 0,  0, 7, 9
     };
-    //    private final int[] originalPuzzle = {
-//            1, 2, 3,  4, 5, 6,  7, 8, 9,
-//            4, 5, 6,  7, 8, 9,  1, 2, 3,
-//            7, 8, 9,  1, 2, 3,  4, 5, 6,
-//
-//            2, 3, 4,  5, 6, 7,  8, 9, 1,
-//            5, 6, 7,  8, 9, 1,  2, 0, 0,
-//            8, 9, 1,  2, 3, 4,  5, 6, 7,
-//
-//            3, 4, 5,  6, 7, 8,  9, 1, 2,
-//            6, 7, 8,  9, 1, 2,  3, 4, 5,
-//            9, 1, 2,  3, 4, 5,  6, 7, 8
-//    };
+
     final int[] workingPuzzle = originalPuzzle.clone();
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
@@ -52,8 +41,9 @@ class SudokuPuzzle {
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    final String[] frenchWords = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
-    final String[] englishWords = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    final String[] frenchWords = {"", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf"};
+    final String[] englishWords = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+
     String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
 

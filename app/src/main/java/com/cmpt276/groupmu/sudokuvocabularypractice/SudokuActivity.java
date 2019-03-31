@@ -3,6 +3,7 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+
+import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -112,7 +115,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
-//    Drop Down Menue
+//    Drop Down Menu
     public void dialogBuilder(final TextView set, final int position) {
         AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
@@ -130,8 +133,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
                     puzzle.setValueAtPosition(position, dialogChoice);
-                    set.setText(puzzle.getWordAtPosition(position));
-//                    set.setTextColor(1255);
+                    set.setText(capitalize(puzzle.getWordAtPosition(position)));
+                    set.setTextColor(Color.parseColor("#ffc107"));
                 }
             }
         });
@@ -148,7 +151,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 //    Generate Grid
     public void generateGrid() {
         grid.setAdapter(new SudokuAdapter(this, puzzle));
-
+//        grid.setBackgroundColor(Color.parseColor("#29434e"));
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -166,6 +169,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
+        grid.bringToFront();
         Log.i(null, "generateGrid()");
     }
 
@@ -361,9 +365,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             String[] nextLine;
 
             while ((nextLine = dataRead.readNext()) != null) {
+                String str = "this";
 
-                puzzle.enWords.add(nextLine[0]);
-                puzzle.frWords.add(nextLine[1]);
+                puzzle.enWords.add(capitalize(nextLine[0]));
+                puzzle.frWords.add(capitalize(nextLine[1]));
             }
 
 
@@ -414,8 +419,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // killed and restarted.
         savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
         savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
-        savedInstanceState.putStringArray("english", puzzle.english);
-        savedInstanceState.putStringArray("french", puzzle.french);
+        savedInstanceState.putStringArray("english", puzzle.englishWords);
+        savedInstanceState.putStringArray("french", puzzle.frenchWords );
         savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
 
 
