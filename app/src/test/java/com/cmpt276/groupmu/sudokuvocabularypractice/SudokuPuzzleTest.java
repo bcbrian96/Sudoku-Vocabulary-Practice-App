@@ -64,8 +64,12 @@ public class SudokuPuzzleTest {
     @Test
     public void testGetColumn() {
         SudokuPuzzle testColumn = new SudokuPuzzle();
-        int [] testCol = testColumn.getColumn(4);
-        int [] expect = {7,9,0,6,0,2,0,1,8};
+        // Manually set first column (assumes 9x9 puzzle size)
+        for (int i=0; i<9; i++) {
+            testColumn.workingPuzzle[i*9] = i;
+        }
+        int [] expect = {0,1,2,3,4,5,6,7,8};
+        int [] testCol = testColumn.getColumn(0);
         assertArrayEquals(expect, testCol);
 
     }
@@ -93,10 +97,10 @@ public class SudokuPuzzleTest {
             assertEquals(expect,actual);
     }
     @Test
-    public void testCheckSudokuCorrect(){
+    public void testCheckSudokuIncorrect(){
         SudokuPuzzle testCheckSudoku = new SudokuPuzzle();
         boolean expect = false;
-        boolean acutal = testCheckSudoku.checkSudokuCorrect();
+        boolean acutal = testCheckSudoku.checkSudokuIncorrect();
         assertEquals(expect,acutal);
     }
     @Test
@@ -117,25 +121,37 @@ public class SudokuPuzzleTest {
     @Test
     public void testGetRow (){
             SudokuPuzzle testRow = new SudokuPuzzle();
-            int[] expectRow = {2, 0, 0,  4, 1, 9,  0, 0, 5};
-            int[] actualRow = testRow.getRow(7);
+            // Manually set first row (assumes 9x9 puzzle size)
+            for (int i=0; i<9; i++) {
+                testRow.workingPuzzle[i] = i;
+            }
+            int[] expectRow = {0,1,2,3,4,5,6,7,8};
+            int[] actualRow = testRow.getRow(0);
             assertArrayEquals(expectRow,actualRow);
     }
     @Test
     public void testGetBox(){
             SudokuPuzzle testBox = new SudokuPuzzle();
-            int[] expectBox = {0,6,0,8,0,3,0,2,0};
+            // Manually set the section of the puzzle (relies on 9x9 size)
+            for (int i=0; i<9; i++) {
+                testBox.workingPuzzle[30 + (i%3) + 9*(i/3)] = i+1;
+            }
+            int[] expectBox = {1,2,3,4,5,6,7,8,9};
             int[] actualBox = testBox.getBox(4);
             assertArrayEquals(expectBox,actualBox);
     }
     @Test
     public void testContainDuplicates (){
-            SudokuPuzzle testContainDup = new SudokuPuzzle();
-            boolean expect = true;
-            boolean actual = testContainDup.containsDuplicates(testContainDup.workingPuzzle);
-            assertEquals(expect,actual);
-
-
+            SudokuPuzzle testPuzzle = new SudokuPuzzle();
+            // Zero the array: containsDuplicates should ignore zeros (empty squares)
+            for (int i=0; i<testPuzzle.workingPuzzle.length; i++) {
+                testPuzzle.workingPuzzle[i] = 0;
+            }
+            assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
+            // Add duplicates
+            testPuzzle.workingPuzzle[0] = 1;
+            testPuzzle.workingPuzzle[1] = 1;
+            assertTrue(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
     }
     @Test
     public void testGetCurrentLanguage(){

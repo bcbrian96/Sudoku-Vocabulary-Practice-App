@@ -1,6 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +10,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+
+import static android.content.ContentValues.TAG;
+
+
 
 /**
  * SudokuPuzzle class. Contains methods:
@@ -19,21 +24,31 @@ class SudokuPuzzle {
 
     /** VARIABLES */
 //    9x9
-    final int[] originalPuzzle = {
+    int[] originalPuzzle = {
             5, 4, 0,  0, 7, 0,  0, 0, 0,
-            6, 0, 0,  1, 9, 5,  0, 0, 0,
-            0, 9, 8,  0, 0, 0,  0, 6, 0,
+            6, 0, 0,  1, 8, 5,  0, 0, 0,
+            0, 8, 8,  0, 0, 0,  0, 6, 0,
 
             8, 0, 0,  0, 6, 0,  0, 0, 3,
             4, 0, 0,  8, 0, 3,  0, 0, 1,
             7, 0, 3,  0, 2, 0,  0, 0, 6,
 
             0, 6, 0,  0, 0, 0,  0, 8, 0,
-            2, 0, 0,  4, 1, 9,  0, 0, 5,
-            0, 4, 5,  0, 8, 0,  0, 7, 9
+            2, 0, 0,  4, 1, 8,  0, 0, 5,
+            0, 4, 5,  0, 8, 0,  0, 7, 8
     };
+    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
-    final int[] workingPuzzle = originalPuzzle.clone();
+
+    int detected_User_Choice_Size = 9;
+    // Can be: 4, 6, 9, 12
+    // boxes: 2x2, 2x3, 3x3, 3x4
+    private int boxHeight = 3;
+    private int boxWidth = 3;
+    // boxHeight * boxWidth == size must be true
+    int[] workingPuzzle = originalPuzzle.clone();
+    int[] solutionPuzzle;
+
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
     ArrayList<String> enWords = new ArrayList<>();
@@ -47,12 +62,60 @@ class SudokuPuzzle {
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    final String[] frenchWords = {"", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf"};
-    final String[] englishWords = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+    String[] frenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
+    String[] newFrenchWordsArray;
+    String[] englishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    String[] newEnglishWordsArray;
 
     String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
 
+    void setPuzzleSize (int gridScale){
+        int defaultGameDifficulty = (int)(gridScale*gridScale)/3;
+        workingPuzzle = new int[gridScale*gridScale];
+        solutionPuzzle = new int [gridScale*gridScale];
+        originalPuzzle = new int [gridScale*gridScale];
+        Words =new String[][] {setEnglishWords(gridScale),setFrenchWords(gridScale)};
+        SudokuGenerator scalable = new SudokuGenerator(gridScale,defaultGameDifficulty);
+        Log.d(TAG, "setOriginalPuzzle: "+gridScale);
+        detected_User_Choice_Size = gridScale;
+        switch (gridScale) {
+            case 4:
+                boxWidth = 2;
+                break;
+            case 6:
+            case 9:
+                boxWidth = 3;
+                break;
+            case 12:
+                boxWidth = 4;
+                break;
+        }
+        boxHeight = gridScale / boxWidth;
+        //setEnglishWordsAndFrenchWords();
+        scalable.generatePuzzle();
+        scalable.scalablePuzzleGenerator();
+        getGamePuzzle(scalable.gamePuzzle);
+        workingPuzzle = originalPuzzle.clone();
+        getSolutionPuzzle(scalable.solutionPuzzle);
+        Log.d("wantSize", "the size:" + detected_User_Choice_Size);
+    }
+    String[] setEnglishWords(int gridSize) {
+        newEnglishWordsArray = new String[gridSize+1];
+        System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
+        return newEnglishWordsArray;
+    }
+    String[] setFrenchWords(int gridSize) {
+        newFrenchWordsArray = new String[gridSize+1];
+        System.arraycopy(frenchWords, 0, newFrenchWordsArray, 0, gridSize + 1);
+        return newFrenchWordsArray;
+    }
+    void getGamePuzzle(int [] inputPuzzle){
+        System.arraycopy(inputPuzzle, 0, originalPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
+    }
+    void getSolutionPuzzle (int [] inputPuzzle){
+        System.arraycopy(inputPuzzle, 0, solutionPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
+    }
     // Fancy witchcraft
     enum Mode {NORMAL, LISTENING}
     private Mode mode = Mode.NORMAL;
@@ -257,15 +320,16 @@ class SudokuPuzzle {
     }
 
     /**
-     * Check if the puzzle is correct thus far
-     * @return  A boolean value of true if the puzzle is correct so far, false otherwise
+     * Check if the puzzle is incorrect thus far
+     * @return  A boolean value of true if the puzzle is incorrect so far, false otherwise
      */
-    boolean checkSudokuCorrect() {
-        boolean result = true;
-        for (int regionNum = 0; regionNum < 9; regionNum++) {
-            result = result && !containsDuplicates(getRow(regionNum));
-            result = result && !containsDuplicates(getColumn(regionNum));
-            result = result && !containsDuplicates(getBox(regionNum));
+    boolean checkSudokuIncorrect() {
+        // If any rows/columns/boxes contain duplicates, sudoku is incorrect: return true.
+        boolean result = false;
+        for (int regionNum = 0; regionNum < detected_User_Choice_Size; regionNum++) {
+            result = result || containsDuplicates(getRow(regionNum));
+            result = result || containsDuplicates(getColumn(regionNum));
+            result = result || containsDuplicates(getBox(regionNum));
         }
         return result;
     }
@@ -287,9 +351,9 @@ class SudokuPuzzle {
      * @return  An array of integers for the puzzle row
      */
     int[] getRow(int rowNum) {
-        int[] row = new int[9];
-        for (int i = 0; i < 9; i++) {
-            row[i] = workingPuzzle[(i + rowNum * 9)];
+        int[] row = new int[detected_User_Choice_Size];
+        for (int i = 0; i < detected_User_Choice_Size; i++) {
+            row[i] = workingPuzzle[(i + rowNum * detected_User_Choice_Size)];
         }
         return row;
     }
@@ -300,9 +364,9 @@ class SudokuPuzzle {
      * @return  An array of integers for the puzzle column
      */
     int[] getColumn(int columnNum) {
-        int[] column = new int[9];
-        for (int i = 0; i < 9; i++) {
-            column[i] = workingPuzzle[(columnNum + i * 9)];
+        int[] column = new int[detected_User_Choice_Size];
+        for (int i = 0; i < detected_User_Choice_Size; i++) {
+            column[i] = workingPuzzle[(columnNum + i * detected_User_Choice_Size)];
         }
         return column;
     }
@@ -314,14 +378,15 @@ class SudokuPuzzle {
      * @return  The box array of integers
      */
     int[] getBox(int boxNum) {
-        int[] box = new int[9];
-        int firstRow = (boxNum - (boxNum % 3));
-        int firstCol = 3 * (boxNum % 3);
+        int[] box = new int[detected_User_Choice_Size];
+        int boxesPerRow = detected_User_Choice_Size/boxWidth;
+        int firstRow = (boxNum / boxesPerRow) * boxHeight;
+        int firstCol = (boxNum % boxesPerRow) * boxWidth;
         // Go through the box, left-to-right top-to-bottom.
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                int position = (firstCol + col) + (firstRow + row) * 9;
-                box[col + 3*row] = workingPuzzle[(position)];
+        for (int row = 0; row < boxHeight; row++) {
+            for (int col = 0; col < boxWidth; col++) {
+                int position = (firstCol + col) + (firstRow + row) * detected_User_Choice_Size;
+                box[col + boxWidth*row] = workingPuzzle[(position)];
             }
         }
         return box;
@@ -333,9 +398,9 @@ class SudokuPuzzle {
      * @return  A boolean value: true if there contains duplicates, false otherwise
      */
     boolean containsDuplicates(int[] region) {
-        boolean[] seen_yet = new boolean[10];
+        boolean[] seen_yet = new boolean[detected_User_Choice_Size+1];
         for (int value : region) {
-            if (seen_yet[value]) {
+            if (value!=0 && seen_yet[value]) {
                 return true; // we already saw this word
             }
             seen_yet[value] = true;

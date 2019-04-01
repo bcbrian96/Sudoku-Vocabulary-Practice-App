@@ -2,6 +2,10 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.support.v4.graphics.drawable.IconCompat;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.graphics.drawable.IconCompat;
@@ -10,11 +14,14 @@ import android.support.v4.widget.TextViewCompat;
 import android.util.TypedValue;
 import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -60,7 +67,7 @@ public class SudokuAdapter extends BaseAdapter {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //LayoutInflater inflater = (LayoutInflater) context         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         TextView textView;
         if (convertView == null) {
