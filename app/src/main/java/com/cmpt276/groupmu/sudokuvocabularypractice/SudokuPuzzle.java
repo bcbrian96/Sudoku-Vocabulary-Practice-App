@@ -64,9 +64,7 @@ class SudokuPuzzle {
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
     String[] frenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
-    String[] newFrenchWordsArray;
     String[] englishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
-    String[] newEnglishWordsArray;
 
     String[][] Words = {englishWords, frenchWords};
     int[] numHints = new int[10]; // update when puzzleSize changes, or on new game/new puzzle
@@ -77,7 +75,6 @@ class SudokuPuzzle {
         workingPuzzle = new int[gridScale*gridScale];
         solutionPuzzle = new int [gridScale*gridScale];
         originalPuzzle = new int [gridScale*gridScale];
-        Words =new String[][] {setEnglishWords(gridScale),setFrenchWords(gridScale)};
         Log.d(TAG, "setOriginalPuzzle: "+gridScale);
         detected_User_Choice_Size = gridScale;
         switch (gridScale) {
@@ -98,12 +95,12 @@ class SudokuPuzzle {
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
     String[] setEnglishWords(int gridSize) {
-        newEnglishWordsArray = new String[gridSize+1];
+        String[] newEnglishWordsArray = new String[gridSize + 1];
         System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
         return newEnglishWordsArray;
     }
     String[] setFrenchWords(int gridSize) {
-        newFrenchWordsArray = new String[gridSize+1];
+        String[] newFrenchWordsArray = new String[gridSize + 1];
         System.arraycopy(frenchWords, 0, newFrenchWordsArray, 0, gridSize + 1);
         return newFrenchWordsArray;
     }
@@ -292,15 +289,19 @@ class SudokuPuzzle {
     }
 
     /**
-     * Checks for a new puzzle
+     * Create a new random puzzle from a SudokuGenerator
+     * Also generate new list of word pairs from current pairs.
      */
     void newPuzzle() {
+        // generate Puzzle
         SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
         scalable.generatePuzzle();
         scalable.scalablePuzzleGenerator();
         getGamePuzzle(scalable.gamePuzzle);
         workingPuzzle = originalPuzzle.clone();
         getSolutionPuzzle(scalable.solutionPuzzle);
+        // get Words for puzzle
+        Words = new String[][] {setEnglishWords(detected_User_Choice_Size),setFrenchWords(detected_User_Choice_Size)};
     }
 
     /**
