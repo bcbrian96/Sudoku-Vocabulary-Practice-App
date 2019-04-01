@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
@@ -52,22 +53,33 @@ class SudokuPuzzle {
 
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
-    ArrayList<String> enWords = new ArrayList<>();
-    ArrayList<String> frWords = new ArrayList<>();
-
-    String[] english = {"", "", "", "", "", "", "", "", ""};
-    String[] french = {"", "", "", "", "", "", "", "", ""};
-
 
     int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    String[] frenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
-    String[] englishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    // Default words (numbers)
+    String[] defaultFrenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
+    String[] defaultEnglishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    // temporarily store words loaded from file:
+    // use in puzzle:
+    String[] allFrenchWords = defaultFrenchWords.clone();
+    String[] allEnglishWords = defaultEnglishWords.clone();
+    String[] frenchWords = Arrays.copyOfRange(allFrenchWords,0,detected_User_Choice_Size+2);
+    String[] englishWords = Arrays.copyOfRange(allEnglishWords,0,detected_User_Choice_Size+2);
 
     String[][] Words = {englishWords, frenchWords};
-    int[] numHints = new int[10]; // update when puzzleSize changes, or on new game/new puzzle
+
+    /**
+     * numHints stores the number of times a hint was asked for each pair.
+     */
+    int[] numHints = new int[detected_User_Choice_Size+1];
+    /**
+     * pairIndexes stores the original position of the puzzle words
+     * (eg. englishWords) in the array of all words (eg. allEnglishWords).
+     * It's also used with numHints.
+     */
+    int[] pairIndexes = {0,1,2,3,4,5,6,7,8,9};
     private int currentPuzzleIndex = -1;
 
     void setPuzzleSize (int gridScale){

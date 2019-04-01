@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
@@ -436,20 +437,27 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             InputStreamReader isr = new InputStreamReader(inputStream);
             CSVReader dataRead = new CSVReader(isr);
             String[] nextLine;
+            ArrayList<String> frWords = new ArrayList<>();
+            ArrayList<String> enWords = new ArrayList<>();
+            // Empty string for the first entry
+            enWords.add(0, "");
+            frWords.add(0, "");
 
             // For each line in the csv
             while ((nextLine = dataRead.readNext()) != null) {
-                String str = "this";
-
-                puzzle.enWords.add(capitalize(nextLine[0]));
-                puzzle.frWords.add(capitalize(nextLine[1]));
+                frWords.add(capitalize(nextLine[0]));
+                enWords.add(capitalize(nextLine[1]));
             }
 
             // Close the stream
             dataRead.close();
-            // Fix the size of the array if the number exceeds/is less than the size of the grid
-            fix_size();
 
+            // Allocate new words
+            puzzle.allEnglishWords = enWords.toArray(new String[0]);
+            puzzle.allFrenchWords = frWords.toArray(new String[0]);
+            puzzle.Words = new String[][]{puzzle.englishWords, puzzle.frenchWords};
+            // Initialize the grid again
+            generateGrid();
         }
         catch (Exception e) {
             Log.e("TAG",e.toString());
@@ -460,37 +468,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * Fixes the size of array if there are too many/few variables in the CSV file to use.
      */
     public void fix_size(){
-        int size = puzzle.enWords.size();
-       // int var = detected_User_Choice_Size;
-        if(size < detected_User_Choice_Size){
-            /** Too few words */
-            for(int i = 1; i < detected_User_Choice_Size-size+1; i++){
-                puzzle.enWords.add(puzzle.englishWords[i]);
-                puzzle.frWords.add(puzzle.frenchWords[i]);
-            }
-        } else if(size > detected_User_Choice_Size){
-            /** Too many words */
-            for(int i = 0; i > size - detected_User_Choice_Size; i++){
-                puzzle.enWords.remove(i);
-                puzzle.frWords.remove(i);
-            }
 
-        } else{
-            // Do nothing
-        }
 
-        // Empty string for the first entry
-        puzzle.enWords.add(0, "");
-        puzzle.frWords.add(0, "");
-
-        // Allocate new words
-        puzzle.english = (String[])puzzle.enWords.toArray(puzzle.english);
-        puzzle.french = (String[])puzzle.frWords.toArray(puzzle.french);
-        puzzle.Words = new String[][]{puzzle.english, puzzle.french};
-
-        // Initialize the grid again
-        generateGrid();
-        System.out.println(Arrays.toString(puzzle.english));
+//        System.out.println(Arrays.toString(puzzle.english));
     }
 
     /**
@@ -505,8 +485,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // killed and restarted.
         savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
         savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
-        savedInstanceState.putStringArray("english", puzzle.englishWords);
-        savedInstanceState.putStringArray("french", puzzle.frenchWords);
+        // These are the full list of word pairs.
+        savedInstanceState.putStringArray("englishWords", puzzle.allEnglishWords);
+        savedInstanceState.putStringArray("frenchWords", puzzle.allFrenchWords);
+        // save puzzle indices and hints.
+        savedInstanceState.putIntArray("pairIndexes", puzzle.pairIndexes);
+        savedInstanceState.putIntArray("numHints",puzzle.numHints);
         savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
         savedInstanceState.putInt("gridSize",detected_User_Choice_Size);
 
@@ -529,18 +513,21 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
 
+        detected_User_Choice_Size = savedInstanceState.getInt("gridSize");
+
         int[] wp = savedInstanceState.getIntArray("workingPuzzle");
         System.arraycopy(wp, 0, puzzle.workingPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
 
         int[] op = savedInstanceState.getIntArray("originalPuzzle");
         System.arraycopy(op, 0, puzzle.originalPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
 
-        puzzle.english = savedInstanceState.getStringArray("english");
-        puzzle.french = savedInstanceState.getStringArray("french");
+        puzzle.allEnglishWords = savedInstanceState.getStringArray("englishWords");
+        puzzle.allFrenchWords = savedInstanceState.getStringArray("frenchWords");
+        puzzle.pairIndexes = savedInstanceState.getIntArray("pairIndexes");
+        puzzle.numHints = savedInstanceState.getIntArray("numHints");
         puzzle.languageIndex = savedInstanceState.getInt("languageIndex");
-        puzzle.Words[0] = puzzle.english;
-        puzzle.Words[1] = puzzle.french;
-        detected_User_Choice_Size = savedInstanceState.getInt("gridSize");
+        puzzle.Words[0] = puzzle.englishWords;
+        puzzle.Words[1] = puzzle.frenchWords;
 
     }
 
