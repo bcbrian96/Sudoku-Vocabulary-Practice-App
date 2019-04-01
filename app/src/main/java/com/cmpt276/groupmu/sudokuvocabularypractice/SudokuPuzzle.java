@@ -64,6 +64,7 @@ class SudokuPuzzle {
 
     String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
+
     void setPuzzleSize (int gridScale){
         int defaultGameDifficulty = (int)(gridScale*gridScale)/3;
         workingPuzzle = new int[gridScale*gridScale];
@@ -72,59 +73,14 @@ class SudokuPuzzle {
         Words =new String[][] {setEnglishWords(gridScale),setFrenchWords(gridScale)};
         SudokuGenerator scalable = new SudokuGenerator(gridScale,defaultGameDifficulty);
         Log.d(TAG, "setOriginalPuzzle: "+gridScale);
-        switch (gridScale) {
-            case 4:
-                 {
-                    detected_User_Choice_Size = gridScale;
-                    // setEnglishWordsAndFrenchWords();
-                    scalable.generatePuzzle();
-                    scalable.scalablePuzzleGenerator();
-                    getGamePuzzle(scalable.gamePuzzle);
-                     workingPuzzle = originalPuzzle.clone();
-                    getSolutionPuzzle(scalable.solutionPuzzle);
-                    Log.d("okok", "Ok, the case actually goes to here");
-                    Log.d("wantSize", "the size:" + detected_User_Choice_Size);
-
-                }
-                break;
-            case 6:
-                 {
-                     detected_User_Choice_Size = gridScale;
-                     //setEnglishWordsAndFrenchWords();
-                     scalable.generatePuzzle();
-                     scalable.scalablePuzzleGenerator();
-                     getGamePuzzle(scalable.gamePuzzle);
-                     workingPuzzle = originalPuzzle.clone();
-                     getSolutionPuzzle(scalable.solutionPuzzle);
-                    Log.d("okok", "Ok?");
-                    Log.d("wantSize", "the size:" + detected_User_Choice_Size);
-
-                }
-                break;
-            case 9: {
-                detected_User_Choice_Size = gridScale;
-                //setEnglishWordsAndFrenchWords();
-                scalable.generatePuzzle();
-                scalable.scalablePuzzleGenerator();
-                getGamePuzzle(scalable.gamePuzzle);
-                workingPuzzle = originalPuzzle.clone();
-                getSolutionPuzzle(scalable.solutionPuzzle);
-                Log.d("okok", "Ok?");
-                Log.d("wantSize", "the size:" + detected_User_Choice_Size);
-            }
-            break;
-            case 12: {
-                detected_User_Choice_Size = gridScale;
-                //setEnglishWordsAndFrenchWords();
-                scalable.generatePuzzle();
-                scalable.scalablePuzzleGenerator();
-                getGamePuzzle(scalable.gamePuzzle);
-                workingPuzzle = originalPuzzle.clone();
-                getSolutionPuzzle(scalable.solutionPuzzle);
-                Log.d("okok", "Ok?");
-                Log.d("wantSize", "the size:" + detected_User_Choice_Size);
-            }break;
-        }
+        detected_User_Choice_Size = gridScale;
+        //setEnglishWordsAndFrenchWords();
+        scalable.generatePuzzle();
+        scalable.scalablePuzzleGenerator();
+        getGamePuzzle(scalable.gamePuzzle);
+        workingPuzzle = originalPuzzle.clone();
+        getSolutionPuzzle(scalable.solutionPuzzle);
+        Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
     String[] setEnglishWords(int gridSize){
         newEnglishWordsArray = new String[gridSize+1];
