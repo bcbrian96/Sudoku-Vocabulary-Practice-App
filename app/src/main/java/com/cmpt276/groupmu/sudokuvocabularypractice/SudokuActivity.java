@@ -263,15 +263,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * Check the current progress of the user against the puzzle solution
      */
     public void checkSudoku() {
-
-        if (puzzle.checkSudokuIncomplete()) {
-            Log.d("checkSudoku", "sudoku incomplete");
+        if (puzzle.checkSudokuIncorrect()) {
+            Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
+        } else if (puzzle.checkSudokuIncomplete()) {
             Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
-            return;
+        } else {
+            Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
         }
-        if (puzzle.checkSudokuCorrect())
-        Toast.makeText(this,"Congratulation! Answer correct",Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -352,15 +352,16 @@ class SudokuPuzzle {
     }
 
     /**
-     * Check if the puzzle is correct thus far
-     * @return  A boolean value of true if the puzzle is correct so far, false otherwise
+     * Check if the puzzle is incorrect thus far
+     * @return  A boolean value of true if the puzzle is incorrect so far, false otherwise
      */
-    boolean checkSudokuCorrect() {
-        boolean result = true;
+    boolean checkSudokuIncorrect() {
+        // If any rows/columns/boxes contain duplicates, sudoku is incorrect: return true.
+        boolean result = false;
         for (int regionNum = 0; regionNum < detected_User_Choice_Size; regionNum++) {
-            result = result && !containsDuplicates(getRow(regionNum));
-            result = result && !containsDuplicates(getColumn(regionNum));
-            result = result && !containsDuplicates(getBox(regionNum));
+            result = result || containsDuplicates(getRow(regionNum));
+            result = result || containsDuplicates(getColumn(regionNum));
+            result = result || containsDuplicates(getBox(regionNum));
         }
         return result;
     }
@@ -431,7 +432,7 @@ class SudokuPuzzle {
     boolean containsDuplicates(int[] region) {
         boolean[] seen_yet = new boolean[detected_User_Choice_Size+1];
         for (int value : region) {
-            if (seen_yet[value]) {
+            if (value!=0 && seen_yet[value]) {
                 return true; // we already saw this word
             }
             seen_yet[value] = true;
