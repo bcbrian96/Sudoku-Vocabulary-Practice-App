@@ -78,7 +78,7 @@ class SudokuGenerator {
         return true;
     }
     boolean checkDuplicateInColumn (int colNum, int checkNum){
-        for (int i = 0; i < sizeOfRegion; i ++){
+        for (int i = 0; i < sizeOfPuzzle; i ++){
             if (puzzle [i][colNum] == checkNum){
                 return false;
             }
