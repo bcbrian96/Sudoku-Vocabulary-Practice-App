@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
@@ -18,59 +18,79 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.opencsv.CSVReader;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
+import static org.apache.commons.lang3.text.WordUtils.capitalize;
+
+/**
+ * Main Activity. Provides Methods for:
+ * - Initialization
+ * - Dropdown menu
+ * - Generates grid
+ * - onClickListners
+ * - Changes language modes (English and French)
+ * - Changes puzzle modes (listening and reading comprehension modes
+ * - Read word list from CSV file
+ * - Save and restore app state after layout change (portrait/landscape)
+ */
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
-//    Global Variables
+    /** VARIABLES */
     public SudokuPuzzle puzzle;
     protected GridView grid;
-//    private LinearLayout linear;
+
     Button resetButton;
     private int dialogChoice;
     Button checkSudokuButton;
     Button newPuzzleButton;
     Switch languageSwitch;
     //Button newGameButton;
+    Switch modeSwitch;
     private static final int READ_REQUEST_CODE = 42;
     //int detected_User_Choice_Size;
     int GridSizeChoice;
-//    TextToSpeech
+
+    /** TextToSpeech */
     private TextToSpeech mTTS;
     float pitch = (float)0.7;
     float speed = (float)0.7;
     int detected_User_Choice_Size;
     String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
-
-
-    //    Initialization
+    /**
+     *
+     * @param savedInstanceState Initialization on startup or from onSaveInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        For every activity
 
+        /** For every activity */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
+
+        /** Declared Variables Initialization*/
         int puzzleSize= getIntent().getIntExtra("USER_REQUEST_SIZE", 9);
-        puzzle= new SudokuPuzzle();
         detected_User_Choice_Size = puzzleSize;
+        puzzle = new SudokuPuzzle();
         puzzle.setPuzzleSize(detected_User_Choice_Size);
+        //puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
+        //puzzle.newPuzzle();
+
         grid = findViewById(R.id.grid);
         grid.setNumColumns(detected_User_Choice_Size);
+
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
+
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
+
         newPuzzleButton = findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(this);
 //        newGameButton = findViewById(R.id.NewGame);
@@ -81,23 +101,37 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch.setChecked(true);
         languageSwitch.setText(puzzle.getCurrentLanguage());
 
+        modeSwitch = findViewById(R.id.mode_switch);
+        modeSwitch.setOnClickListener(this);
+
+        /**
+         * Method for initializing text to speech variable mTTS
+         */
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            /**
+             *
+             * @param status Status of TextToSpeach. Returns 0 if successful
+             */
             @Override
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS){
 
                     int result = mTTS.setLanguage(puzzle.getVoiceLocale());
 
-                    if(result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED){
-                        Log.e("TTS", "Language No Supported");
-                        Toast.makeText(getApplicationContext(), "Failed to set language", Toast.LENGTH_SHORT).show();
+                    if (result == TextToSpeech.LANG_MISSING_DATA){
+                        Toast.makeText(getApplicationContext(),
+                                "Your device does not have voice data for "+puzzle.getForeignLanguage()
+                                +". Please download it from language settings.",Toast.LENGTH_LONG).show();
+                    } else if (result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        Log.e("TTS", "Language Not Supported");
+                        Toast.makeText(getApplicationContext(), "Sorry, Speech is not supported for "+puzzle.getForeignLanguage(), Toast.LENGTH_SHORT).show();
                     }
                 } else{
                     Log.e("TTS", "Initialization Failed");
                 }
             }
         });
+
 
         Button openFile = (Button) findViewById(R.id.get_file);
         openFile.setOnClickListener(new View.OnClickListener() {
@@ -110,52 +144,77 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         generateGrid();
 
     }
-//    Drop Down Menue
+
+    /**
+     *  Method for generating the dropdown menu to select the item to insert in the GridView
+     *
+     * @param set       The textview that is generated by the dialoge builder
+     * @param position
+     */
     public void dialogBuilder(final TextView set, final int position) {
-        AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
+        final AlertDialog.Builder sudokuWords = new AlertDialog.Builder(this);
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
-//        Check Language Mdde
+
+        /** The list of choices */
         sudokuWords.setItems(puzzle.getChoiceWords(),  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;
-                if (dialogChoice != -1){
-                puzzle.setValueAtPosition(position, dialogChoice);
-                set.setText(puzzle.getWordAtPosition(position));}
+                if (dialogChoice != -1) {
+                    puzzle.setValueAtPosition(position, dialogChoice);
+                    set.setText(capitalize(puzzle.getWordAtPosition(position)));
+                    set.setTextColor(Color.parseColor("#ffc107"));
 
+                }
             }
         });
-//        Set value to grid
-
         sudokuWords.show();
-//        Toast.makeText(this, mText, Toast.LENGTH_SHORT).show();
+
     }
-//    Generate Grid
+
+    /**
+     * Generate the GridView
+     */
     public void generateGrid() {
+
+        /** Connect to SudokuAdpater.java */
         grid.setAdapter(new SudokuAdapter(this, puzzle));
+//        grid.setBackgroundColor(Color.parseColor("#29434e"));
 
-
+        /** Button actions on GridView*/
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 if (v != null) {
+                    /** Empty cell, dropdown menu */
                     if (puzzle.isNotPreset(position)) {
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
-                        hintPresetCellTranslation(position);
-                        speak(position);
+                        /** Reading Comprehension (normal) Mode: Toast hint */
+                        if(puzzle.isNormalMode()) {
+                            hintPresetCellTranslation(position);
+                        } else {
+                        /** Listening Comprehension Mode: Text to speech hint */
+                            speak(position);
+                        }
                     }
                 }
             }
         });
+        grid.bringToFront();
         Log.i(null, "generateGrid()");
     }
 
-    //    Button Click methods
+    /**
+     * Method that separates the different button actions based on the type
+     *
+     * @param v View button within grid to be clicked
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            /** Clear and reset the puzzle */
             case R.id.resetBtn:
                 try {
                     puzzle.resetPuzzle();
@@ -164,6 +223,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Can not reset", " " + e);
                 }
                 break;
+            /** Check if the sudoku is correct */
             case R.id.checkSudoku:
                 try {
                     checkSudoku();
@@ -171,6 +231,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Check Sudoku error", "" + e);
                 }
                 break;
+            /** Toggle the language modes (French & English) */
             case R.id.language_switch:
                 try {
                     changeLanguage();
@@ -178,7 +239,16 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("Check switch eror", "" + e);
                 }
                 break;
+            /** Toggle between Reading and Listening comprehension modes */
+            case R.id.mode_switch:
+                try {
+                    changeMode();
+                } catch (Exception e) {
+                    Log.d("Mode switch error",""+e);
+                }
+                break;
             case R.id.newPuzzle:
+            /** Generate a new puzzle */
                 try {
                     puzzle.newPuzzle();
                     generateGrid();
@@ -189,8 +259,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-//    Check Sudoku solutions
+    /**
+     * Check the current progress of the user against the puzzle solution
+     */
     public void checkSudoku() {
+
         if (puzzle.checkSudokuIncomplete()) {
             Log.d("checkSudoku", "sudoku incomplete");
             Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
@@ -201,7 +274,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         else Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
     }
 
-//    Switch Language (French & English)
+    /**
+     * Swap languages (English and French)
+     */
     public void changeLanguage() {
         puzzle.swapLanguage();
         languageSwitch.setText(puzzle.getCurrentLanguage());
@@ -211,23 +286,58 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(this, "Language Switched: " + puzzle.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Swap reading and listening comprehension modes
+     */
+    public void changeMode() {
+        puzzle.swapMode();
+        if (puzzle.isNormalMode()) {
+            modeSwitch.setText(R.string.mode_normal);
+            languageSwitch.setEnabled(true);
+        } else {
+            modeSwitch.setText(R.string.mode_listening);
+            // Listening mode: ensure foreign language is spoken (prefilled)
+            // and native language is input.
+            if (!puzzle.getCurrentLanguage().equals(puzzle.getForeignLanguage())) {
+                puzzle.swapLanguage();
+                languageSwitch.setText(puzzle.getCurrentLanguage());
+                languageSwitch.setChecked(false);
+            }
+            languageSwitch.setEnabled(false); // disable changing language
+            // possible todo: refactor so Normal, Alt-language, Listening are all different
+            // eg. when starting new puzzle, choose mode from 3 above
+            // move TTS initialization here ?
+        }
+        generateGrid();
+    }
+
+    /**
+     *
+     * Provides a toast hint to the user when a prefilled cell is clicked in reading comprehension
+     * mode.
+     *
+     * @param position  The position within the GridView array
+     */
     public void hintPresetCellTranslation(int position) {
         Toast.makeText(this, puzzle.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
     }
 
-//    Speaking functions
+    /**
+     *
+     * Provides an audio hint to the user when a prefilled cell is clicked in the listening
+     * comprehension mode.
+     * @param position  The position within the GridView array
+     */
     public void speak(int position) {
-        String text = puzzle.getTranslationAtPosition(position);
+        String text = puzzle.getForeignWordAtPosition(position);
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
-//        } else {
-//            mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-//        }
-
     }
-//    Make sure the mTTS variable is destroyed
+
+    /**
+     * Ensures that the textToSpeech variable is destroyed when OnDestroy() is called
+     */
     @Override
     protected void onDestroy() {
         if(mTTS != null){
@@ -242,7 +352,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * The intended format has not headers: English_word1, French_word1
      *                                      English_word2, French_word2
      *                                      ....
-     * Iteration 1 & 2 will only support french and english words, iteration 3 will
+     * Iteration 1 & 2 will only support french and english words, final will
      * support multiple languages.
      */
 
@@ -272,9 +382,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      *
-     * @param requestCode
-     * @param resultCode
-     * @param resultData
+     * Gets a result from an activity - in this case from the Android File Manager, we return the
+     * following variables to ensure that the CSV file was passed without error through the intent.
+     * @param requestCode   Which request code was returned - We want READ_REQUEST_CODE
+     * @param resultCode    Was the request code returned successfully - We want RESULT_OK
+     * @param resultData    Returned value passed through the intent. In this case the URI to the
+     *                      file
      *
      * Called after setGet_File()
      */
@@ -294,11 +407,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
-//                This string apparently does not exist
                 Log.i(null, "Uri: " + uri.getPath());
 
                 try {
-
+                    // Pase the words within the CSV file
                     parseCSV(uri);
                 } catch (Exception e) {
                     Log.i(null, "parseCSV: " + e.toString());
@@ -308,26 +420,32 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    /**
+     * Parse the words from a CSV file given a file path URI variable. See format of CSV above.
+     *
+     * @param uri   The URI of the CSV file to be parsed
+     */
     public void parseCSV( Uri uri){
         try {
+
+            // Setup a buffer to read the CSV line by line
             InputStream inputStream = getContentResolver().openInputStream(uri);
             InputStreamReader isr = new InputStreamReader(inputStream);
             CSVReader dataRead = new CSVReader(isr);
             String[] nextLine;
 
+            // For each line in the csv
             while ((nextLine = dataRead.readNext()) != null) {
+                String str = "this";
 
-                puzzle.enWords.add(nextLine[0]);
-                puzzle.frWords.add(nextLine[1]);
+                puzzle.enWords.add(capitalize(nextLine[0]));
+                puzzle.frWords.add(capitalize(nextLine[1]));
             }
 
-
+            // Close the stream
             dataRead.close();
+            // Fix the size of the array if the number exceeds/is less than the size of the grid
             fix_size();
-//            System.out.println("English: ");
-//            System.out.println(Arrays.toString(frWords.toArray()));
-//            System.out.println("French: ");
-//            System.out.println(Arrays.toString(frWords.toArray()));
 
         }
         catch (Exception e) {
@@ -335,33 +453,47 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * Fixes the size of array if there are too many/few variables in the CSV file to use.
+     */
     public void fix_size(){
         int size = puzzle.enWords.size();
        // int var = detected_User_Choice_Size;
         if(size < detected_User_Choice_Size){
+            /** Too few words */
             for(int i = 1; i < detected_User_Choice_Size-size+1; i++){
                 puzzle.enWords.add(puzzle.englishWords[i]);
                 puzzle.frWords.add(puzzle.frenchWords[i]);
             }
         } else if(size > detected_User_Choice_Size){
+            /** Too many words */
             for(int i = 0; i > size - detected_User_Choice_Size; i++){
                 puzzle.enWords.remove(i);
                 puzzle.frWords.remove(i);
             }
 
         } else{
-//            Do nothing
+            // Do nothing
         }
+
+        // Empty string for the first entry
         puzzle.enWords.add(0, "");
         puzzle.frWords.add(0, "");
 
+        // Allocate new words
         puzzle.english = (String[])puzzle.enWords.toArray(puzzle.english);
         puzzle.french = (String[])puzzle.frWords.toArray(puzzle.french);
         puzzle.Words = new String[][]{puzzle.english, puzzle.french};
+
+        // Initialize the grid again
         generateGrid();
         System.out.println(Arrays.toString(puzzle.english));
     }
 
+    /**
+     * Saves the instance of the app when device orientation is changed
+     * @param savedInstanceState    The Bundle object to save the state parameters to.
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         Log.i(null, "Saved Instance");
@@ -382,6 +514,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    /**
+     * Restores the app to the state before the orientation of the devices was changed
+     * @param savedInstanceState    The Bundle object to restore the state parameters from.
+     */
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.i(null, "generate instance");
@@ -408,5 +544,4 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 }
 
 
-
-
+// END
