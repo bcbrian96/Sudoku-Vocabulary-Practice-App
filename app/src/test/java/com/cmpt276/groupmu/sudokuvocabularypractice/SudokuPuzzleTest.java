@@ -102,9 +102,17 @@ public class SudokuPuzzleTest {
     @Test
     public void testCheckSudokuIncomplete(){
             SudokuPuzzle testCheckIncomplete = new SudokuPuzzle();
-            boolean expect = true;
+
             boolean actual = testCheckIncomplete.checkSudokuIncomplete();
-            assertEquals(expect,actual);
+            assertEquals(true,actual);
+
+            for(int i = 0; i < 81; i++){
+                testCheckIncomplete.setValueAtPosition(i, 1);
+            }
+
+            assertEquals(false, testCheckIncomplete.checkSudokuIncomplete());
+
+
     }
     @Test
     public void testGetRow (){
@@ -126,6 +134,8 @@ public class SudokuPuzzleTest {
             boolean expect = true;
             boolean actual = testContainDup.containsDuplicates(testContainDup.workingPuzzle);
             assertEquals(expect,actual);
+
+
     }
     @Test
     public void testGetCurrentLanguage(){
@@ -192,6 +202,18 @@ public class SudokuPuzzleTest {
 
     }
 
+    @Test
+    public void testGetForeignLanguage(){
+        SudokuPuzzle foreignWords = new SudokuPuzzle();
+        assertEquals("French", foreignWords.getForeignLanguage());
+    }
+
+    @Test
+    public void testNewPuzzle(){
+        SudokuPuzzle newpuzzle = new SudokuPuzzle();
+
+
+    }
 
 
 
