@@ -104,6 +104,8 @@ class SudokuPuzzle {
         getSolutionPuzzle(scalable.solutionPuzzle);
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
+
+
     String[] setEnglishWords(int gridSize) {
         newEnglishWordsArray = new String[gridSize+1];
         System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
@@ -120,6 +122,7 @@ class SudokuPuzzle {
     void getSolutionPuzzle (int [] inputPuzzle){
         System.arraycopy(inputPuzzle, 0, solutionPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
     }
+
     // Fancy witchcraft
     enum Mode {NORMAL, LISTENING}
     private Mode mode = Mode.NORMAL;
@@ -148,29 +151,29 @@ class SudokuPuzzle {
      * @param puzzleString  String of numbers to be converted to an array of integers
      * @return  An array of integers to use in the puzzle gridview to display/organize the words
      */
-    private int[] convertPuzzleStringToArray(String puzzleString) {
-        // Array to return
-        int[] puzzleArray = new int[81];
-
-        // Parse
-        int puzzleSize=0;
-        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
-            char c = puzzleString.charAt(j);
-            if (Character.isDigit(c)) {
-                puzzleArray[puzzleSize++] = Character.digit(c,10);
-            } else if (c=='.') {
-                puzzleArray[puzzleSize++] = 0;
-            }
-        }
-
-        // Failed: Index out of bounds (too many characters)
-        if (puzzleSize < 81) {
-            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
-//            throw new Exception("Invalid puzzle string");
-            return null;
-        }
-        return puzzleArray;
-    }
+//    private int[] convertPuzzleStringToArray(String puzzleString) {
+//        // Array to return
+//        int[] puzzleArray = new int[81];
+//
+//        // Parse
+//        int puzzleSize=0;
+//        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
+//            char c = puzzleString.charAt(j);
+//            if (Character.isDigit(c)) {
+//                puzzleArray[puzzleSize++] = Character.digit(c,10);
+//            } else if (c=='.') {
+//                puzzleArray[puzzleSize++] = 0;
+//            }
+//        }
+//
+//        // Failed: Index out of bounds (too many characters)
+//        if (puzzleSize < 81) {
+//            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
+////            throw new Exception("Invalid puzzle string");
+//            return null;
+//        }
+//        return puzzleArray;
+//    }
 
     /**
      * Check what mode we're in

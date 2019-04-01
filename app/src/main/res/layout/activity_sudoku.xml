@@ -48,46 +48,68 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Switch
-            android:switchPadding="30dp"
-            android:layoutDirection="rtl"
-            android:id="@+id/mode_switch"
+        android:orientation="horizontal">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFeatureSettings="bold"
+            android:orientation="vertical">
 
-            android:text="@string/mode_normal"
-            android:textSize="20dp"
-            android:textColor="@color/colorAccent"
+            <Switch
+                android:switchPadding="30dp"
+                android:layoutDirection="rtl"
+                android:id="@+id/mode_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFeatureSettings="bold"
 
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+                android:text="@string/mode_normal"
+                android:textSize="20dp"
+                android:textColor="@color/colorAccent"
 
-            android:checked="false"/>
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+
+                android:checked="false"/>
 
 
-        <Switch
-            android:switchPadding="30dp"
-            android:layoutDirection="rtl"
-            android:textSize="20dp"
-            android:paddingRight="10dp"
-            android:id="@+id/language_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFeatureSettings="bold"
-            android:textColor="@color/colorAccent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
+            <Switch
+                android:switchPadding="30dp"
+                android:layoutDirection="rtl"
+                android:textSize="20dp"
+                android:paddingRight="10dp"
+                android:id="@+id/language_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFeatureSettings="bold"
+                android:textColor="@color/colorAccent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="10dp"
 
-            android:checked="false"/>
+                android:checked="false"/>
 
-        <View
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorAccent"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorAccent"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical|center_horizontal"
+            >
+            <Button xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/get_file"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorAccent"
+                android:layout_marginLeft="30dp"
+                android:text="Open CSV"
+                android:onClick="openFile"/>
+
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -123,21 +145,7 @@
         android:layout_gravity="right"
         android:text="Check Sudoku"/>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp">
-        <Button xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/get_file"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:text="Open CSV"
-            android:onClick="openFile"/>
 
-    </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
