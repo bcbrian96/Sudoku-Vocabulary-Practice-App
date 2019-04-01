@@ -158,6 +158,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) throws ArrayIndexOutOfBoundsException {
                 if (dialogChoice != -1) {
                     puzzle.setValueAtPosition(position, dialogChoice);
+
                     set.setText(capitalize(puzzle.getWordAtPosition(position)));
                     set.setTextColor(Color.parseColor("#ffc107"));
                 }
