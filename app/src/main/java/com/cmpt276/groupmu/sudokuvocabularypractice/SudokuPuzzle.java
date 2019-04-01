@@ -40,7 +40,12 @@ class SudokuPuzzle {
     String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
-    int detected_User_Choice_Size ;
+    int detected_User_Choice_Size = 9;
+    // Can be: 4, 6, 9, 12
+    // boxes: 2x2, 2x3, 3x3, 3x4
+    private int boxHeight = 3;
+    private int boxWidth = 3;
+    // boxHeight * boxWidth == size must be true
     int[] workingPuzzle = originalPuzzle.clone();
     int[] solutionPuzzle;
 
@@ -74,6 +79,19 @@ class SudokuPuzzle {
         SudokuGenerator scalable = new SudokuGenerator(gridScale,defaultGameDifficulty);
         Log.d(TAG, "setOriginalPuzzle: "+gridScale);
         detected_User_Choice_Size = gridScale;
+        switch (gridScale) {
+            case 4:
+                boxWidth = 2;
+                break;
+            case 6:
+            case 9:
+                boxWidth = 3;
+                break;
+            case 12:
+                boxWidth = 4;
+                break;
+        }
+        boxHeight = gridScale / boxWidth;
         //setEnglishWordsAndFrenchWords();
         scalable.generatePuzzle();
         scalable.scalablePuzzleGenerator();
@@ -359,11 +377,11 @@ class SudokuPuzzle {
      */
     int[] getBox(int boxNum) {
         int[] box = new int[detected_User_Choice_Size];
-        int boxWidth = (int) Math.sqrt(detected_User_Choice_Size);
-        int firstRow = (boxNum - (boxNum % boxWidth));
-        int firstCol = boxWidth * (boxNum % boxWidth);
+        int boxesPerRow = detected_User_Choice_Size/boxWidth;
+        int firstRow = (boxNum / boxesPerRow) * boxHeight;
+        int firstCol = (boxNum % boxesPerRow) * boxWidth;
         // Go through the box, left-to-right top-to-bottom.
-        for (int row = 0; row < boxWidth; row++) {
+        for (int row = 0; row < boxHeight; row++) {
             for (int col = 0; col < boxWidth; col++) {
                 int position = (firstCol + col) + (firstRow + row) * detected_User_Choice_Size;
                 box[col + boxWidth*row] = workingPuzzle[(position)];
