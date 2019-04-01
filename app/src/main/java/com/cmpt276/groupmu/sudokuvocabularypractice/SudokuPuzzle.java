@@ -94,16 +94,6 @@ class SudokuPuzzle {
         newPuzzle();
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
-    String[] setEnglishWords(int gridSize) {
-        String[] newEnglishWordsArray = new String[gridSize + 1];
-        System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
-        return newEnglishWordsArray;
-    }
-    String[] setFrenchWords(int gridSize) {
-        String[] newFrenchWordsArray = new String[gridSize + 1];
-        System.arraycopy(frenchWords, 0, newFrenchWordsArray, 0, gridSize + 1);
-        return newFrenchWordsArray;
-    }
     void getGamePuzzle(int [] inputPuzzle){
         System.arraycopy(inputPuzzle, 0, originalPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
     }
@@ -301,7 +291,33 @@ class SudokuPuzzle {
         workingPuzzle = originalPuzzle.clone();
         getSolutionPuzzle(scalable.solutionPuzzle);
         // get Words for puzzle
-        Words = new String[][] {setEnglishWords(detected_User_Choice_Size),setFrenchWords(detected_User_Choice_Size)};
+        loadWordPairs();
+    }
+
+    /**
+     * Load a new set of word pairs for use in a puzzle.
+     * Takes pairs from , and uses numHints
+     */
+    private void loadWordPairs() {
+        int[] newPairIndexes = new int[detected_User_Choice_Size+1];
+        newPairIndexes[0] = 0; // empty string.
+        // add hinted: find top 3 most hinted words, and add them first
+        for(int i=0; i<3; i++) {
+            int max_j = 1;
+            for(int j=2; j<detected_User_Choice_Size+1; j++) {
+                if (numHints[j] > numHints[max_j]) {
+                    max_j = j;
+                }
+            }
+            numHints[max_j] = -1; // Make sure we don't choose the same one again.
+        }
+        String[] newEnglish = new String[detected_User_Choice_Size+1];
+        String[] newFrench = new String[detected_User_Choice_Size+1];
+        for(int i = 0; i<newPairIndexes.length; i++){
+            newEnglish[i] = englishWords[newPairIndexes[i]];
+            newFrench[i] = frenchWords[newPairIndexes[i]];
+        }
+        Words = new String[][]{newEnglish,newFrench};
     }
 
     /**
