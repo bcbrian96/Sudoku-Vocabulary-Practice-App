@@ -312,9 +312,11 @@ class SudokuPuzzle {
      */
     void resetPuzzle() {
 
-        for (int i = 0; i < workingPuzzle.length; i++) {
-            workingPuzzle[i] = originalPuzzle[i];
-      }
+//        for (int i = 0; i < workingPuzzle.length; i++) {
+//            workingPuzzle[i] = originalPuzzle[i];
+//        }
+        // This is faster
+        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
     }
 
     /**

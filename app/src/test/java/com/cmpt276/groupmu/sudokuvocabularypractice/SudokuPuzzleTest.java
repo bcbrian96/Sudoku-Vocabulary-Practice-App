@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.security.KeyStore;
 import java.util.Locale;
 
@@ -17,22 +19,45 @@ import static org.junit.Assert.*;
 public class SudokuPuzzleTest {
     @Test
    public void  testGetWordChoices()
-    { String [] expect  = {"", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf"};
+    { String [] expect  = {"", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf"};
         SudokuPuzzle testWordChoices = new SudokuPuzzle();
         String[] testString = testWordChoices.getChoiceWords();
         assertArrayEquals(expect, testString);
     }
+
+
     @Test
     public void testGetWordAtPosition(){
-        SudokuPuzzle testGetWord = new SudokuPuzzle();
-        String expect = "three";
-        String actual = testGetWord.getWordAtPosition(35);
-        assertEquals(expect,actual);
+        // Setup variables to ensure that the correct
+        SudokuPuzzle foreignWords = new SudokuPuzzle();
+        final int[] originalPuzzle = {
+                5, 4, 0,  0, 7, 0,  0, 0, 0,
+                6, 0, 0,  1, 9, 5,  0, 0, 0,
+                0, 9, 8,  0, 0, 0,  0, 6, 0,
+
+                8, 0, 0,  0, 6, 0,  0, 0, 3,
+                4, 0, 0,  8, 0, 3,  0, 0, 1,
+                7, 0, 3,  0, 2, 0,  0, 0, 6,
+
+                0, 6, 0,  0, 0, 0,  0, 8, 0,
+                2, 0, 0,  4, 1, 9,  0, 0, 5,
+                0, 4, 5,  0, 8, 0,  0, 7, 9
+        };
+
+        // Initialize variables
+        final String[] frenchWords = {"", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf"};
+        final String[] englishWords = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+        String[][] Words = {englishWords, frenchWords};
+        // Loop through puzzle and check that english and french words matchup
+        for(int i = 0; i < originalPuzzle.length; i++){
+            assertEquals(englishWords[originalPuzzle[i]], foreignWords.getWordAtPosition(i));
+            assertEquals(frenchWords[originalPuzzle[i]], foreignWords.getTranslationAtPosition(i));
+        }
     }
     @Test
     public void testGetTranslationAtPosition(){
             SudokuPuzzle testTranslation = new SudokuPuzzle();
-            String expect = "huit";
+            String expect = "Huit";
             String actual = testTranslation.getTranslationAtPosition(39);
             assertEquals(expect,actual);
     }
@@ -81,9 +106,17 @@ public class SudokuPuzzleTest {
     @Test
     public void testCheckSudokuIncomplete(){
             SudokuPuzzle testCheckIncomplete = new SudokuPuzzle();
-            boolean expect = true;
+
             boolean actual = testCheckIncomplete.checkSudokuIncomplete();
-            assertEquals(expect,actual);
+            assertEquals(true,actual);
+
+            for(int i = 0; i < 81; i++){
+                testCheckIncomplete.setValueAtPosition(i, 1);
+            }
+
+            assertEquals(false, testCheckIncomplete.checkSudokuIncomplete());
+
+
     }
     @Test
     public void testGetRow (){
@@ -144,4 +177,60 @@ public class SudokuPuzzleTest {
             int [] actual = testReset.workingPuzzle;
             assertArrayEquals(expect,actual);
     }
+
+    @Test
+    public void testSwapMode(){
+        SudokuPuzzle testMode = new SudokuPuzzle();
+        testMode.swapMode();
+        assertNotEquals(true, testMode.isNormalMode());
+        testMode.swapMode();
+        assertEquals(true, testMode.isNormalMode());
+
+    }
+
+    @Test
+    public void testGetForeignWordAtPosition(){
+        // Setup variables to ensure that the correct
+        SudokuPuzzle foreignWords = new SudokuPuzzle();
+        final int[] originalPuzzle = {
+                5, 4, 0,  0, 7, 0,  0, 0, 0,
+                6, 0, 0,  1, 9, 5,  0, 0, 0,
+                0, 9, 8,  0, 0, 0,  0, 6, 0,
+
+                8, 0, 0,  0, 6, 0,  0, 0, 3,
+                4, 0, 0,  8, 0, 3,  0, 0, 1,
+                7, 0, 3,  0, 2, 0,  0, 0, 6,
+
+                0, 6, 0,  0, 0, 0,  0, 8, 0,
+                2, 0, 0,  4, 1, 9,  0, 0, 5,
+                0, 4, 5,  0, 8, 0,  0, 7, 9
+        };
+
+        // Initialize variables
+        final String[] frenchWords = {"", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf"};
+        final String[] englishWords = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+        String[][] Words = {englishWords, frenchWords};
+        // Loop through puzzle and check that english and french words matchup
+        for(int i = 0; i < originalPuzzle.length; i++){
+            assertEquals(frenchWords[originalPuzzle[i]], foreignWords.getForeignWordAtPosition(i));
+
+        }
+
+    }
+
+    @Test
+    public void testGetForeignLanguage(){
+        SudokuPuzzle foreignWords = new SudokuPuzzle();
+        assertEquals("French", foreignWords.getForeignLanguage());
+    }
+
+    @Test
+    public void testNewPuzzle(){
+        SudokuPuzzle newpuzzle = new SudokuPuzzle();
+
+
+    }
+
+
+
 }
