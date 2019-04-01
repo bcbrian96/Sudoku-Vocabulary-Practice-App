@@ -526,8 +526,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         puzzle.pairIndexes = savedInstanceState.getIntArray("pairIndexes");
         puzzle.numHints = savedInstanceState.getIntArray("numHints");
         puzzle.languageIndex = savedInstanceState.getInt("languageIndex");
-        puzzle.Words[0] = puzzle.englishWords;
-        puzzle.Words[1] = puzzle.frenchWords;
+        puzzle.generatePuzzleWordlist();
 
     }
 

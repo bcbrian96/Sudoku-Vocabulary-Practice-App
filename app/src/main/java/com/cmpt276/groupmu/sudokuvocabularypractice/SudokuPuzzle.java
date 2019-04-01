@@ -308,28 +308,50 @@ class SudokuPuzzle {
 
     /**
      * Load a new set of word pairs for use in a puzzle.
-     * Takes pairs from , and uses numHints
+     * Takes pairs from allEnglishWords/allFrenchWords,
+     * according to which have the most in numHints.
      */
     private void loadWordPairs() {
         int[] newPairIndexes = new int[detected_User_Choice_Size+1];
+        int[] tempNumHints = new int[frenchWords.length];
+        // tempNumHints tracks word pairs in allEnglishWords instead of englishWords
+        for(int i=0; i<numHints.length; i++){
+            tempNumHints[pairIndexes[i]] = numHints[i];
+        }
         newPairIndexes[0] = 0; // empty string.
         // add hinted: find top 3 most hinted words, and add them first
         for(int i=0; i<3; i++) {
-            int max_j = 1;
-            for(int j=2; j<detected_User_Choice_Size+1; j++) {
-                if (numHints[j] > numHints[max_j]) {
+            int max_j = 0;
+            for(int j=1; j<tempNumHints.length; j++) {
+                if (tempNumHints[j] > tempNumHints[max_j]) {
                     max_j = j;
                 }
             }
-            numHints[max_j] = -1; // Make sure we don't choose the same one again.
+            tempNumHints[max_j] = -1; // Make sure we don't choose the same one again.
+            newPairIndexes[i+1] = max_j; // index of the word pair with the most hints.
         }
-        String[] newEnglish = new String[detected_User_Choice_Size+1];
-        String[] newFrench = new String[detected_User_Choice_Size+1];
-        for(int i = 0; i<newPairIndexes.length; i++){
-            newEnglish[i] = englishWords[newPairIndexes[i]];
-            newFrench[i] = frenchWords[newPairIndexes[i]];
+        // Add the rest of the words
+        for(int i=3, j=1; i<detected_User_Choice_Size; i++, j++){
+            while(tempNumHints[j] == -1) j++; // ignore already taken pairs
+            newPairIndexes[i+1] = j;
         }
-        Words = new String[][]{newEnglish,newFrench};
+        pairIndexes = newPairIndexes;
+        generatePuzzleWordlist();
+        resetHints();
+    }
+
+    /**
+     * Set englishWords/frenchWords (the words used in the puzzle)
+     * according to allEnglishWords/... and pairIndexes.
+     */
+    void generatePuzzleWordlist() {
+        englishWords = new String[detected_User_Choice_Size+1];
+        frenchWords = new String[detected_User_Choice_Size+1];
+        for(int i = 0; i<pairIndexes.length; i++){
+            englishWords[i] = allEnglishWords[pairIndexes[i]];
+            frenchWords[i] = allFrenchWords[pairIndexes[i]];
+        }
+        Words = new String[][]{englishWords,frenchWords};
     }
 
     /**
@@ -349,7 +371,7 @@ class SudokuPuzzle {
      */
     void resetHints() {
         // Reset the number of hints for each word.
-        numHints = new int[10]; // replace with puzzleSize+1
+        numHints = new int[detected_User_Choice_Size+1];
     }
 
     /**
