@@ -70,6 +70,10 @@ class SudokuPuzzle {
     String[][] Words = {englishWords, frenchWords};
     private int currentPuzzleIndex = -1;
 
+    /**
+     *
+     * @param gridScale
+     */
     void setPuzzleSize (int gridScale){
         int defaultGameDifficulty = (int)(gridScale*gridScale)/3;
         workingPuzzle = new int[gridScale*gridScale];
@@ -124,19 +128,19 @@ class SudokuPuzzle {
      * Reads the puzzles form the sudoku files
      * @param inputStream   Input stream used to read from sudoku files
      */
-    void readPuzzlesFromInputStream(InputStream inputStream) {
-        // This assumes each puzzle is on a separate line, as in .sdm format.
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                int[] arr = convertPuzzleStringToArray(line);
-                if (arr!=null) allPuzzles.add(arr);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    void readPuzzlesFromInputStream(InputStream inputStream) {
+//        // This assumes each puzzle is on a separate line, as in .sdm format.
+//        try {
+//            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                int[] arr = convertPuzzleStringToArray(line);
+//                if (arr!=null) allPuzzles.add(arr);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     /**
      * Converts string of puzzles to an array that is useable by the gridView. Sudokus puzzles are
@@ -284,38 +288,33 @@ class SudokuPuzzle {
      * array to set the puzzle
      * @param puzzleIndex   the index to set
      */
-    private void setPuzzle(int puzzleIndex) {
-        // Check that puzzle index is valid.
-        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
-            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
-            return;
-        }
-        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
-        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
-    }
+//    private void setPuzzle(int puzzleIndex) {
+//        // Check that puzzle index is valid.
+//        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
+//            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
+//            return;
+//        }
+//        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
+//        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+//    }
 
     /**
      * Checks for a new puzzle
      */
-    void newPuzzle() {
-        if (allPuzzles.size()==0) {
-            Log.d("newPuzzle","No puzzles from file");
-            return;
-        }
-
-        currentPuzzleIndex = (currentPuzzleIndex + 1) % allPuzzles.size();
-        setPuzzle(currentPuzzleIndex);
-    }
+//    void newPuzzle() {
+//        if (allPuzzles.size()==0) {
+//            Log.d("newPuzzle","No puzzles from file");
+//            return;
+//        }
+//
+//        currentPuzzleIndex = (currentPuzzleIndex + 1) % allPuzzles.size();
+//        setPuzzle(currentPuzzleIndex);
+//    }
 
     /**
      * Reset the puzzle
      */
     void resetPuzzle() {
-
-//        for (int i = 0; i < workingPuzzle.length; i++) {
-//            workingPuzzle[i] = originalPuzzle[i];
-//        }
-        // This is faster
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
     }
 

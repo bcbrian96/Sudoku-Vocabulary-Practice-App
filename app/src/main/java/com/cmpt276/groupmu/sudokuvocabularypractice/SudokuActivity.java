@@ -156,7 +156,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         sudokuWords.setTitle("Select the word to insert");
         dialogChoice = 0;
 
-        /** The list of choices */
+        /* The list of choices */
         sudokuWords.setItems(puzzle.getChoiceWords(),  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -251,7 +251,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.newPuzzle:
             /** Generate a new puzzle */
                 try {
-                    puzzle.newPuzzle();
+//                    puzzle.newPuzzle();
                     generateGrid();
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
