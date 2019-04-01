@@ -95,10 +95,10 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            if (puzzle.isNormalMode() || puzzle.isNotPreset(position)) {
+            if (puzzle.isNormalMode()) {
                 textView.setText(capitalize(puzzle.getWordAtPosition(position)));
-
             } else {
+                // In listening comprehension mode, display numbers.
                 textView.setText(capitalize(getItem(position).toString()));
             }
 
