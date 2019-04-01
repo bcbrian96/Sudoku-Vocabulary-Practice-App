@@ -82,29 +82,21 @@ class SudokuPuzzle {
         getSolutionPuzzle(scalable.solutionPuzzle);
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
-    String[] setEnglishWords(int gridSize){
+    String[] setEnglishWords(int gridSize) {
         newEnglishWordsArray = new String[gridSize+1];
-        for (int i = 0; i<gridSize+1;i++){
-            newEnglishWordsArray [i] = englishWords[i];
-        }
+        System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
         return newEnglishWordsArray;
     }
-    String[]setFrenchWords(int gridSize){
+    String[] setFrenchWords(int gridSize) {
         newFrenchWordsArray = new String[gridSize+1];
-        for (int i = 0; i<gridSize+1;i++){
-            newFrenchWordsArray [i] = frenchWords[i];
-        }
+        System.arraycopy(frenchWords, 0, newFrenchWordsArray, 0, gridSize + 1);
         return newFrenchWordsArray;
     }
     void getGamePuzzle(int [] inputPuzzle){
-        for (int i = 0; i < detected_User_Choice_Size*detected_User_Choice_Size; i++) {
-            originalPuzzle[i] = inputPuzzle[i];
-        }
+        System.arraycopy(inputPuzzle, 0, originalPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
     }
     void getSolutionPuzzle (int [] inputPuzzle){
-        for (int i = 0; i < detected_User_Choice_Size*detected_User_Choice_Size; i++) {
-            solutionPuzzle[i] = inputPuzzle[i];
-        }
+        System.arraycopy(inputPuzzle, 0, solutionPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
     }
     // Fancy witchcraft
     enum Mode {NORMAL, LISTENING}
