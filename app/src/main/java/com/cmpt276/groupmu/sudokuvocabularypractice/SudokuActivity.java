@@ -3,6 +3,7 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +11,9 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
+import android.text.Layout;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -38,7 +41,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Button checkSudokuButton;
     Button newPuzzleButton;
     Switch languageSwitch;
-    Button newGameButton;
+    //Button newGameButton;
     private static final int READ_REQUEST_CODE = 42;
     //int detected_User_Choice_Size;
     int GridSizeChoice;
@@ -47,6 +50,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float pitch = (float)0.7;
     float speed = (float)0.7;
     int detected_User_Choice_Size;
+    String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
 
@@ -54,27 +58,23 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        For every activity
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sudoku);
-        final int puzzleSize= getIntent().getIntExtra("USER_REQUEST_SIZE", 2);
-
-//        Declared Variables
-        puzzle = new SudokuPuzzle();
+        int puzzleSize= getIntent().getIntExtra("USER_REQUEST_SIZE", 9);
+        puzzle= new SudokuPuzzle();
         detected_User_Choice_Size = puzzleSize;
-        puzzle.setOriginalPuzzle(puzzleSize);
-        puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
-       // puzzle.setOriginalPuzzle(detected_User_Choice_Size);
-        puzzle.newPuzzle();
+        puzzle.setPuzzleSize(detected_User_Choice_Size);
         grid = findViewById(R.id.grid);
-//        linear = findViewById(R.id.linear);
+        grid.setNumColumns(detected_User_Choice_Size);
         resetButton = findViewById(R.id.resetBtn);
         resetButton.setOnClickListener(this);
         checkSudokuButton = findViewById(R.id.checkSudoku);
         checkSudokuButton.setOnClickListener(this);
         newPuzzleButton = findViewById(R.id.newPuzzle);
         newPuzzleButton.setOnClickListener(this);
-        newGameButton = findViewById(R.id.NewGame);
-        newGameButton.setOnClickListener(this);
+//        newGameButton = findViewById(R.id.NewGame);
+//        newGameButton.setOnClickListener(this);
 
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
@@ -108,9 +108,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         generateGrid();
-
-
-
 
     }
 //    Drop Down Menue
@@ -189,9 +186,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("New Puzzle error:","" + e);
                 }
                 break;
-
         }
-
     }
 
 //    Check Sudoku solutions
@@ -343,13 +338,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void fix_size(){
         int size = puzzle.enWords.size();
        // int var = detected_User_Choice_Size;
-        if(size < 9){
-            for(int i = 1; i < 9-size+1; i++){
+        if(size < detected_User_Choice_Size){
+            for(int i = 1; i < detected_User_Choice_Size-size+1; i++){
                 puzzle.enWords.add(puzzle.englishWords[i]);
                 puzzle.frWords.add(puzzle.frenchWords[i]);
             }
-        } else if(size > 9){
-            for(int i = 0; i > size - 9; i++){
+        } else if(size > detected_User_Choice_Size){
+            for(int i = 0; i > size - detected_User_Choice_Size; i++){
                 puzzle.enWords.remove(i);
                 puzzle.frWords.remove(i);
             }
@@ -375,9 +370,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // killed and restarted.
         savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
         savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
-        savedInstanceState.putStringArray("english", puzzle.english);
-        savedInstanceState.putStringArray("french", puzzle.french);
+        savedInstanceState.putStringArray("english", puzzle.englishWords);
+        savedInstanceState.putStringArray("french", puzzle.frenchWords);
         savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
+        savedInstanceState.putInt("gridSize",detected_User_Choice_Size);
 
 
 
@@ -395,39 +391,21 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // This bundle has also been passed to onCreate.
 
         int[] wp = savedInstanceState.getIntArray("workingPuzzle");
-        System.arraycopy(wp, 0, puzzle.workingPuzzle, 0, 81);
+        System.arraycopy(wp, 0, puzzle.workingPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
 
         int[] op = savedInstanceState.getIntArray("originalPuzzle");
-        System.arraycopy(op, 0, puzzle.originalPuzzle, 0, 81);
+        System.arraycopy(op, 0, puzzle.originalPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
 
         puzzle.english = savedInstanceState.getStringArray("english");
         puzzle.french = savedInstanceState.getStringArray("french");
         puzzle.languageIndex = savedInstanceState.getInt("languageIndex");
         puzzle.Words[0] = puzzle.english;
         puzzle.Words[1] = puzzle.french;
+        detected_User_Choice_Size = savedInstanceState.getInt("gridSize");
 
     }
-//    public void sizeChoosingDialogBuilder() {
-//        AlertDialog.Builder gridSelect = new AlertDialog.Builder(this);
-//        //GridSizeChoice = 2;
-//        gridSelect.setTitle("Select a grid size");
-//        gridSelect.setItems(puzzle.gridSizeArray, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                GridSizeChoice = which;
-//                puzzle.setOriginalPuzzle(GridSizeChoice);
-//                if (GridSizeChoice == 1){
-//                    //puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.testpuzzles));
-//                    puzzle.newPuzzle();
-//                    Log.d ("testPuzzle", "The dialog is working fine");
-//                    generateGrid();
-//                }
-//
-//            }
-//        });
-//        gridSelect.show();
-//
-    }
+
+}
 
 
 

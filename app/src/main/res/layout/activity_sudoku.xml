@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_gravity="center">
+
         <Switch
             android:id="@+id/language_switch"
             android:layout_width="wrap_content"
@@ -16,11 +18,10 @@
 
         <GridView
             android:id="@+id/grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:horizontalSpacing="4dp"
-            android:numColumns="9"
             android:textAlignment="center"
             android:verticalSpacing="4dp"
             android:layout_weight="1"
@@ -37,8 +38,8 @@
         android:id="@+id/resetBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_weight="2"
         android:text="reset"/>
         <Button
             android:id="@+id/newPuzzle"
@@ -51,27 +52,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkSudoku"
-        android:layout_weight="4"
+        android:layout_weight="1"
         android:layout_gravity="right"
         android:text="Check Sudoku"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+
         <Button xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/get_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:text="Open CSV"
             android:onClick="openFile"/>
-        <Button xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/NewGame"
-            android:text="New Game"
-            android:layout_weight="1"/>
+
     </LinearLayout>
     <TextView
     android:layout_width="wrap_content"

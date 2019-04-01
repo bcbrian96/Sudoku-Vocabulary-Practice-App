@@ -17,7 +17,8 @@ public class HomeScreen extends AppCompatActivity implements View.OnClickListene
     String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
     Button mNewGameButton ;
     Button mContinueGameButton;
-    int gridChoice = 2;
+    int gridChoice;
+
     final int GRID_SIZE_REQUEST = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +45,23 @@ public class HomeScreen extends AppCompatActivity implements View.OnClickListene
         }
     }
     public void dialogBuilder() {
-        AlertDialog.Builder gridSelect = new AlertDialog.Builder(this);
-        gridChoice = 2;
+        final AlertDialog.Builder gridSelect = new AlertDialog.Builder(this);
+        gridChoice = 9;
         gridSelect.setTitle("Select a grid size");
         gridSelect.setItems(gridSizeArray, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                gridChoice = which;
+                int temp = which;
+                if (temp == 0)gridChoice = 4;
+                if (temp == 1)gridChoice = 6;
+                if (temp == 2)gridChoice = 9;
+                if (temp == 3)gridChoice = 12;
 
                 //Intent gridSize = new Intent(HomeScreen.this, SudokuActivity.class);
                 Intent gridSize = new Intent(HomeScreen.this,SudokuActivity.class);
                 gridSize.putExtra("USER_REQUEST_SIZE", gridChoice);
+                //SudokuPuzzle puzzle = new SudokuPuzzle();
+                //puzzle.setPuzzleSize(gridChoice);
                 startActivity(gridSize);
             }
         });
