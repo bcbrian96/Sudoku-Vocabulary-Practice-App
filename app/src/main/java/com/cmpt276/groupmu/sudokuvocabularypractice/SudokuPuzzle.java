@@ -48,6 +48,7 @@ class SudokuPuzzle {
     // boxHeight * boxWidth == size must be true
     int[] workingPuzzle = originalPuzzle.clone();
     int[] solutionPuzzle;
+    int difficulty;
 
     private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
@@ -72,12 +73,11 @@ class SudokuPuzzle {
     private int currentPuzzleIndex = -1;
 
     void setPuzzleSize (int gridScale){
-        int defaultGameDifficulty = (int)(gridScale*gridScale)/3;
+        difficulty = (gridScale*gridScale)/3;
         workingPuzzle = new int[gridScale*gridScale];
         solutionPuzzle = new int [gridScale*gridScale];
         originalPuzzle = new int [gridScale*gridScale];
         Words =new String[][] {setEnglishWords(gridScale),setFrenchWords(gridScale)};
-        SudokuGenerator scalable = new SudokuGenerator(gridScale,defaultGameDifficulty);
         Log.d(TAG, "setOriginalPuzzle: "+gridScale);
         detected_User_Choice_Size = gridScale;
         switch (gridScale) {
@@ -94,11 +94,7 @@ class SudokuPuzzle {
         }
         boxHeight = gridScale / boxWidth;
         //setEnglishWordsAndFrenchWords();
-        scalable.generatePuzzle();
-        scalable.scalablePuzzleGenerator();
-        getGamePuzzle(scalable.gamePuzzle);
-        workingPuzzle = originalPuzzle.clone();
-        getSolutionPuzzle(scalable.solutionPuzzle);
+        newPuzzle();
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
     String[] setEnglishWords(int gridSize) {
@@ -299,13 +295,12 @@ class SudokuPuzzle {
      * Checks for a new puzzle
      */
     void newPuzzle() {
-        if (allPuzzles.size()==0) {
-            Log.d("newPuzzle","No puzzles from file");
-            return;
-        }
-
-        currentPuzzleIndex = (currentPuzzleIndex + 1) % allPuzzles.size();
-        setPuzzle(currentPuzzleIndex);
+        SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
+        scalable.generatePuzzle();
+        scalable.scalablePuzzleGenerator();
+        getGamePuzzle(scalable.gamePuzzle);
+        workingPuzzle = originalPuzzle.clone();
+        getSolutionPuzzle(scalable.solutionPuzzle);
     }
 
     /**
