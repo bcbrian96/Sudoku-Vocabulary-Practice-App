@@ -84,9 +84,6 @@ class SudokuPuzzle {
 
     void setPuzzleSize (int gridScale){
         difficulty = (gridScale*gridScale)/3;
-        workingPuzzle = new int[gridScale*gridScale];
-        solutionPuzzle = new int [gridScale*gridScale];
-        originalPuzzle = new int [gridScale*gridScale];
         Log.d(TAG, "setOriginalPuzzle: "+gridScale);
         detected_User_Choice_Size = gridScale;
         switch (gridScale) {
@@ -105,12 +102,6 @@ class SudokuPuzzle {
         //setEnglishWordsAndFrenchWords();
         newPuzzle();
         Log.d("wantSize", "the size:" + detected_User_Choice_Size);
-    }
-    void getGamePuzzle(int [] inputPuzzle){
-        System.arraycopy(inputPuzzle, 0, originalPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
-    }
-    void getSolutionPuzzle (int [] inputPuzzle){
-        System.arraycopy(inputPuzzle, 0, solutionPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
     }
     // Fancy witchcraft
     enum Mode {NORMAL, LISTENING}
@@ -299,9 +290,9 @@ class SudokuPuzzle {
         SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
         scalable.generatePuzzle();
         scalable.scalablePuzzleGenerator();
-        getGamePuzzle(scalable.gamePuzzle);
+        originalPuzzle = scalable.gamePuzzle;
         workingPuzzle = originalPuzzle.clone();
-        getSolutionPuzzle(scalable.solutionPuzzle);
+        solutionPuzzle = scalable.solutionPuzzle;
         // get Words for puzzle
         loadWordPairs();
     }
