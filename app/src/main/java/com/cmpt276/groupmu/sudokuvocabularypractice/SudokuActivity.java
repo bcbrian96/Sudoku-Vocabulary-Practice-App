@@ -165,7 +165,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     puzzle.setValueAtPosition(position, dialogChoice);
 
                     set.setText(capitalize(puzzle.getWordAtPosition(position)));
-                    set.setTextColor(Color.parseColor("#ffc107"));
 
                 }
             }
