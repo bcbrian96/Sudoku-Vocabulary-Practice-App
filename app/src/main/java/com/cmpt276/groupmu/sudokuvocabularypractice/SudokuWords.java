@@ -10,42 +10,16 @@ import static android.content.ContentValues.TAG;
 
 
 /**
- * SudokuPuzzle class. Contains methods:
- * - Reading and converting from input streams of sudoku files
- * - Checking and verifying parameters of the sudoku
+ * SudokuWords class. Contains methods:
+ * - Relating to words/languages of the puzzle
  */
-class SudokuPuzzle {
+class SudokuWords {
 
     /** VARIABLES */
-//    9x9
-    int[] originalPuzzle = {
-            5, 4, 0,  0, 7, 0,  0, 0, 0,
-            6, 0, 0,  1, 8, 5,  0, 0, 0,
-            0, 8, 8,  0, 0, 0,  0, 6, 0,
-
-            8, 0, 0,  0, 6, 0,  0, 0, 3,
-            4, 0, 0,  8, 0, 3,  0, 0, 1,
-            7, 0, 3,  0, 2, 0,  0, 0, 6,
-
-            0, 6, 0,  0, 0, 0,  0, 8, 0,
-            2, 0, 0,  4, 1, 8,  0, 0, 5,
-            0, 4, 5,  0, 8, 0,  0, 7, 8
-    };
-//    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
-
-
     int detected_User_Choice_Size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
-    private int boxHeight = 3;
-    private int boxWidth = 3;
-    // boxHeight * boxWidth == size must be true
-    int[] workingPuzzle = originalPuzzle.clone();
-    int[] solutionPuzzle;
     int difficulty;
-
-//    private ArrayList<int[]> allPuzzles = new ArrayList<>();
-
 
     int languageIndex = 1;
     private String languageNames[] = {"French","English"};
@@ -75,73 +49,6 @@ class SudokuPuzzle {
     int[] pairIndexes = {0,1,2,3,4,5,6,7,8,9};
 //    private int currentPuzzleIndex = -1;
 
-
-    void setPuzzleSize (int gridScale){
-        difficulty = (gridScale*gridScale)/3;
-        detected_User_Choice_Size = gridScale;
-        switch (gridScale) {
-            case 4:
-                boxWidth = 2;
-                break;
-            case 6:
-            case 9:
-                boxWidth = 3;
-                break;
-            case 12:
-                boxWidth = 4;
-                break;
-        }
-        boxHeight = gridScale / boxWidth;
-        newPuzzle();
-    }
-
-//    /**
-//     * Reads the puzzles form the sudoku files
-//     * @param inputStream   Input stream used to read from sudoku files
-//     */
-//    void readPuzzlesFromInputStream(InputStream inputStream) {
-//        // This assumes each puzzle is on a separate line, as in .sdm format.
-//        try {
-//            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                int[] arr = convertPuzzleStringToArray(line);
-//                if (arr!=null) allPuzzles.add(arr);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    /**
-//     * Converts string of puzzles to an array that is useable by the gridView. Sudokus puzzles are
-//     * sourced from: http://forum.enjoysudoku.com/low-stepper-puzzles-t4200.html
-//     * @param puzzleString  String of numbers to be converted to an array of integers
-//     * @return  An array of integers to use in the puzzle gridview to display/organize the words
-//     */
-//    private int[] convertPuzzleStringToArray(String puzzleString) {
-//        // Array to return
-//        int[] puzzleArray = new int[81];
-//
-//        // Parse
-//        int puzzleSize=0;
-//        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
-//            char c = puzzleString.charAt(j);
-//            if (Character.isDigit(c)) {
-//                puzzleArray[puzzleSize++] = Character.digit(c,10);
-//            } else if (c=='.') {
-//                puzzleArray[puzzleSize++] = 0;
-//            }
-//        }
-//
-//        // Failed: Index out of bounds (too many characters)
-//        if (puzzleSize < 81) {
-//            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
-////            throw new Exception("Invalid puzzle string");
-//            return null;
-//        }
-//        return puzzleArray;
-//    }
 
     // Store Reading and Listening modes.
     enum Mode {NORMAL, LISTENING}
@@ -209,24 +116,6 @@ class SudokuPuzzle {
         return Words[languageIndex][workingPuzzle[position]];
     }
 
-    /**
-     * Sets the value at the position in the Gridview
-     * @param position  The position within the sudoku puzzle array
-     * @param value     The value to set the puzzle index to
-     */
-    void setValueAtPosition(int position, int value) {
-        //assert (0<=value) && (value<=9);
-        workingPuzzle[position] = value;
-    }
-
-    /**
-     * Checks if the position within the sudoku is not preset (not set to 0)
-     * @param position  The position within the sudoku puzzle array
-     * @return      True if the position is not preset, false otherwise
-     */
-    boolean isNotPreset(int position) {
-        return originalPuzzle[position]==0;
-    }
 
     /**
      * Swaps languages
@@ -259,36 +148,6 @@ class SudokuPuzzle {
         return languageNames[0];
     }
 
-//    /**
-//     * Checks that the puzzleIndex is within the bounds of the puzzle size and then copies the
-//     * array to set the puzzle
-//     * @param puzzleIndex   the index to set
-//     */
-//    private void setPuzzle(int puzzleIndex) {
-//        // Check that puzzle index is valid.
-//        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
-//            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
-//            return;
-//        }
-//        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
-//        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
-//    }
-
-    /**
-     * Create a new random puzzle from a SudokuGenerator
-     * Also generate new list of word pairs from current pairs.
-     */
-    void newPuzzle() {
-        // generate Puzzle
-        SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
-        scalable.generatePuzzle();
-        scalable.scalablePuzzleGenerator();
-        originalPuzzle = scalable.gamePuzzle;
-        workingPuzzle = originalPuzzle.clone();
-        solutionPuzzle = scalable.solutionPuzzle;
-        // get Words for puzzle
-        loadWordPairs();
-    }
 
     /**
      * Load a new set of word pairs for use in a puzzle.
@@ -363,12 +222,6 @@ class SudokuPuzzle {
         Words = new String[][]{englishWords,frenchWords};
     }
 
-    /**
-     * Reset the puzzle
-     */
-    void resetPuzzle() {
-        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
-    }
 
     /**
      * Reset hints when making a new puzzle.
@@ -377,95 +230,6 @@ class SudokuPuzzle {
         // Reset the number of hints for each word.
         numHints = new int[detected_User_Choice_Size+1];
     }
-
-    /**
-     * Check if the puzzle is incorrect thus far
-     * @return  A boolean value of true if the puzzle is incorrect so far, false otherwise
-     */
-    boolean checkSudokuIncorrect() {
-        // If any rows/columns/boxes contain duplicates, sudoku is incorrect: return true.
-        boolean result = false;
-        for (int regionNum = 0; regionNum < detected_User_Choice_Size; regionNum++) {
-            result = result || containsDuplicates(getRow(regionNum));
-            result = result || containsDuplicates(getColumn(regionNum));
-            result = result || containsDuplicates(getBox(regionNum));
-        }
-        return result;
-    }
-
-    /**
-     * Checks if the sudoku is complete
-     * @return  Returns true if the puzzle if incomplete, flase otherwise
-     */
-    boolean checkSudokuIncomplete() {
-        for (int value : workingPuzzle) {
-            if (value == 0) return true; // Incomplete
-        }
-        return false; // Puzzle is complete
-    }
-
-    /**
-     * Gets the row of the sudoku
-     * @param rowNum    Row number of the sudoku
-     * @return  An array of integers for the puzzle row
-     */
-    int[] getRow(int rowNum) {
-        int[] row = new int[detected_User_Choice_Size];
-        System.arraycopy(workingPuzzle, rowNum * detected_User_Choice_Size, row, 0, detected_User_Choice_Size);
-        return row;
-    }
-
-    /**
-     * Gets the column of the sudoku
-     * @param columnNum Column number of the sudoku
-     * @return  An array of integers for the puzzle column
-     */
-    int[] getColumn(int columnNum) {
-        int[] column = new int[detected_User_Choice_Size];
-        for (int i = 0; i < detected_User_Choice_Size; i++) {
-            column[i] = workingPuzzle[(columnNum + i * detected_User_Choice_Size)];
-        }
-        return column;
-    }
-
-    /**
-     * Gets the 3x3 box for a specific subset within sudoku. Each 3x3 box should only contain one of
-     * each number from 0-9
-     * @param boxNum    Box num from 0 - 8
-     * @return  The box array of integers
-     */
-    int[] getBox(int boxNum) {
-        int[] box = new int[detected_User_Choice_Size];
-        int boxesPerRow = detected_User_Choice_Size/boxWidth;
-        int firstRow = (boxNum / boxesPerRow) * boxHeight;
-        int firstCol = (boxNum % boxesPerRow) * boxWidth;
-        // Go through the box, left-to-right top-to-bottom.
-        for (int row = 0; row < boxHeight; row++) {
-            for (int col = 0; col < boxWidth; col++) {
-                int position = (firstCol + col) + (firstRow + row) * detected_User_Choice_Size;
-                box[col + boxWidth*row] = workingPuzzle[(position)];
-            }
-        }
-        return box;
-    }
-
-    /**
-     * Checks if the sudoku region contains duplicates
-     * @param region The region being checked within the sudoku
-     * @return  A boolean value: true if there contains duplicates, false otherwise
-     */
-    boolean containsDuplicates(int[] region) {
-        boolean[] seen_yet = new boolean[detected_User_Choice_Size+1];
-        for (int value : region) {
-            if (value!=0 && seen_yet[value]) {
-                return true; // we already saw this word
-            }
-            seen_yet[value] = true;
-
-        }
-        return false;
-    }
-
 
 
 }
