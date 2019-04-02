@@ -52,12 +52,12 @@ class SudokuPuzzle {
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
     // Default words (numbers)
-    String[] defaultFrenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
-    String[] defaultEnglishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
-    // temporarily store words loaded from file:
-    // use in puzzle:
+    private String[] defaultFrenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
+    private String[] defaultEnglishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    // All words:
     String[] allFrenchWords = defaultFrenchWords.clone();
     String[] allEnglishWords = defaultEnglishWords.clone();
+    // The words used in the visible puzzle:
     String[] frenchWords = Arrays.copyOfRange(allFrenchWords,0,detected_User_Choice_Size+2);
     String[] englishWords = Arrays.copyOfRange(allEnglishWords,0,detected_User_Choice_Size+2);
 
@@ -94,9 +94,6 @@ class SudokuPuzzle {
         boxHeight = gridScale / boxWidth;
         newPuzzle();
     }
-    // Fancy witchcraft
-    enum Mode {NORMAL, LISTENING}
-    private Mode mode = Mode.NORMAL;
 
 //    /**
 //     * Reads the puzzles form the sudoku files
@@ -146,6 +143,10 @@ class SudokuPuzzle {
 //        return puzzleArray;
 //    }
 
+    // Store Reading and Listening modes.
+    enum Mode {NORMAL, LISTENING}
+    private Mode mode = Mode.NORMAL;
+
     /**
      * Check what mode we're in
      * @return  Boolean: true for NORMAL (Reading), false for LISTENING mode
@@ -166,8 +167,9 @@ class SudokuPuzzle {
     }
 
     /**
-     * Gets the language (French or English)
-     * @return  The language as a string
+     * Gets the list of words for each language (possible inputs).
+     * This is for the dialog the user sees when inputting a word.
+     * @return  The list of words for the input language.
      */
     String[] getChoiceWords() {
         return Words[languageIndex];
@@ -351,7 +353,7 @@ class SudokuPuzzle {
     /**
      * Reset hints when making a new puzzle.
      */
-    void resetHints() {
+    private void resetHints() {
         // Reset the number of hints for each word.
         numHints = new int[detected_User_Choice_Size+1];
     }
