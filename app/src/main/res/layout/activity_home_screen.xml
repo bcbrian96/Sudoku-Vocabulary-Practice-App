@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground">
     >
-
-
     <LinearLayout
         android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center|center_vertical"
         style="?android:buttonBarStyle">
@@ -19,17 +18,24 @@
             android:id="@+id/NewGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/buttonshape"
+            android:background="@color/colorAccent"
             android:text="New Game"
             />
         <Button
             android:id="@+id/ContinueGame"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/buttonshape"
+            android:background="@color/colorAccent"
             android:text="Continue Game" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="40dp"
+            android:layout_marginTop="10dp"
+            android:text="SUDOKU"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 </LinearLayout>
