@@ -2,31 +2,23 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v4.view.ViewPager;
+
 import android.support.v4.widget.TextViewCompat;
-import android.util.TypedValue;
+
 import android.graphics.Typeface;
-import android.support.v4.view.ViewPager;
-import android.view.Display;
+
 import android.view.Gravity;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
+
 import android.widget.GridView;
 import android.widget.TextView;
 
-import static android.app.PendingIntent.getActivity;
-import static java.security.AccessController.getContext;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
 /**
@@ -39,7 +31,7 @@ public class SudokuAdapter extends BaseAdapter {
     private SudokuPuzzle puzzle;
 
     // Initialization
-    public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
+    SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
         this.puzzle = puzzle;
     }
