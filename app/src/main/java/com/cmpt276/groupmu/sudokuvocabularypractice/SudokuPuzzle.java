@@ -34,7 +34,7 @@ class SudokuPuzzle {
 //    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
-    private int detected_User_Choice_Size = 9;
+    int detected_User_Choice_Size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
     private int boxHeight = 3;
@@ -78,7 +78,6 @@ class SudokuPuzzle {
 
     void setPuzzleSize (int gridScale){
         difficulty = (gridScale*gridScale)/3;
-        Log.d(TAG, "setOriginalPuzzle: "+gridScale);
         detected_User_Choice_Size = gridScale;
         switch (gridScale) {
             case 4:
@@ -93,9 +92,7 @@ class SudokuPuzzle {
                 break;
         }
         boxHeight = gridScale / boxWidth;
-        //setEnglishWordsAndFrenchWords();
         newPuzzle();
-        Log.d("wantSize", "the size:" + detected_User_Choice_Size);
     }
     // Fancy witchcraft
     enum Mode {NORMAL, LISTENING}
