@@ -2,31 +2,23 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.support.v4.graphics.drawable.IconCompat;
-import android.support.v4.view.ViewPager;
+
 import android.support.v4.widget.TextViewCompat;
-import android.util.TypedValue;
+
 import android.graphics.Typeface;
-import android.support.v4.view.ViewPager;
-import android.view.Display;
+
 import android.view.Gravity;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
+
 import android.widget.GridView;
 import android.widget.TextView;
 
-import static android.app.PendingIntent.getActivity;
-import static java.security.AccessController.getContext;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
 /**
@@ -39,7 +31,7 @@ public class SudokuAdapter extends BaseAdapter {
     private SudokuPuzzle puzzle;
 
     // Initialization
-    public SudokuAdapter(Context c, SudokuPuzzle puzzle) {
+    SudokuAdapter(Context c, SudokuPuzzle puzzle) {
         this.context = c;
         this.puzzle = puzzle;
     }
@@ -78,11 +70,13 @@ public class SudokuAdapter extends BaseAdapter {
 
             // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
             // scales to fit the parent, has the appropriate colours/contrasts etc...
-            textView.setBackgroundColor(Color.parseColor("#455a64"));
-            if(puzzle.isNotPreset(position)){
-                textView.setBackgroundColor(Color.parseColor("#007080"));
+            if (puzzle.isNotPreset(position)) {
+                textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
+                textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            } else {
+                textView.setBackgroundColor(context.getResources().getColor(R.color.preset_background));
+                textView.setTextColor(Color.WHITE);
             }
-            textView.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
                 textView.isAllCaps();
             }

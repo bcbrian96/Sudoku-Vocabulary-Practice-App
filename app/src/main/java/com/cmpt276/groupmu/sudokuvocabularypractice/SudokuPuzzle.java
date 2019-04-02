@@ -1,16 +1,9 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.util.Log;
-import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 
@@ -38,10 +31,10 @@ class SudokuPuzzle {
             2, 0, 0,  4, 1, 8,  0, 0, 5,
             0, 4, 5,  0, 8, 0,  0, 7, 8
     };
-    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
+//    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
-    int detected_User_Choice_Size = 9;
+    private int detected_User_Choice_Size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
     private int boxHeight = 3;
@@ -51,7 +44,7 @@ class SudokuPuzzle {
     int[] solutionPuzzle;
     int difficulty;
 
-    private ArrayList<int[]> allPuzzles = new ArrayList<>();
+//    private ArrayList<int[]> allPuzzles = new ArrayList<>();
 
 
     int languageIndex = 1;
@@ -80,7 +73,8 @@ class SudokuPuzzle {
      * It's also used with numHints.
      */
     int[] pairIndexes = {0,1,2,3,4,5,6,7,8,9};
-    private int currentPuzzleIndex = -1;
+//    private int currentPuzzleIndex = -1;
+
 
     void setPuzzleSize (int gridScale){
         difficulty = (gridScale*gridScale)/3;
@@ -107,53 +101,53 @@ class SudokuPuzzle {
     enum Mode {NORMAL, LISTENING}
     private Mode mode = Mode.NORMAL;
 
-    /**
-     * Reads the puzzles form the sudoku files
-     * @param inputStream   Input stream used to read from sudoku files
-     */
-    void readPuzzlesFromInputStream(InputStream inputStream) {
-        // This assumes each puzzle is on a separate line, as in .sdm format.
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                int[] arr = convertPuzzleStringToArray(line);
-                if (arr!=null) allPuzzles.add(arr);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    /**
+//     * Reads the puzzles form the sudoku files
+//     * @param inputStream   Input stream used to read from sudoku files
+//     */
+//    void readPuzzlesFromInputStream(InputStream inputStream) {
+//        // This assumes each puzzle is on a separate line, as in .sdm format.
+//        try {
+//            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                int[] arr = convertPuzzleStringToArray(line);
+//                if (arr!=null) allPuzzles.add(arr);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    /**
-     * Converts string of puzzles to an array that is useable by the gridView. Sudokus puzzles are
-     * sourced from: http://forum.enjoysudoku.com/low-stepper-puzzles-t4200.html
-     * @param puzzleString  String of numbers to be converted to an array of integers
-     * @return  An array of integers to use in the puzzle gridview to display/organize the words
-     */
-    private int[] convertPuzzleStringToArray(String puzzleString) {
-        // Array to return
-        int[] puzzleArray = new int[81];
-
-        // Parse
-        int puzzleSize=0;
-        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
-            char c = puzzleString.charAt(j);
-            if (Character.isDigit(c)) {
-                puzzleArray[puzzleSize++] = Character.digit(c,10);
-            } else if (c=='.') {
-                puzzleArray[puzzleSize++] = 0;
-            }
-        }
-
-        // Failed: Index out of bounds (too many characters)
-        if (puzzleSize < 81) {
-            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
-//            throw new Exception("Invalid puzzle string");
-            return null;
-        }
-        return puzzleArray;
-    }
+//    /**
+//     * Converts string of puzzles to an array that is useable by the gridView. Sudokus puzzles are
+//     * sourced from: http://forum.enjoysudoku.com/low-stepper-puzzles-t4200.html
+//     * @param puzzleString  String of numbers to be converted to an array of integers
+//     * @return  An array of integers to use in the puzzle gridview to display/organize the words
+//     */
+//    private int[] convertPuzzleStringToArray(String puzzleString) {
+//        // Array to return
+//        int[] puzzleArray = new int[81];
+//
+//        // Parse
+//        int puzzleSize=0;
+//        for (int j=0; puzzleSize<81 && j<puzzleString.length(); j++) {
+//            char c = puzzleString.charAt(j);
+//            if (Character.isDigit(c)) {
+//                puzzleArray[puzzleSize++] = Character.digit(c,10);
+//            } else if (c=='.') {
+//                puzzleArray[puzzleSize++] = 0;
+//            }
+//        }
+//
+//        // Failed: Index out of bounds (too many characters)
+//        if (puzzleSize < 81) {
+//            Log.e("Parsing puzzle","Invalid string ("+puzzleSize+" digits)");
+////            throw new Exception("Invalid puzzle string");
+//            return null;
+//        }
+//        return puzzleArray;
+//    }
 
     /**
      * Check what mode we're in
@@ -266,20 +260,20 @@ class SudokuPuzzle {
         return languageNames[0];
     }
 
-    /**
-     * Checks that the puzzleIndex is within the bounds of the puzzle size and then copies the
-     * array to set the puzzle
-     * @param puzzleIndex   the index to set
-     */
-    private void setPuzzle(int puzzleIndex) {
-        // Check that puzzle index is valid.
-        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
-            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
-            return;
-        }
-        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
-        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
-    }
+//    /**
+//     * Checks that the puzzleIndex is within the bounds of the puzzle size and then copies the
+//     * array to set the puzzle
+//     * @param puzzleIndex   the index to set
+//     */
+//    private void setPuzzle(int puzzleIndex) {
+//        // Check that puzzle index is valid.
+//        if (puzzleIndex < 0 || puzzleIndex > allPuzzles.size()) {
+//            Log.e("setPuzzle","puzzleIndex "+puzzleIndex+" invalid");
+//            return;
+//        }
+//        System.arraycopy(allPuzzles.get(currentPuzzleIndex), 0, originalPuzzle, 0, 81);
+//        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+//    }
 
     /**
      * Create a new random puzzle from a SudokuGenerator
@@ -354,11 +348,6 @@ class SudokuPuzzle {
      * Reset the puzzle
      */
     void resetPuzzle() {
-
-//        for (int i = 0; i < workingPuzzle.length; i++) {
-//            workingPuzzle[i] = originalPuzzle[i];
-//        }
-        // This is faster
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
     }
 
@@ -403,9 +392,7 @@ class SudokuPuzzle {
      */
     int[] getRow(int rowNum) {
         int[] row = new int[detected_User_Choice_Size];
-        for (int i = 0; i < detected_User_Choice_Size; i++) {
-            row[i] = workingPuzzle[(i + rowNum * detected_User_Choice_Size)];
-        }
+        System.arraycopy(workingPuzzle, rowNum * detected_User_Choice_Size, row, 0, detected_User_Choice_Size);
         return row;
     }
 
