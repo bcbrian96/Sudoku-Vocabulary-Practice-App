@@ -447,8 +447,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
             // For each line in the csv
             while ((nextLine = dataRead.readNext()) != null) {
-                frWords.add(capitalize(nextLine[0]));
-                enWords.add(capitalize(nextLine[1]));
+                enWords.add(capitalize(nextLine[0]));
+                frWords.add(capitalize(nextLine[1]));
             }
 
             // Close the stream
