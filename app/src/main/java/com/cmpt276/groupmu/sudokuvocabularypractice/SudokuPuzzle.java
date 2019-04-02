@@ -297,7 +297,7 @@ class SudokuPuzzle {
      * Currently, there is no support for word lists smaller than puzzle size
      * (this may result in an error.)
      */
-    private void loadWordPairs() {
+    void loadWordPairs() {
         int[] newPairIndexes = new int[detected_User_Choice_Size+1];
         int[] tempNumHints = new int[allFrenchWords.length];
         // tempNumHints tracks word pairs in allFrenchWords instead of frenchWords

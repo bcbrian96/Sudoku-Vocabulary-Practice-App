@@ -457,7 +457,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             // Allocate new words
             puzzle.allEnglishWords = enWords.toArray(new String[0]);
             puzzle.allFrenchWords = frWords.toArray(new String[0]);
-            puzzle.Words = new String[][]{puzzle.englishWords, puzzle.frenchWords};
+            puzzle.loadWordPairs();
             // Initialize the grid again
             generateGrid();
         }
