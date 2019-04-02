@@ -93,7 +93,11 @@ public class SudokuAdapter extends BaseAdapter {
                 textView.setText(capitalize(puzzle.getWordAtPosition(position)));
             } else {
                 // In listening comprehension mode, display numbers.
-                textView.setText(capitalize(getItem(position).toString()));
+                if ((int)getItem(position)==0){
+                    textView.setText("");
+                } else {
+                    textView.setText(capitalize(getItem(position).toString()));
+                }
             }
 
         } else {
