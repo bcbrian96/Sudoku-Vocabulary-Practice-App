@@ -303,26 +303,39 @@ class SudokuPuzzle {
         // tempNumHints tracks word pairs in allFrenchWords instead of frenchWords
         // (independent of `detected_User_Choice_Size`)
         for(int i=0; i<numHints.length; i++){
-            tempNumHints[pairIndexes[i]] = numHints[i];
+            // if it was *not* a 'padding word' (from defaultWords)
+            if(pairIndexes[i] < tempNumHints.length)
+                tempNumHints[pairIndexes[i]] = numHints[i];
         }
         newPairIndexes[0] = 0; // Add the empty string.
         tempNumHints[0] = -1; // Ignore the empty string when adding words.
         // add hinted: find top 3 most hinted words, and add them first
-        for(int i=1; i<4; i++) {
-            int max_j = 1;
-            for(int j=2; j<tempNumHints.length; j++) {
-                // change to >= to prefer words at end of list instead of start.
-                if (tempNumHints[j] > tempNumHints[max_j]) {
-                    max_j = j;
-                }
+        if(allFrenchWords.length < detected_User_Choice_Size+1) {
+            //Log.d("newPuzzle","not enough words")
+            // add all words
+            // set first N words to permutation of all words
+            for(int i=1; i<newPairIndexes.length; i++) {
+                newPairIndexes[i] = i;
             }
-            tempNumHints[max_j] = -1; // Make sure we don't choose the same one again.
-            newPairIndexes[i] = max_j; // index of the word pair with the most hints.
-        }
-        // Add the rest of the words
-        for(int i=4, j=1; i<newPairIndexes.length; i++, j++){
-            while(tempNumHints[j] == -1) j++; // ignore already taken pairs
-            newPairIndexes[i] = j;
+        } else {
+            // add first 3 words according to hints
+            int i = 1; // position in newPairIndexes
+            for(; i<4; i++) {
+                int max_j = 1;
+                for(int j=2; j<tempNumHints.length; j++) {
+                    // change to >= to prefer words at end of list instead of start.
+                    if (tempNumHints[j] > tempNumHints[max_j]) {
+                        max_j = j;
+                    }
+                }
+                tempNumHints[max_j] = -1; // Make sure we don't choose the same one again.
+                newPairIndexes[i] = max_j; // index of the word pair with the most hints.
+            }
+            // Add the rest of the words
+            for(int j=1; i<newPairIndexes.length; i++, j++){
+                while(tempNumHints[j] == -1) j++; // ignore already taken pairs
+                newPairIndexes[i] = j;
+            }
         }
         pairIndexes = newPairIndexes;
         generatePuzzleWordlist();
@@ -336,9 +349,16 @@ class SudokuPuzzle {
     void generatePuzzleWordlist() {
         englishWords = new String[detected_User_Choice_Size+1];
         frenchWords = new String[detected_User_Choice_Size+1];
-        for(int i = 0; i<pairIndexes.length; i++){
+        int i=0;
+        for(; i<pairIndexes.length && i<allEnglishWords.length; i++){
             englishWords[i] = allEnglishWords[pairIndexes[i]];
             frenchWords[i] = allFrenchWords[pairIndexes[i]];
+        }
+        // if not enough words in allWords, use from defaultWords
+        while(i < pairIndexes.length) {
+            englishWords[i] = defaultEnglishWords[pairIndexes[i]];
+            frenchWords[i] = defaultFrenchWords[pairIndexes[i]];
+            i++;
         }
         Words = new String[][]{englishWords,frenchWords};
     }
