@@ -2,6 +2,7 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
@@ -33,43 +34,50 @@ class SudokuPuzzle {
 //    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
-    private int detected_User_Choice_Size = 9;
+    int detected_User_Choice_Size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
     private int boxHeight = 3;
     private int boxWidth = 3;
     // boxHeight * boxWidth == size must be true
     int[] workingPuzzle = originalPuzzle.clone();
-    private int[] solutionPuzzle;
+    int[] solutionPuzzle;
+    int difficulty;
 
 //    private ArrayList<int[]> allPuzzles = new ArrayList<>();
-
-    ArrayList<String> enWords = new ArrayList<>();
-    ArrayList<String> frWords = new ArrayList<>();
-
-    String[] english = {"", "", "", "", "", "", "", "", ""};
-    String[] french = {"", "", "", "", "", "", "", "", ""};
 
 
     int languageIndex = 1;
     private String languageNames[] = {"French","English"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
     // Note: languageNames[] is in the opposite order of Words[].
-    String[] frenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
-    String[] englishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    // Default words (numbers)
+    private String[] defaultFrenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
+    private String[] defaultEnglishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
+    // All words:
+    String[] allFrenchWords = defaultFrenchWords.clone();
+    String[] allEnglishWords = defaultEnglishWords.clone();
+    // The words used in the visible puzzle:
+    String[] frenchWords = Arrays.copyOfRange(allFrenchWords,0,detected_User_Choice_Size+2);
+    String[] englishWords = Arrays.copyOfRange(allEnglishWords,0,detected_User_Choice_Size+2);
 
     String[][] Words = {englishWords, frenchWords};
+
+    /**
+     * numHints stores the number of times a hint was asked for each pair.
+     */
+    int[] numHints = new int[detected_User_Choice_Size+1];
+    /**
+     * pairIndexes stores the original position of the puzzle words
+     * (eg. englishWords) in the array of all words (eg. allEnglishWords).
+     * It's also used with numHints.
+     */
+    int[] pairIndexes = {0,1,2,3,4,5,6,7,8,9};
 //    private int currentPuzzleIndex = -1;
 
 
     void setPuzzleSize (int gridScale){
-        int defaultGameDifficulty = (int)(gridScale*gridScale)/3;
-        workingPuzzle = new int[gridScale*gridScale];
-        solutionPuzzle = new int [gridScale*gridScale];
-        originalPuzzle = new int [gridScale*gridScale];
-        Words =new String[][] {setEnglishWords(gridScale),setFrenchWords(gridScale)};
-        SudokuGenerator scalable = new SudokuGenerator(gridScale,defaultGameDifficulty);
-        Log.d(TAG, "setOriginalPuzzle: "+gridScale);
+        difficulty = (gridScale*gridScale)/3;
         detected_User_Choice_Size = gridScale;
         switch (gridScale) {
             case 4:
@@ -84,36 +92,8 @@ class SudokuPuzzle {
                 break;
         }
         boxHeight = gridScale / boxWidth;
-        //setEnglishWordsAndFrenchWords();
-        scalable.generatePuzzle();
-        scalable.scalablePuzzleGenerator();
-        getGamePuzzle(scalable.gamePuzzle);
-        workingPuzzle = originalPuzzle.clone();
-        getSolutionPuzzle(scalable.solutionPuzzle);
-        Log.d("wantSize", "the size:" + detected_User_Choice_Size);
+        newPuzzle();
     }
-
-
-    String[] setEnglishWords(int gridSize) {
-        String[] newEnglishWordsArray = new String[gridSize + 1];
-        System.arraycopy(englishWords, 0, newEnglishWordsArray, 0, gridSize + 1);
-        return newEnglishWordsArray;
-    }
-    String[] setFrenchWords(int gridSize) {
-        String[] newFrenchWordsArray = new String[gridSize + 1];
-        System.arraycopy(frenchWords, 0, newFrenchWordsArray, 0, gridSize + 1);
-        return newFrenchWordsArray;
-    }
-    void getGamePuzzle(int [] inputPuzzle){
-        System.arraycopy(inputPuzzle, 0, originalPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
-    }
-    void getSolutionPuzzle (int [] inputPuzzle){
-        System.arraycopy(inputPuzzle, 0, solutionPuzzle, 0, detected_User_Choice_Size * detected_User_Choice_Size);
-    }
-
-    // Fancy witchcraft
-    enum Mode {NORMAL, LISTENING}
-    private Mode mode = Mode.NORMAL;
 
 //    /**
 //     * Reads the puzzles form the sudoku files
@@ -163,6 +143,10 @@ class SudokuPuzzle {
 //        return puzzleArray;
 //    }
 
+    // Store Reading and Listening modes.
+    enum Mode {NORMAL, LISTENING}
+    private Mode mode = Mode.NORMAL;
+
     /**
      * Check what mode we're in
      * @return  Boolean: true for NORMAL (Reading), false for LISTENING mode
@@ -183,8 +167,9 @@ class SudokuPuzzle {
     }
 
     /**
-     * Gets the language (French or English)
-     * @return  The language as a string
+     * Gets the list of words for each language (possible inputs).
+     * This is for the dialog the user sees when inputting a word.
+     * @return  The list of words for the input language.
      */
     String[] getChoiceWords() {
         return Words[languageIndex];
@@ -289,24 +274,88 @@ class SudokuPuzzle {
 //        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
 //    }
 
-//    /**
-//     * Checks for a new puzzle
-//     */
-//    void newPuzzle() {
-//        if (allPuzzles.size()==0) {
-//            Log.d("newPuzzle","No puzzles from file");
-//            return;
-//        }
-//
-//        currentPuzzleIndex = (currentPuzzleIndex + 1) % allPuzzles.size();
-//        setPuzzle(currentPuzzleIndex);
-//    }
+    /**
+     * Create a new random puzzle from a SudokuGenerator
+     * Also generate new list of word pairs from current pairs.
+     */
+    void newPuzzle() {
+        // generate Puzzle
+        SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
+        scalable.generatePuzzle();
+        scalable.scalablePuzzleGenerator();
+        originalPuzzle = scalable.gamePuzzle;
+        workingPuzzle = originalPuzzle.clone();
+        solutionPuzzle = scalable.solutionPuzzle;
+        // get Words for puzzle
+        loadWordPairs();
+    }
+
+    /**
+     * Load a new set of word pairs for use in a puzzle.
+     * Takes pairs from allEnglishWords/allFrenchWords,
+     * according to which have the most in numHints.
+     * Currently, there is no support for word lists smaller than puzzle size
+     * (this may result in an error.)
+     */
+    void loadWordPairs() {
+        int[] newPairIndexes = new int[detected_User_Choice_Size+1];
+        int[] tempNumHints = new int[allFrenchWords.length];
+        // tempNumHints tracks word pairs in allFrenchWords instead of frenchWords
+        // (independent of `detected_User_Choice_Size`)
+        for(int i=0; i<numHints.length; i++){
+            tempNumHints[pairIndexes[i]] = numHints[i];
+        }
+        newPairIndexes[0] = 0; // Add the empty string.
+        tempNumHints[0] = -1; // Ignore the empty string when adding words.
+        // add hinted: find top 3 most hinted words, and add them first
+        for(int i=1; i<4; i++) {
+            int max_j = 1;
+            for(int j=2; j<tempNumHints.length; j++) {
+                // change to >= to prefer words at end of list instead of start.
+                if (tempNumHints[j] > tempNumHints[max_j]) {
+                    max_j = j;
+                }
+            }
+            tempNumHints[max_j] = -1; // Make sure we don't choose the same one again.
+            newPairIndexes[i] = max_j; // index of the word pair with the most hints.
+        }
+        // Add the rest of the words
+        for(int i=4, j=1; i<newPairIndexes.length; i++, j++){
+            while(tempNumHints[j] == -1) j++; // ignore already taken pairs
+            newPairIndexes[i] = j;
+        }
+        pairIndexes = newPairIndexes;
+        generatePuzzleWordlist();
+        resetHints();
+    }
+
+    /**
+     * Set englishWords/frenchWords (the words used in the puzzle)
+     * according to allEnglishWords/... and pairIndexes.
+     */
+    void generatePuzzleWordlist() {
+        englishWords = new String[detected_User_Choice_Size+1];
+        frenchWords = new String[detected_User_Choice_Size+1];
+        for(int i = 0; i<pairIndexes.length; i++){
+            englishWords[i] = allEnglishWords[pairIndexes[i]];
+            frenchWords[i] = allFrenchWords[pairIndexes[i]];
+        }
+        Words = new String[][]{englishWords,frenchWords};
+    }
 
     /**
      * Reset the puzzle
      */
     void resetPuzzle() {
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+    }
+
+    /**
+     * Reset hints when making a new puzzle.
+     */
+    private void resetHints() {
+        // Reset the number of hints for each word.
+        numHints = new int[detected_User_Choice_Size+1];
     }
 
     /**

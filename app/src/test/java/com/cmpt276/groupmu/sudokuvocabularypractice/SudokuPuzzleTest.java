@@ -1,8 +1,10 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.junit.Test;
 
 
+import java.util.Arrays;
 import java.util.Locale;
 import static org.junit.Assert.*;
 
@@ -13,11 +15,10 @@ import static org.junit.Assert.*;
  */
 public class SudokuPuzzleTest {
     @Test
-   public void  testGetWordChoices(){
+    public void  testGetWordChoices(){
         SudokuPuzzle testWordChoices = new SudokuPuzzle();
         assertArrayEquals(testWordChoices.frenchWords, testWordChoices.getChoiceWords());
     }
-
 
     @Test
     public void testGetWordAtPosition(){
@@ -29,6 +30,7 @@ public class SudokuPuzzleTest {
 
         }
     }
+
     @Test
     public void testGetTranslationAtPosition(){
         // Setup variables to ensure that the correct
@@ -39,6 +41,7 @@ public class SudokuPuzzleTest {
 
         }
     }
+
     @Test
     public void testGetColumn() {
         SudokuPuzzle testColumn = new SudokuPuzzle();
@@ -57,6 +60,7 @@ public class SudokuPuzzleTest {
             SudokuPuzzle testPreset = new SudokuPuzzle();
             assertTrue(testPreset.isNotPreset(16));
     }
+
     @Test
     public void testSetValueAtPosition() {
 
@@ -65,6 +69,7 @@ public class SudokuPuzzleTest {
         int expect = 6;
         assertEquals(expect, testPreset.workingPuzzle[14]);
     }
+
     @Test
     public void testGetVoiceLocale (){
             SudokuPuzzle testVoice = new SudokuPuzzle();
@@ -72,11 +77,13 @@ public class SudokuPuzzleTest {
             Locale actual = testVoice.getVoiceLocale();
             assertEquals(expect,actual);
     }
+
     @Test
     public void testCheckSudokuIncorrect(){
         SudokuPuzzle testCheckSudoku = new SudokuPuzzle();
         assertTrue(testCheckSudoku.checkSudokuIncorrect());
     }
+
     @Test
     public void testCheckSudokuIncomplete(){
             SudokuPuzzle testCheckIncomplete = new SudokuPuzzle();
@@ -90,8 +97,8 @@ public class SudokuPuzzleTest {
 
             assertFalse(testCheckIncomplete.checkSudokuIncomplete());
 
-
     }
+
     @Test
     public void testGetRow (){
             SudokuPuzzle testRow = new SudokuPuzzle();
@@ -103,6 +110,7 @@ public class SudokuPuzzleTest {
             int[] actualRow = testRow.getRow(0);
             assertArrayEquals(expectRow,actualRow);
     }
+
     @Test
     public void testGetBox(){
             SudokuPuzzle testBox = new SudokuPuzzle();
@@ -114,6 +122,7 @@ public class SudokuPuzzleTest {
             int[] actualBox = testBox.getBox(4);
             assertArrayEquals(expectBox,actualBox);
     }
+
     @Test
     public void testContainDuplicates (){
             SudokuPuzzle testPuzzle = new SudokuPuzzle();
@@ -127,6 +136,7 @@ public class SudokuPuzzleTest {
             testPuzzle.workingPuzzle[1] = 1;
             assertTrue(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
     }
+
     @Test
     public void testGetCurrentLanguage(){
             SudokuPuzzle testCurrentLanguage = new SudokuPuzzle();
@@ -134,6 +144,7 @@ public class SudokuPuzzleTest {
             String actualName = testCurrentLanguage.getCurrentLanguage();
             assertEquals(expectName,actualName);
     }
+
     @Test
     public void testSwapLanguage(){
             SudokuPuzzle testSwap = new SudokuPuzzle();
@@ -142,15 +153,18 @@ public class SudokuPuzzleTest {
             int actual = testSwap.languageIndex;
             assertEquals(expect, actual);
     }
-//    @Test
-//    public void testResetPuzzle(){
-//            SudokuPuzzle testReset = new SudokuPuzzle();
-//            int [] expect = testReset.originalPuzzle;
-//            testReset.setValueAtPosition(35,5);
-//            testReset.resetPuzzle();
-//            int [] actual = testReset.workingPuzzle;
-//            assertArrayEquals(expect,actual);
-//    }
+
+    @Test
+    public void testResetPuzzle(){
+        SudokuPuzzle testReset = new SudokuPuzzle();
+        // set values in the working puzzle
+        for(int i=0; i<testReset.workingPuzzle.length; i++) {
+            testReset.workingPuzzle[i] = 1;
+        }
+        testReset.resetPuzzle();
+        // Reset should set them back
+        assertArrayEquals(testReset.originalPuzzle, testReset.workingPuzzle);
+    }
 
     @Test
     public void testSwapMode(){
@@ -180,16 +194,24 @@ public class SudokuPuzzleTest {
         assertEquals("French", foreignWords.getForeignLanguage());
     }
 
-//    @Test
-//    public void testNewPuzzle(){
-//        SudokuPuzzle newpuzzle = new SudokuPuzzle();
-//        SudokuPuzzle oldpuzzle = new SudokuPuzzle();
-//        newpuzzle.newPuzzle();
-//
-//        assertFalse(Arrays.equals(newpuzzle.workingPuzzle, oldpuzzle.originalPuzzle));
-//
-//    }
+    @Test
+    public void testNewPuzzle(){
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        int[] first_originalPuzzle = puzzle.originalPuzzle;
+        puzzle.newPuzzle();
+        // After newPuzzle(), the originalPuzzle should be different,
+        // and it should also be a valid puzzle
+        assertFalse(Arrays.equals(puzzle.originalPuzzle, first_originalPuzzle));
+        assertFalse(puzzle.checkSudokuIncorrect());
+    }
 
+    @Test
+    public void testSetPuzzleSize(){
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        puzzle.setPuzzleSize(4);
+        assertEquals(4, puzzle.detected_User_Choice_Size);
+        assertEquals(4+1, puzzle.englishWords.length);
+    }
 //    @Test
 //    public void testGetSolutionPuzzle(){
 //        SudokuPuzzle solution = new SudokuPuzzle();

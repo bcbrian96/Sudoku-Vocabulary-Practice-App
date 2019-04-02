@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class HomeScreen extends AppCompatActivity implements View.OnClickListener {
-    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
     Button mNewGameButton ;
     Button mContinueGameButton;
     int gridChoice;
@@ -47,15 +46,13 @@ public class HomeScreen extends AppCompatActivity implements View.OnClickListene
     public void dialogBuilder() {
         final AlertDialog.Builder gridSelect = new AlertDialog.Builder(this);
         gridChoice = 9;
+        String[] gridSizeArray= {"4 x 4", "6 x 6", "9 x 9", "12 x 12"};
+        final int[] gridsize_choices = {4, 6, 9, 12};
         gridSelect.setTitle("Select a grid size");
         gridSelect.setItems(gridSizeArray, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int temp = which;
-                if (temp == 0)gridChoice = 4;
-                if (temp == 1)gridChoice = 6;
-                if (temp == 2)gridChoice = 9;
-                if (temp == 3)gridChoice = 12;
+                gridChoice = gridsize_choices[which];
 
                 //Intent gridSize = new Intent(HomeScreen.this, SudokuActivity.class);
                 Intent gridSize = new Intent(HomeScreen.this,SudokuActivity.class);
