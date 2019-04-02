@@ -310,30 +310,35 @@ class SudokuPuzzle {
      * Load a new set of word pairs for use in a puzzle.
      * Takes pairs from allEnglishWords/allFrenchWords,
      * according to which have the most in numHints.
+     * Currently, there is no support for word lists smaller than puzzle size
+     * (this may result in an error.)
      */
     private void loadWordPairs() {
         int[] newPairIndexes = new int[detected_User_Choice_Size+1];
-        int[] tempNumHints = new int[frenchWords.length];
-        // tempNumHints tracks word pairs in allEnglishWords instead of englishWords
+        int[] tempNumHints = new int[allFrenchWords.length];
+        // tempNumHints tracks word pairs in allFrenchWords instead of frenchWords
+        // (independent of `detected_User_Choice_Size`)
         for(int i=0; i<numHints.length; i++){
             tempNumHints[pairIndexes[i]] = numHints[i];
         }
-        newPairIndexes[0] = 0; // empty string.
+        newPairIndexes[0] = 0; // Add the empty string.
+        tempNumHints[0] = -1; // Ignore the empty string when adding words.
         // add hinted: find top 3 most hinted words, and add them first
-        for(int i=0; i<3; i++) {
-            int max_j = 0;
-            for(int j=1; j<tempNumHints.length; j++) {
+        for(int i=1; i<4; i++) {
+            int max_j = 1;
+            for(int j=2; j<tempNumHints.length; j++) {
+                // change to >= to prefer words at end of list instead of start.
                 if (tempNumHints[j] > tempNumHints[max_j]) {
                     max_j = j;
                 }
             }
             tempNumHints[max_j] = -1; // Make sure we don't choose the same one again.
-            newPairIndexes[i+1] = max_j; // index of the word pair with the most hints.
+            newPairIndexes[i] = max_j; // index of the word pair with the most hints.
         }
         // Add the rest of the words
-        for(int i=3, j=1; i<detected_User_Choice_Size; i++, j++){
+        for(int i=4, j=1; i<newPairIndexes.length; i++, j++){
             while(tempNumHints[j] == -1) j++; // ignore already taken pairs
-            newPairIndexes[i+1] = j;
+            newPairIndexes[i] = j;
         }
         pairIndexes = newPairIndexes;
         generatePuzzleWordlist();
