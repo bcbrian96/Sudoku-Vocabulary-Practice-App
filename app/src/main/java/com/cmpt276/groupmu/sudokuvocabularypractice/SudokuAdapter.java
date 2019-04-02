@@ -70,11 +70,13 @@ public class SudokuAdapter extends BaseAdapter {
 
             // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
             // scales to fit the parent, has the appropriate colours/contrasts etc...
-            textView.setBackgroundColor(Color.parseColor("#455a64"));
-            if(puzzle.isNotPreset(position)){
-                textView.setBackgroundColor(Color.parseColor("#007080"));
+            if (puzzle.isNotPreset(position)) {
+                textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
+                textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
+            } else {
+                textView.setBackgroundColor(context.getResources().getColor(R.color.preset_background));
+                textView.setTextColor(Color.WHITE);
             }
-            textView.setTextColor(Color.WHITE);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
                 textView.isAllCaps();
             }
