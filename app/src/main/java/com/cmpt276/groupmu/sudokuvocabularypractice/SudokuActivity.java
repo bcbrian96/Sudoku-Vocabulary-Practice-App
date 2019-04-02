@@ -467,15 +467,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * Fixes the size of array if there are too many/few variables in the CSV file to use.
-     */
-    public void fix_size(){
-
-
-//        System.out.println(Arrays.toString(puzzle.english));
-    }
-
-    /**
      * Saves the instance of the app when device orientation is changed
      * @param savedInstanceState    The Bundle object to save the state parameters to.
      */

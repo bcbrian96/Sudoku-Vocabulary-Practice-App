@@ -3,6 +3,7 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import org.junit.Test;
 
 
+import java.util.Arrays;
 import java.util.Locale;
 import static org.junit.Assert.*;
 
@@ -180,15 +181,16 @@ public class SudokuPuzzleTest {
         assertEquals("French", foreignWords.getForeignLanguage());
     }
 
-//    @Test
-//    public void testNewPuzzle(){
-//        SudokuPuzzle newpuzzle = new SudokuPuzzle();
-//        SudokuPuzzle oldpuzzle = new SudokuPuzzle();
-//        newpuzzle.newPuzzle();
-//
-//        assertFalse(Arrays.equals(newpuzzle.workingPuzzle, oldpuzzle.originalPuzzle));
-//
-//    }
+    @Test
+    public void testNewPuzzle(){
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        int[] first_originalPuzzle = puzzle.originalPuzzle;
+        puzzle.newPuzzle();
+        // After newPuzzle(), the originalPuzzle should be different,
+        // and it should also be a valid puzzle
+        assertFalse(Arrays.equals(puzzle.originalPuzzle, first_originalPuzzle));
+        assertFalse(puzzle.checkSudokuIncorrect());
+    }
 
 //    @Test
 //    public void testGetSolutionPuzzle(){
