@@ -15,10 +15,12 @@ import android.widget.TextView;
 
 public class HomeScreen extends AppCompatActivity implements View.OnClickListener {
     String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
+    String[] gridDifficultyArray = {"1","2","3","4","5"};
     Button mNewGameButton ;
     Button mContinueGameButton;
+    TextView mSudokuTextView;
     int gridChoice;
-
+    int difficultyChoice;
     final int GRID_SIZE_REQUEST = 20;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,16 +58,40 @@ public class HomeScreen extends AppCompatActivity implements View.OnClickListene
                 if (temp == 1)gridChoice = 6;
                 if (temp == 2)gridChoice = 9;
                 if (temp == 3)gridChoice = 12;
-
                 //Intent gridSize = new Intent(HomeScreen.this, SudokuActivity.class);
-                Intent gridSize = new Intent(HomeScreen.this,SudokuActivity.class);
-                gridSize.putExtra("USER_REQUEST_SIZE", gridChoice);
+                //gridSize.putExtra("USER_REQUEST_SIZE", gridChoice);
+                //startActivity(gridSize);
+                difficultyChoicesDialog();
                 //SudokuPuzzle puzzle = new SudokuPuzzle();
                 //puzzle.setPuzzleSize(gridChoice);
-                startActivity(gridSize);
             }
         });
         gridSelect.show();
 
+    }
+    public void difficultyChoicesDialog (){
+        final AlertDialog.Builder difficultySelect = new AlertDialog.Builder(this);
+        difficultyChoice = 1;
+        difficultySelect.setTitle("Select a difficulty");
+        difficultySelect.setItems(gridDifficultyArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int temp = which;
+                if (temp == 0)difficultyChoice = 8;
+                if (temp == 1)difficultyChoice = 6;
+                if (temp == 2)difficultyChoice = 4;
+                if (temp == 3)difficultyChoice = 3;
+                if (temp == 4)difficultyChoice = 2;
+                //Intent gridSize = new Intent(HomeScreen.this, SudokuActivity.class);
+                Intent gridSize = new Intent(HomeScreen.this, SudokuActivity.class);
+                gridSize.putExtra("USER_REQUEST_DIFFICULTY", difficultyChoice);
+                gridSize.putExtra("USER_REQUEST_SIZE", gridChoice);
+                //SudokuPuzzle puzzle = new SudokuPuzzle();
+                //puzzle.setPuzzleSize(gridChoice);
+                startActivity(gridSize);
+
+            }
+        });
+        difficultySelect.show();
     }
 }
