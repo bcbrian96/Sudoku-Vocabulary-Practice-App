@@ -505,28 +505,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
 
-        detected_User_Choice_Size = savedInstanceState.getInt("gridSize");
-
-        int[] wp = savedInstanceState.getIntArray("workingPuzzle");
-        if (wp != null) {
-            System.arraycopy(wp, 0, model.puzzle.workingPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
-        } else {
-            Log.i(null, "workingPuzzle is null onRestoreInstanceState()");
+        int temp_size = savedInstanceState.getInt("gridSize");
+        if (model.restoreState(savedInstanceState)) {
+           this.detected_User_Choice_Size = temp_size;
         }
-
-        int[] op = savedInstanceState.getIntArray("originalPuzzle");
-        if (op != null) {
-            System.arraycopy(op, 0, model.puzzle.originalPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
-        } else {
-            Log.i(null, "originalPuzzle is null onRestoreInstanceState()");
-        }
-
-        model.words.allEnglishWords = savedInstanceState.getStringArray("englishWords");
-        model.words.allFrenchWords = savedInstanceState.getStringArray("frenchWords");
-        model.words.pairIndexes = savedInstanceState.getIntArray("pairIndexes");
-        model.words.numHints = savedInstanceState.getIntArray("numHints");
-        model.words.languageIndex = savedInstanceState.getInt("languageIndex");
-        model.words.generatePuzzleWordlist();
 
     }
 
