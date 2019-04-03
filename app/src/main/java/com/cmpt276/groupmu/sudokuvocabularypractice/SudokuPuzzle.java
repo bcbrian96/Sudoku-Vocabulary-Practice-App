@@ -1,13 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.util.Log;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
-
-
 
 /**
  * SudokuPuzzle class. Contains methods:
@@ -34,7 +26,7 @@ class SudokuPuzzle {
 //    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
 
-    int detected_User_Choice_Size = 9;
+    int size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
     private int boxHeight = 3;
@@ -47,7 +39,7 @@ class SudokuPuzzle {
 
     void setPuzzleSize (int gridScale){
         difficulty = (gridScale*gridScale)/3;
-        detected_User_Choice_Size = gridScale;
+        size = gridScale;
         switch (gridScale) {
             case 4:
                 boxWidth = 2;
@@ -162,7 +154,7 @@ class SudokuPuzzle {
      */
     void newPuzzle() {
         // generate Puzzle
-        SudokuGenerator scalable = new SudokuGenerator(detected_User_Choice_Size,difficulty);
+        SudokuGenerator scalable = new SudokuGenerator(size,difficulty);
         scalable.generatePuzzle();
         scalable.scalablePuzzleGenerator();
         originalPuzzle = scalable.gamePuzzle;
@@ -186,7 +178,7 @@ class SudokuPuzzle {
     boolean checkSudokuIncorrect() {
         // If any rows/columns/boxes contain duplicates, sudoku is incorrect: return true.
         boolean result = false;
-        for (int regionNum = 0; regionNum < detected_User_Choice_Size; regionNum++) {
+        for (int regionNum = 0; regionNum < size; regionNum++) {
             result = result || containsDuplicates(getRow(regionNum));
             result = result || containsDuplicates(getColumn(regionNum));
             result = result || containsDuplicates(getBox(regionNum));
@@ -211,8 +203,8 @@ class SudokuPuzzle {
      * @return  An array of integers for the puzzle row
      */
     int[] getRow(int rowNum) {
-        int[] row = new int[detected_User_Choice_Size];
-        System.arraycopy(workingPuzzle, rowNum * detected_User_Choice_Size, row, 0, detected_User_Choice_Size);
+        int[] row = new int[size];
+        System.arraycopy(workingPuzzle, rowNum * size, row, 0, size);
         return row;
     }
 
@@ -222,9 +214,9 @@ class SudokuPuzzle {
      * @return  An array of integers for the puzzle column
      */
     int[] getColumn(int columnNum) {
-        int[] column = new int[detected_User_Choice_Size];
-        for (int i = 0; i < detected_User_Choice_Size; i++) {
-            column[i] = workingPuzzle[(columnNum + i * detected_User_Choice_Size)];
+        int[] column = new int[size];
+        for (int i = 0; i < size; i++) {
+            column[i] = workingPuzzle[(columnNum + i * size)];
         }
         return column;
     }
@@ -237,14 +229,14 @@ class SudokuPuzzle {
      * @return  The box array of integers
      */
     int[] getBox(int boxNum) {
-        int[] box = new int[detected_User_Choice_Size];
-        int boxesPerRow = detected_User_Choice_Size/boxWidth;
+        int[] box = new int[size];
+        int boxesPerRow = size / boxWidth;
         int firstRow = (boxNum / boxesPerRow) * boxHeight;
         int firstCol = (boxNum % boxesPerRow) * boxWidth;
         // Go through the box, left-to-right top-to-bottom.
         for (int row = 0; row < boxHeight; row++) {
             for (int col = 0; col < boxWidth; col++) {
-                int position = (firstCol + col) + (firstRow + row) * detected_User_Choice_Size;
+                int position = (firstCol + col) + (firstRow + row) * size;
                 box[col + boxWidth*row] = workingPuzzle[(position)];
             }
         }
@@ -257,7 +249,7 @@ class SudokuPuzzle {
      * @return  A boolean value: true if there contains duplicates, false otherwise
      */
     boolean containsDuplicates(int[] region) {
-        boolean[] seen_yet = new boolean[detected_User_Choice_Size+1];
+        boolean[] seen_yet = new boolean[size+1];
         for (int value : region) {
             if (value!=0 && seen_yet[value]) {
                 return true; // we already saw this word

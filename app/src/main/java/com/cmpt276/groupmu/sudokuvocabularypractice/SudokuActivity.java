@@ -54,7 +54,6 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     //Button newGameButton;
     Switch modeSwitch;
     private static final int READ_REQUEST_CODE = 42;
-    //int detected_User_Choice_Size;
 //    int GridSizeChoice;
 
     /** TextToSpeech */

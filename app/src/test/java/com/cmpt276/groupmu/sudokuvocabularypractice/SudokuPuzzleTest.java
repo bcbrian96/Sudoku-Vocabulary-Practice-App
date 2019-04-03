@@ -1,6 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import org.apache.commons.lang3.builder.ToStringExclude;
 import org.junit.Test;
 
 
@@ -209,7 +208,7 @@ public class SudokuPuzzleTest {
     public void testSetPuzzleSize(){
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setPuzzleSize(4);
-        assertEquals(4, puzzle.detected_User_Choice_Size);
+        assertEquals(4, puzzle.size);
         assertEquals(4+1, puzzle.englishWords.length);
     }
 //    @Test

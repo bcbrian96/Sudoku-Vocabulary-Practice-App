@@ -1,14 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.util.Log;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
-
-
-
 /**
  * SudokuPuzzle class. Contains methods:
  * - Reading and converting from input streams of sudoku files

@@ -1,12 +1,7 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.util.Log;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-
-import static android.content.ContentValues.TAG;
-
 
 
 /**
@@ -16,9 +11,8 @@ import static android.content.ContentValues.TAG;
 class SudokuWords {
 
     /** VARIABLES */
-    int detected_User_Choice_Size = 9;
+    int size = 9;
     // Can be: 4, 6, 9, 12
-    // boxes: 2x2, 2x3, 3x3, 3x4
     int difficulty;
 
     int languageIndex = 1;
@@ -32,15 +26,15 @@ class SudokuWords {
     String[] allFrenchWords = defaultFrenchWords.clone();
     String[] allEnglishWords = defaultEnglishWords.clone();
     // The words used in the visible puzzle:
-    String[] frenchWords = Arrays.copyOfRange(allFrenchWords,0,detected_User_Choice_Size+2);
-    String[] englishWords = Arrays.copyOfRange(allEnglishWords,0,detected_User_Choice_Size+2);
+    String[] frenchWords = Arrays.copyOfRange(allFrenchWords, 0, size+2);
+    String[] englishWords = Arrays.copyOfRange(allEnglishWords, 0, size+2);
 
     String[][] Words = {englishWords, frenchWords};
 
     /**
      * numHints stores the number of times a hint was asked for each pair.
      */
-    int[] numHints = new int[detected_User_Choice_Size+1];
+    int[] numHints = new int[size+1];
     /**
      * pairIndexes stores the original position of the puzzle words
      * (eg. englishWords) in the array of all words (eg. allEnglishWords).
@@ -53,37 +47,48 @@ class SudokuWords {
     /**
      * Gets the list of words for each language (possible inputs).
      * This is for the dialog the user sees when inputting a word.
+     * Also used to display words
      * @return  The list of words for the input language.
      */
     String[] getChoiceWords() {
         return Words[languageIndex];
     }
 
+    /**
+     * Gets the list of words for preset cells.
+     * @return The list of words shown in preset cells.
+     */
     String[] getPresetWords() {
         return Words[languageIndex^1];
     }
 
+    /**
+     * Get the words in the foreign language for speech (in listening mode).
+     * @return The list of words in the foreign language.
+     */
     String[] getForeignWords() {
         return Words[1];
     }
 
     /**
      * Swaps languages
+     * Swaps the 'Choice' (input) and 'Preset' words.
      */
     void swapLanguage() {
         languageIndex ^= 1;
     }
 
     /**
-     * Gets the local for the puzzle for Text to Speech
-     * @return  The local
+     * Gets the locale for the puzzle for Text to Speech
+     * @return  The locale
      */
     Locale getVoiceLocale() {
         return locales[1]; // The foreign language
     }
 
     /**
-     * Gets the current language (English or French)
+     * Gets the current language. This is the language of the words
+     * that are displayed in *Preset* cells.
      * @return  The current language as a string
      */
     String getCurrentLanguage() {
@@ -103,14 +108,13 @@ class SudokuWords {
      * Load a new set of word pairs for use in a puzzle.
      * Takes pairs from allEnglishWords/allFrenchWords,
      * according to which have the most in numHints.
-     * Currently, there is no support for word lists smaller than puzzle size
-     * (this may result in an error.)
+     * If word list is smaller than puzzle size, more are added from defaultWords.
      */
     void loadWordPairs() {
-        int[] newPairIndexes = new int[detected_User_Choice_Size+1];
+        int[] newPairIndexes = new int[size+1];
         int[] tempNumHints = new int[allFrenchWords.length];
         // tempNumHints tracks word pairs in allFrenchWords instead of frenchWords
-        // (independent of `detected_User_Choice_Size`)
+        // (independent of `size`)
         for(int i=0; i<numHints.length; i++){
             // if it was *not* a 'padding word' (from defaultWords)
             if(pairIndexes[i] < tempNumHints.length)
@@ -119,7 +123,7 @@ class SudokuWords {
         newPairIndexes[0] = 0; // Add the empty string.
         tempNumHints[0] = -1; // Ignore the empty string when adding words.
         // add hinted: find top 3 most hinted words, and add them first
-        if(allFrenchWords.length < detected_User_Choice_Size+1) {
+        if(allFrenchWords.length < size+1) {
             //Log.d("newPuzzle","not enough words")
             // add all words
             // set first N words to permutation of all words
@@ -156,8 +160,8 @@ class SudokuWords {
      * according to allEnglishWords/... and pairIndexes.
      */
     void generatePuzzleWordlist() {
-        englishWords = new String[detected_User_Choice_Size+1];
-        frenchWords = new String[detected_User_Choice_Size+1];
+        englishWords = new String[size+1];
+        frenchWords = new String[size+1];
         int i=0;
         for(; i<pairIndexes.length && i<allEnglishWords.length; i++){
             englishWords[i] = allEnglishWords[pairIndexes[i]];
@@ -177,8 +181,7 @@ class SudokuWords {
      * Reset hints when making a new puzzle.
      */
     private void resetHints() {
-        // Reset the number of hints for each word.
-        numHints = new int[detected_User_Choice_Size+1];
+        numHints = new int[size+1];
     }
 
 
