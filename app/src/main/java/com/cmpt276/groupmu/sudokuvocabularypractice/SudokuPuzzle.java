@@ -114,40 +114,6 @@ class SudokuPuzzle {
 
 
     /**
-     * Gets the word at the position of the array for the foreign language.
-     * @param position  The position within the sudoku puzzle array
-     * @return  The word as a string
-     */
-    String getForeignWordAtPosition(int position) {
-        return Words[1][workingPuzzle[position]];
-    }
-
-    /**
-     * Gets the word at the position of the array for the specified language. For preset values in
-     * one language, and the other language that the user inputs.
-     * @param position  The position within the sudoku puzzle array
-     * @return  The word as a string
-     */
-    String getWordAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex][workingPuzzle[position]];
-        }
-        return Words[languageIndex^1][workingPuzzle[position]];
-    }
-
-    /**
-     * Gets the translation for a word in the GridView
-     * @param position  The position within the sudoku puzzle array
-     * @return  The translation of the word as a string at the given position
-     */
-    String getTranslationAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex^1][workingPuzzle[position]];
-        }
-        return Words[languageIndex][workingPuzzle[position]];
-    }
-
-    /**
      * Sets the value at the position in the Gridview
      * @param position  The position within the sudoku puzzle array
      * @param value     The value to set the puzzle index to
@@ -194,8 +160,6 @@ class SudokuPuzzle {
         originalPuzzle = scalable.gamePuzzle;
         workingPuzzle = originalPuzzle.clone();
         solutionPuzzle = scalable.solutionPuzzle;
-        // get Words for puzzle
-        loadWordPairs();
     }
 
 

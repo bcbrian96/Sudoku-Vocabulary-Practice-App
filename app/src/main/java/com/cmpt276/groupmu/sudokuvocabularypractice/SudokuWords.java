@@ -50,29 +50,6 @@ class SudokuWords {
 //    private int currentPuzzleIndex = -1;
 
 
-    // Store Reading and Listening modes.
-    enum Mode {NORMAL, LISTENING}
-    private Mode mode = Mode.NORMAL;
-
-    /**
-     * Check what mode we're in
-     * @return  Boolean: true for NORMAL (Reading), false for LISTENING mode
-     */
-    boolean isNormalMode() {
-        return mode==Mode.NORMAL;
-    }
-
-    /**
-     * Swap the mode from NORMAL (Reading) to LISTENING mode (and vise-versa)
-     */
-    void swapMode() {
-        if (isNormalMode()) {
-            mode = Mode.LISTENING;
-        } else {
-            mode = Mode.NORMAL;
-        }
-    }
-
     /**
      * Gets the list of words for each language (possible inputs).
      * This is for the dialog the user sees when inputting a word.
@@ -82,39 +59,6 @@ class SudokuWords {
         return Words[languageIndex];
     }
 
-    /**
-     * Gets the word at the position of the array for the foreign language.
-     * @param position  The position within the sudoku puzzle array
-     * @return  The word as a string
-     */
-    String getForeignWordAtPosition(int position) {
-        return Words[1][workingPuzzle[position]];
-    }
-
-    /**
-     * Gets the word at the position of the array for the specified language. For preset values in
-     * one language, and the other language that the user inputs.
-     * @param position  The position within the sudoku puzzle array
-     * @return  The word as a string
-     */
-    String getWordAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex][workingPuzzle[position]];
-        }
-        return Words[languageIndex^1][workingPuzzle[position]];
-    }
-
-    /**
-     * Gets the translation for a word in the GridView
-     * @param position  The position within the sudoku puzzle array
-     * @return  The translation of the word as a string at the given position
-     */
-    String getTranslationAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex^1][workingPuzzle[position]];
-        }
-        return Words[languageIndex][workingPuzzle[position]];
-    }
 
 
     /**
