@@ -16,6 +16,9 @@ import static android.content.ContentValues.TAG;
  */
 class SudokuModel {
 
+    SudokuPuzzle puzzle = new SudokuPuzzle();
+    SudokuWords words = new SudokuWords();
+
     int detected_User_Choice_Size = 9;
     int difficulty;
 
@@ -50,7 +53,8 @@ class SudokuModel {
      * @return  The word as a string
      */
     String getForeignWordAtPosition(int position) {
-        return Words[1][workingPuzzle[position]];
+        int wordIndex = puzzle.getValueAt(position);
+        return words.getForeignWords()[wordIndex];
     }
 
     /**
@@ -60,10 +64,11 @@ class SudokuModel {
      * @return  The word as a string
      */
     String getWordAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex][workingPuzzle[position]];
+        int wordIndex = puzzle.getValueAt(position);
+        if (puzzle.isNotPreset(position)) {
+            return words.getChoiceWords()[wordIndex];
         }
-        return Words[languageIndex^1][workingPuzzle[position]];
+        return words.getPresetWords()[wordIndex];
     }
 
     /**
@@ -72,10 +77,11 @@ class SudokuModel {
      * @return  The translation of the word as a string at the given position
      */
     String getTranslationAtPosition(int position) {
-        if (isNotPreset(position)) {
-            return Words[languageIndex^1][workingPuzzle[position]];
+        int wordIndex = puzzle.getValueAt(position);
+        if (puzzle.isNotPreset(position)) {
+            return words.getPresetWords()[wordIndex];
         }
-        return Words[languageIndex][workingPuzzle[position]];
+        return words.getChoiceWords()[wordIndex];
     }
 
     /**
@@ -84,8 +90,9 @@ class SudokuModel {
      */
     void newPuzzle() {
         // generate Puzzle
+        puzzle.newPuzzle();
         // get Words for puzzle
-        loadWordPairs();
+        words.loadWordPairs();
     }
 
 }

@@ -124,6 +124,15 @@ class SudokuPuzzle {
     }
 
     /**
+     * Gets the value at a position in the puzzle.
+     * @param position  The position within the sudoku puzzle array
+     * @return          The value (number) at that position
+     */
+    int getValueAt(int position) {
+        return workingPuzzle[position];
+    }
+
+    /**
      * Checks if the position within the sudoku is not preset (not set to 0)
      * @param position  The position within the sudoku puzzle array
      * @return      True if the position is not preset, false otherwise
@@ -150,7 +159,6 @@ class SudokuPuzzle {
 
     /**
      * Create a new random puzzle from a SudokuGenerator
-     * Also generate new list of word pairs from current pairs.
      */
     void newPuzzle() {
         // generate Puzzle
@@ -222,9 +230,10 @@ class SudokuPuzzle {
     }
 
     /**
-     * Gets the 3x3 box for a specific subset within sudoku. Each 3x3 box should only contain one of
-     * each number from 0-9
-     * @param boxNum    Box num from 0 - 8
+     * Gets the box for a specific subset within sudoku.
+     * Each box should only contain one of each number in the puzzle.
+     * Boxes are (width * height): 2x2, 3x2, 3x3, 4x3 for puzzle sizes 4, 6, 9, 12.
+     * @param boxNum    Box num from 0 - SIZE
      * @return  The box array of integers
      */
     int[] getBox(int boxNum) {

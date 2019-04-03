@@ -59,7 +59,13 @@ class SudokuWords {
         return Words[languageIndex];
     }
 
+    String[] getPresetWords() {
+        return Words[languageIndex^1];
+    }
 
+    String[] getForeignWords() {
+        return Words[1];
+    }
 
     /**
      * Swaps languages
