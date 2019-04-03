@@ -167,7 +167,7 @@ class SudokuPuzzle {
      * Reset the puzzle
      */
     void resetPuzzle() {
-        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, 81);
+        System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, size*size);
     }
 
 
