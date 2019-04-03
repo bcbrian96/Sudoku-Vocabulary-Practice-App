@@ -28,20 +28,20 @@ public class SudokuAdapter extends BaseAdapter {
 
     // Global Variables
     private Context context;
-    private SudokuPuzzle puzzle;
+    private SudokuModel model;
 
     // Initialization
-    SudokuAdapter(Context c, SudokuPuzzle puzzle) {
+    SudokuAdapter(Context c, SudokuModel model) {
         this.context = c;
-        this.puzzle = puzzle;
+        this.model = model;
     }
 
     public int getCount() {
-        return puzzle.workingPuzzle.length;
+        return model.puzzle.workingPuzzle.length;
     }
 
     public Object getItem(int position) {
-        return puzzle.workingPuzzle[position];
+        return model.puzzle.getValueAt(position);
     }
 
     public long getItemId(int position) {
@@ -70,7 +70,7 @@ public class SudokuAdapter extends BaseAdapter {
 
             // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
             // scales to fit the parent, has the appropriate colours/contrasts etc...
-            if (puzzle.isNotPreset(position)) {
+            if (model.puzzle.isNotPreset(position)) {
                 textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
                 textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
             } else {
@@ -89,8 +89,8 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            if (puzzle.isNormalMode()) {
-                textView.setText(capitalize(puzzle.getWordAtPosition(position)));
+            if (model.isNormalMode()) {
+                textView.setText(capitalize(model.getWordAtPosition(position)));
             } else {
                 // In listening comprehension mode, display numbers.
                 if ((int)getItem(position)==0){

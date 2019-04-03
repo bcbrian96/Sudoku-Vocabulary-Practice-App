@@ -43,7 +43,7 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
 public class SudokuActivity extends AppCompatActivity implements View.OnClickListener {
 
     /** VARIABLES */
-    public SudokuPuzzle puzzle;
+    public SudokuModel model;
     protected GridView grid;
 
     Button resetButton;
@@ -76,8 +76,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         // Declared Variables Initialization
         detected_User_Choice_Size = getIntent().getIntExtra("USER_REQUEST_SIZE", 9);
-        puzzle = new SudokuPuzzle();
-        puzzle.setPuzzleSize(detected_User_Choice_Size);
+        model = new SudokuModel();
+        model.puzzle.setPuzzleSize(detected_User_Choice_Size);
         //puzzle.readPuzzlesFromInputStream(getResources().openRawResource(R.raw.puzzles));
         //puzzle.newPuzzle();
 
@@ -98,7 +98,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        languageSwitch.setText(puzzle.getCurrentLanguage());
+        languageSwitch.setText(model.words.getCurrentLanguage());
 
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
@@ -115,15 +115,15 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS){
 
-                    int result = mTTS.setLanguage(puzzle.getVoiceLocale());
+                    int result = mTTS.setLanguage(model.words.getVoiceLocale());
 
                     if (result == TextToSpeech.LANG_MISSING_DATA){
                         Toast.makeText(getApplicationContext(),
-                                "Your device does not have voice data for "+puzzle.getForeignLanguage()
+                                "Your device does not have voice data for "+model.words.getForeignLanguage()
                                 +". Please download it from language settings.",Toast.LENGTH_LONG).show();
                     } else if (result == TextToSpeech.LANG_NOT_SUPPORTED){
                         Log.e("TTS", "Language Not Supported");
-                        Toast.makeText(getApplicationContext(), "Sorry, Speech is not supported for "+puzzle.getForeignLanguage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Sorry, Speech is not supported for "+model.words.getForeignLanguage(), Toast.LENGTH_SHORT).show();
                     }
                 } else{
                     Log.e("TTS", "Initialization Failed");
@@ -156,14 +156,14 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         dialogChoice = 0;
 
         /* The list of choices */
-        sudokuWords.setItems(puzzle.getChoiceWords(),  new DialogInterface.OnClickListener() {
+        sudokuWords.setItems(model.words.getChoiceWords(),  new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;
                 if (dialogChoice != -1) {
-                    puzzle.setValueAtPosition(position, dialogChoice);
+                    model.puzzle.setValueAtPosition(position, dialogChoice);
 
-                    set.setText(capitalize(puzzle.getWordAtPosition(position)));
+                    set.setText(capitalize(model.getWordAtPosition(position)));
 
                 }
             }
@@ -178,7 +178,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void generateGrid() {
 
         /* Connect to SudokuAdpater.java */
-        grid.setAdapter(new SudokuAdapter(this, puzzle));
+        grid.setAdapter(new SudokuAdapter(this, model));
 //        grid.setBackgroundColor(Color.parseColor("#29434e"));
 
         /* Button actions on GridView*/
@@ -187,11 +187,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                                     int position, long id) {
                 if (v != null) {
                     /* Empty cell, dropdown menu */
-                    if (puzzle.isNotPreset(position)) {
+                    if (model.puzzle.isNotPreset(position)) {
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
                         /* Reading Comprehension (normal) Mode: Toast hint */
-                        if(puzzle.isNormalMode()) {
+                        if(model.isNormalMode()) {
                             hintPresetCellTranslation(position);
                         } else {
                             /* Listening Comprehension Mode: Text to speech hint */
@@ -216,7 +216,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             /* Clear and reset the puzzle */
             case R.id.resetBtn:
                 try {
-                    puzzle.resetPuzzle();
+                    model.puzzle.resetPuzzle();
                     generateGrid();
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
@@ -249,7 +249,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.newPuzzle:
                 /* Generate a new puzzle */
                 try {
-                    puzzle.newPuzzle();
+                    model.newPuzzle();
                     generateGrid();
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
@@ -262,9 +262,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * Check the current progress of the user against the puzzle solution
      */
     public void checkSudoku() {
-        if (puzzle.checkSudokuIncorrect()) {
+        if (model.puzzle.checkSudokuIncorrect()) {
             Toast.makeText(this,"Sudoku not Correct",Toast.LENGTH_SHORT).show();
-        } else if (puzzle.checkSudokuIncomplete()) {
+        } else if (model.puzzle.checkSudokuIncomplete()) {
             Toast.makeText(this, "Sudoku is not completed yet", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Congratulation! Answer correct", Toast.LENGTH_SHORT).show();
@@ -275,29 +275,29 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * Swap languages (English and French)
      */
     public void changeLanguage() {
-        puzzle.swapLanguage();
-        languageSwitch.setText(puzzle.getCurrentLanguage());
-        mTTS.setLanguage(puzzle.getVoiceLocale());
+        model.words.swapLanguage();
+        languageSwitch.setText(model.words.getCurrentLanguage());
+        mTTS.setLanguage(model.words.getVoiceLocale());
 
         generateGrid();
-        Toast.makeText(this, "Language Switched: " + puzzle.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Language Switched: " + model.words.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Swap reading and listening comprehension modes
      */
     public void changeMode() {
-        puzzle.swapMode();
-        if (puzzle.isNormalMode()) {
+        model.swapMode();
+        if (model.isNormalMode()) {
             modeSwitch.setText(R.string.mode_normal);
             languageSwitch.setEnabled(true);
         } else {
             modeSwitch.setText(R.string.mode_listening);
             // Listening mode: ensure foreign language is spoken (prefilled)
             // and native language is input.
-            if (!puzzle.getCurrentLanguage().equals(puzzle.getForeignLanguage())) {
-                puzzle.swapLanguage();
-                languageSwitch.setText(puzzle.getCurrentLanguage());
+            if (!model.words.getCurrentLanguage().equals(model.words.getForeignLanguage())) {
+                model.words.swapLanguage();
+                languageSwitch.setText(model.words.getCurrentLanguage());
                 languageSwitch.setChecked(false);
             }
             languageSwitch.setEnabled(false); // disable changing language
@@ -317,10 +317,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      */
     public void hintPresetCellTranslation(int position) {
         // create function in sudokuPuzzle for this? eg. puzzle.logHint(position)
-        puzzle.numHints[puzzle.workingPuzzle[position]]++;
+        model.words.numHints[model.puzzle.getValueAt(position)]++;
         Log.d("hints", "Hint Position: " + position);
-        Log.d("hints", "NumHint Value: " + puzzle.numHints[puzzle.workingPuzzle[position]]);
-        Toast.makeText(this, puzzle.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
+        Log.d("hints", "NumHint Value: " + model.words.numHints[model.puzzle.getValueAt(position)]);
+        Toast.makeText(this, model.getTranslationAtPosition(position), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -330,7 +330,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * @param position  The position within the GridView array
      */
     public void speak(int position) {
-        String text = puzzle.getForeignWordAtPosition(position);
+        String text = model.getForeignWordAtPosition(position);
         mTTS.setPitch(pitch);
         mTTS.setSpeechRate(speed);
         mTTS.speak(text,TextToSpeech.QUEUE_FLUSH,null,null);
@@ -454,9 +454,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             dataRead.close();
 
             // Allocate new words
-            puzzle.allEnglishWords = enWords.toArray(new String[0]);
-            puzzle.allFrenchWords = frWords.toArray(new String[0]);
-            puzzle.loadWordPairs();
+            model.words.allEnglishWords = enWords.toArray(new String[0]);
+            model.words.allFrenchWords = frWords.toArray(new String[0]);
+            model.words.loadWordPairs();
             // Initialize the grid again
             generateGrid();
         }
@@ -475,16 +475,16 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-        savedInstanceState.putIntArray("workingPuzzle", puzzle.workingPuzzle);
-        savedInstanceState.putIntArray("originalPuzzle", puzzle.originalPuzzle);
+        savedInstanceState.putIntArray("workingPuzzle", model.puzzle.workingPuzzle);
+        savedInstanceState.putIntArray("originalPuzzle", model.puzzle.originalPuzzle);
         // These are the full list of word pairs.
-        savedInstanceState.putStringArray("englishWords", puzzle.allEnglishWords);
-        savedInstanceState.putStringArray("frenchWords", puzzle.allFrenchWords);
+        savedInstanceState.putStringArray("englishWords", model.words.allEnglishWords);
+        savedInstanceState.putStringArray("frenchWords", model.words.allFrenchWords);
         // save puzzle indices and hints.
-        savedInstanceState.putIntArray("pairIndexes", puzzle.pairIndexes);
-        savedInstanceState.putIntArray("numHints",puzzle.numHints);
-        savedInstanceState.putInt("languageIndex", puzzle.languageIndex);
-        savedInstanceState.putInt("gridSize",detected_User_Choice_Size);
+        savedInstanceState.putIntArray("pairIndexes", model.words.pairIndexes);
+        savedInstanceState.putIntArray("numHints", model.words.numHints);
+        savedInstanceState.putInt("languageIndex", model.words.languageIndex);
+        savedInstanceState.putInt("gridSize", model.detected_User_Choice_Size);
 
 
 
@@ -509,24 +509,24 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         int[] wp = savedInstanceState.getIntArray("workingPuzzle");
         if (wp != null) {
-            System.arraycopy(wp, 0, puzzle.workingPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
+            System.arraycopy(wp, 0, model.puzzle.workingPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
         } else {
             Log.i(null, "workingPuzzle is null onRestoreInstanceState()");
         }
 
         int[] op = savedInstanceState.getIntArray("originalPuzzle");
         if (op != null) {
-            System.arraycopy(op, 0, puzzle.originalPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
+            System.arraycopy(op, 0, model.puzzle.originalPuzzle, 0, detected_User_Choice_Size*detected_User_Choice_Size);
         } else {
             Log.i(null, "originalPuzzle is null onRestoreInstanceState()");
         }
 
-        puzzle.allEnglishWords = savedInstanceState.getStringArray("englishWords");
-        puzzle.allFrenchWords = savedInstanceState.getStringArray("frenchWords");
-        puzzle.pairIndexes = savedInstanceState.getIntArray("pairIndexes");
-        puzzle.numHints = savedInstanceState.getIntArray("numHints");
-        puzzle.languageIndex = savedInstanceState.getInt("languageIndex");
-        puzzle.generatePuzzleWordlist();
+        model.words.allEnglishWords = savedInstanceState.getStringArray("englishWords");
+        model.words.allFrenchWords = savedInstanceState.getStringArray("frenchWords");
+        model.words.pairIndexes = savedInstanceState.getIntArray("pairIndexes");
+        model.words.numHints = savedInstanceState.getIntArray("numHints");
+        model.words.languageIndex = savedInstanceState.getInt("languageIndex");
+        model.words.generatePuzzleWordlist();
 
     }
 
