@@ -4,7 +4,6 @@ import org.junit.Test;
 
 
 import java.util.Arrays;
-import java.util.Locale;
 import static org.junit.Assert.*;
 
 //@RunWith(JUnit4.class)
@@ -13,33 +12,6 @@ import static org.junit.Assert.*;
  * SudokuPuzzle.java Test Class
  */
 public class SudokuPuzzleTest {
-    @Test
-    public void  testGetWordChoices(){
-        SudokuPuzzle testWordChoices = new SudokuPuzzle(9);
-        assertArrayEquals(testWordChoices.frenchWords, testWordChoices.getChoiceWords());
-    }
-
-    @Test
-    public void testGetWordAtPosition(){
-        // Setup variables to ensure that the correct
-        SudokuPuzzle foreignWords = new SudokuPuzzle(9);
-        // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < foreignWords.originalPuzzle.length; i++){
-            assertEquals(foreignWords.englishWords[foreignWords.originalPuzzle[i]], foreignWords.getWordAtPosition(i));
-
-        }
-    }
-
-    @Test
-    public void testGetTranslationAtPosition(){
-        // Setup variables to ensure that the correct
-        SudokuPuzzle testTranslation = new SudokuPuzzle(9);
-        // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < testTranslation.originalPuzzle.length; i++){
-            assertEquals(testTranslation.frenchWords[testTranslation.originalPuzzle[i]], testTranslation.getTranslationAtPosition(i));
-
-        }
-    }
 
     @Test
     public void testGetColumn() {
@@ -67,14 +39,6 @@ public class SudokuPuzzleTest {
         testPreset.setValueAt(14, 6);
         int expect = 6;
         assertEquals(expect, testPreset.workingPuzzle[14]);
-    }
-
-    @Test
-    public void testGetVoiceLocale (){
-            SudokuPuzzle testVoice = new SudokuPuzzle(9);
-            Locale expect = Locale.FRENCH;
-            Locale actual = testVoice.getVoiceLocale();
-            assertEquals(expect,actual);
     }
 
     @Test
@@ -137,23 +101,6 @@ public class SudokuPuzzleTest {
     }
 
     @Test
-    public void testGetCurrentLanguage(){
-            SudokuPuzzle testCurrentLanguage = new SudokuPuzzle(9);
-            String expectName = "English";
-            String actualName = testCurrentLanguage.getCurrentLanguage();
-            assertEquals(expectName,actualName);
-    }
-
-    @Test
-    public void testSwapLanguage(){
-            SudokuPuzzle testSwap = new SudokuPuzzle(9);
-            int expect = 0;
-            testSwap.swapLanguage();
-            int actual = testSwap.languageIndex;
-            assertEquals(expect, actual);
-    }
-
-    @Test
     public void testResetPuzzle(){
         SudokuPuzzle testReset = new SudokuPuzzle(9);
         // set values in the working puzzle
@@ -166,35 +113,7 @@ public class SudokuPuzzleTest {
     }
 
     @Test
-    public void testSwapMode(){
-        SudokuPuzzle testMode = new SudokuPuzzle(9);
-        testMode.swapMode();
-        assertFalse(testMode.isNormalMode());
-        testMode.swapMode();
-        assertTrue(testMode.isNormalMode());
-
-    }
-
-    @Test
-    public void testGetForeignWordAtPosition(){
-        // Setup variables to ensure that the correct
-        SudokuPuzzle foreignWords = new SudokuPuzzle(9);
-        // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < foreignWords.originalPuzzle.length; i++){
-            assertEquals(foreignWords.frenchWords[foreignWords.originalPuzzle[i]], foreignWords.getForeignWordAtPosition(i));
-
-        }
-
-    }
-
-    @Test
-    public void testGetForeignLanguage(){
-        SudokuPuzzle foreignWords = new SudokuPuzzle(9);
-        assertEquals("French", foreignWords.getForeignLanguage());
-    }
-
-    @Test
-    public void testNewPuzzle(){
+    public void testGenerateNewPuzzle(){
         SudokuPuzzle puzzle = new SudokuPuzzle(9);
         int[] first_originalPuzzle = puzzle.originalPuzzle;
         puzzle.generateNewPuzzle();
