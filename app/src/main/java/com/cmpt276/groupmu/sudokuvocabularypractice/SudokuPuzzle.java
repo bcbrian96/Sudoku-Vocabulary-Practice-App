@@ -37,6 +37,10 @@ class SudokuPuzzle {
     int difficulty;
 
 
+    /**
+     * Set the puzzle size and generate a new puzzle with that size.
+     * @param gridScale The size of the puzzle (width and height).
+     */
     void setPuzzleSize (int gridScale){
         difficulty = (gridScale*gridScale)/3;
         size = gridScale;
@@ -110,7 +114,7 @@ class SudokuPuzzle {
      * @param position  The position within the sudoku puzzle array
      * @param value     The value to set the puzzle index to
      */
-    void setValueAtPosition(int position, int value) {
+    void setValueAt(final int position, final int value) {
         workingPuzzle[position] = value;
     }
 
@@ -119,7 +123,7 @@ class SudokuPuzzle {
      * @param position  The position within the sudoku puzzle array
      * @return          The value (number) at that position
      */
-    int getValueAt(int position) {
+    int getValueAt(final int position) {
         return workingPuzzle[position];
     }
 
@@ -128,7 +132,7 @@ class SudokuPuzzle {
      * @param position  The position within the sudoku puzzle array
      * @return      True if the position is not preset, false otherwise
      */
-    boolean isNotPreset(int position) {
+    boolean isNotPreset(final int position) {
         return originalPuzzle[position]==0;
     }
 
@@ -201,7 +205,7 @@ class SudokuPuzzle {
      * @param rowNum    Row number of the sudoku
      * @return  An array of integers for the puzzle row
      */
-    int[] getRow(int rowNum) {
+    int[] getRow(final int rowNum) {
         int[] row = new int[size];
         System.arraycopy(workingPuzzle, rowNum * size, row, 0, size);
         return row;
@@ -212,7 +216,7 @@ class SudokuPuzzle {
      * @param columnNum Column number of the sudoku
      * @return  An array of integers for the puzzle column
      */
-    int[] getColumn(int columnNum) {
+    int[] getColumn(final int columnNum) {
         int[] column = new int[size];
         for (int i = 0; i < size; i++) {
             column[i] = workingPuzzle[(columnNum + i * size)];
@@ -227,7 +231,7 @@ class SudokuPuzzle {
      * @param boxNum    Box num from 0 - SIZE
      * @return  The box array of integers
      */
-    int[] getBox(int boxNum) {
+    int[] getBox(final int boxNum) {
         int[] box = new int[size];
         int boxesPerRow = size / boxWidth;
         int firstRow = (boxNum / boxesPerRow) * boxHeight;
@@ -247,7 +251,7 @@ class SudokuPuzzle {
      * @param region The region being checked within the sudoku
      * @return  A boolean value: true if there contains duplicates, false otherwise
      */
-    boolean containsDuplicates(int[] region) {
+    boolean containsDuplicates(final int[] region) {
         boolean[] seen_yet = new boolean[size+1];
         for (int value : region) {
             if (value!=0 && seen_yet[value]) {

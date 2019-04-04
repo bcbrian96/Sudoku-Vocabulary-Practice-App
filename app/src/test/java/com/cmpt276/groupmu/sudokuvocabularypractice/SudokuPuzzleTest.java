@@ -64,7 +64,7 @@ public class SudokuPuzzleTest {
     public void testSetValueAtPosition() {
 
         SudokuPuzzle testPreset = new SudokuPuzzle();
-        testPreset.setValueAtPosition(14, 6);
+        testPreset.setValueAt(14, 6);
         int expect = 6;
         assertEquals(expect, testPreset.workingPuzzle[14]);
     }
@@ -91,7 +91,7 @@ public class SudokuPuzzleTest {
             assertTrue(actual);
 
             for(int i = 0; i < 81; i++){
-                testCheckIncomplete.setValueAtPosition(i, 1);
+                testCheckIncomplete.setValueAt(i, 1);
             }
 
             assertFalse(testCheckIncomplete.checkSudokuIncomplete());

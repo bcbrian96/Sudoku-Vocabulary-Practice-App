@@ -47,7 +47,7 @@ class SudokuModel {
      * @param position  The position within the sudoku puzzle array
      * @return  The word as a string
      */
-    String getForeignWordAtPosition(int position) {
+    String getForeignWordAtPosition(final int position) {
         int wordIndex = puzzle.getValueAt(position);
         return words.getForeignWords()[wordIndex];
     }
@@ -58,7 +58,7 @@ class SudokuModel {
      * @param position  The position within the sudoku puzzle array
      * @return  The word as a string
      */
-    String getWordAtPosition(int position) {
+    String getWordAtPosition(final int position) {
         int wordIndex = puzzle.getValueAt(position);
         if (puzzle.isNotPreset(position)) {
             return words.getChoiceWords()[wordIndex];
@@ -71,7 +71,7 @@ class SudokuModel {
      * @param position  The position within the sudoku puzzle array
      * @return  The translation of the word as a string at the given position
      */
-    String getTranslationAtPosition(int position) {
+    String getTranslationAtPosition(final int position) {
         int wordIndex = puzzle.getValueAt(position);
         if (puzzle.isNotPreset(position)) {
             return words.getPresetWords()[wordIndex];

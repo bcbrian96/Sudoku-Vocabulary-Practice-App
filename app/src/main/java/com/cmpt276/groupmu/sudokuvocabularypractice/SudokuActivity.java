@@ -154,7 +154,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int dialogChoice) {
                 if (dialogChoice != -1) {
-                    model.puzzle.setValueAtPosition(position, dialogChoice);
+                    model.puzzle.setValueAt(position, dialogChoice);
 
                     set.setText(capitalize(model.getWordAtPosition(position)));
 
