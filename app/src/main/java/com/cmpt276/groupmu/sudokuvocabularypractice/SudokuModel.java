@@ -134,6 +134,7 @@ class SudokuModel {
         int[] pairI = savedState.getIntArray("pairIndexes");
         int[] hints = savedState.getIntArray("numHints");
         int lang = savedState.getInt("languageIndex", 1);
+        boolean normalMode = savedState.getBoolean("isNormalMode",true);
         // if any were not restored correctly (null), fail and do not update anything.
         if (wp==null) { restoreState_Log_Failed_null("workingPuzzle"); return false; }
         if (op==null) { restoreState_Log_Failed_null("originalPuzzle"); return false; }
@@ -152,6 +153,7 @@ class SudokuModel {
         words.pairIndexes = pairI;
         words.numHints = hints;
         words.languageIndex = lang;
+        if(!normalMode) mode = Mode.LISTENING;
         words.generatePuzzleWordlist();
         return true;
     }

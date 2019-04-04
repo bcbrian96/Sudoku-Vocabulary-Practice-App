@@ -458,6 +458,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
+        savedInstanceState.putInt("gridSize", model.detected_User_Choice_Size);
         savedInstanceState.putIntArray("workingPuzzle", model.puzzle.workingPuzzle);
         savedInstanceState.putIntArray("originalPuzzle", model.puzzle.originalPuzzle);
         // These are the full list of word pairs.
@@ -466,9 +467,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // save current word pairs and hints.
         savedInstanceState.putIntArray("pairIndexes", model.words.pairIndexes);
         savedInstanceState.putIntArray("numHints", model.words.numHints);
+        // Save current mode information.
         savedInstanceState.putInt("languageIndex", model.words.languageIndex);
-        savedInstanceState.putInt("gridSize", model.detected_User_Choice_Size);
-
+        savedInstanceState.putBoolean("isNormalMode", model.isNormalMode());
 
 
         // etc.
@@ -492,6 +493,12 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         if (model.restoreState(savedInstanceState)) {
             // update if successful
             this.detected_User_Choice_Size = temp_size;
+            // Make sure listening mode is handled correctly.
+            // this is kind of a hack, since really it should be handled in the Model.
+            if (!model.isNormalMode()) {
+                model.swapMode();
+                changeMode(); // make sure switches are correct
+            }
             Log.d("restoreInstance", "restoreState successful");
         } else {
             Log.d("restoreInstance", "restoreState failed");
