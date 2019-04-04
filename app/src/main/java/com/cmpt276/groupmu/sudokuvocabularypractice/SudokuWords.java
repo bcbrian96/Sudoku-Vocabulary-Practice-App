@@ -28,8 +28,8 @@ class SudokuWords {
     String[] allFrenchWords = defaultFrenchWords.clone();
     String[] allEnglishWords = defaultEnglishWords.clone();
     // The words used in the visible puzzle:
-    private String[] frenchWords = Arrays.copyOfRange(allFrenchWords, 0, size+2);
-    private String[] englishWords = Arrays.copyOfRange(allEnglishWords, 0, size+2);
+    String[] frenchWords = Arrays.copyOfRange(allFrenchWords, 0, size+2);
+    String[] englishWords = Arrays.copyOfRange(allEnglishWords, 0, size+2);
 
     private String[][] Words = {englishWords, frenchWords};
 

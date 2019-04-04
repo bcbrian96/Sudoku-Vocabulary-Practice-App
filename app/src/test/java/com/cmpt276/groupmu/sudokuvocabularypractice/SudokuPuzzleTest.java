@@ -128,7 +128,6 @@ public class SudokuPuzzleTest {
         SudokuPuzzle puzzle = new SudokuPuzzle(9);
         puzzle.setPuzzleSize(4);
         assertEquals(4, puzzle.size);
-        assertEquals(4+1, puzzle.englishWords.length);
     }
 //    @Test
 //    public void testGetSolutionPuzzle(){

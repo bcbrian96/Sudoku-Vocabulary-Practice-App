@@ -4,7 +4,6 @@ import org.junit.Test;
 
 
 import java.util.Arrays;
-import java.util.Locale;
 import static org.junit.Assert.*;
 
 //@RunWith(JUnit4.class)
@@ -19,8 +18,8 @@ public class SudokuModelTest {
         // Setup variables to ensure that the correct
         SudokuModel foreignWords = new SudokuModel(9);
         // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < foreignWords.originalPuzzle.length; i++){
-            assertEquals(foreignWords.englishWords[foreignWords.originalPuzzle[i]], foreignWords.getWordAtPosition(i));
+        for(int i = 0; i < foreignWords.puzzle.originalPuzzle.length; i++){
+            assertEquals(foreignWords.words.englishWords[foreignWords.puzzle.getValueAt(i)], foreignWords.getWordAtPosition(i));
 
         }
     }
@@ -30,8 +29,8 @@ public class SudokuModelTest {
         // Setup variables to ensure that the correct
         SudokuModel testTranslation = new SudokuModel(9);
         // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < testTranslation.originalPuzzle.length; i++){
-            assertEquals(testTranslation.frenchWords[testTranslation.originalPuzzle[i]], testTranslation.getTranslationAtPosition(i));
+        for(int i = 0; i < testTranslation.puzzle.originalPuzzle.length; i++){
+            assertEquals(testTranslation.words.frenchWords[testTranslation.puzzle.getValueAt(i)], testTranslation.getTranslationAtPosition(i));
 
         }
     }
@@ -52,8 +51,8 @@ public class SudokuModelTest {
         // Setup variables to ensure that the correct
         SudokuModel foreignWords = new SudokuModel(9);
         // Loop through puzzle and check that english and french words matchup
-        for(int i = 0; i < foreignWords.originalPuzzle.length; i++){
-            assertEquals(foreignWords.frenchWords[foreignWords.originalPuzzle[i]], foreignWords.getForeignWordAtPosition(i));
+        for(int i = 0; i < foreignWords.puzzle.originalPuzzle.length; i++){
+            assertEquals(foreignWords.words.frenchWords[foreignWords.puzzle.getValueAt(i)], foreignWords.getForeignWordAtPosition(i));
 
         }
 
@@ -61,13 +60,13 @@ public class SudokuModelTest {
 
     @Test
     public void testNewPuzzle(){
-        SudokuModel puzzle = new SudokuModel(9);
-        int[] first_originalPuzzle = puzzle.originalPuzzle;
-        puzzle.generateNewPuzzle();
+        SudokuModel model = new SudokuModel(9);
+        int[] first_originalPuzzle = model.puzzle.originalPuzzle;
+        model.newPuzzle();
         // After generateNewPuzzle(), the originalPuzzle should be different,
         // and it should also be a valid puzzle
-        assertFalse(Arrays.equals(puzzle.originalPuzzle, first_originalPuzzle));
-        assertFalse(puzzle.checkSudokuIncorrect());
+        assertFalse(Arrays.equals(model.puzzle.originalPuzzle, first_originalPuzzle));
+        assertFalse(model.puzzle.checkSudokuIncorrect());
     }
 
 }
