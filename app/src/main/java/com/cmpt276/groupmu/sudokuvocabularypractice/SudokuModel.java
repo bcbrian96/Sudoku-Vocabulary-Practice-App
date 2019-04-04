@@ -11,16 +11,26 @@ import android.util.Log;
  */
 class SudokuModel {
 
-    SudokuPuzzle puzzle = new SudokuPuzzle();
-    SudokuWords words = new SudokuWords();
+    SudokuPuzzle puzzle;
+    SudokuWords words;
 
-    int detected_User_Choice_Size = 9;
+    int detected_User_Choice_Size;
     int difficulty;
 
 
     // Store Reading and Listening modes.
     enum Mode {NORMAL, LISTENING}
     private Mode mode = Mode.NORMAL;
+
+    /**
+     * Constructor for SudokuModel. Initializes puzzle and words.
+     * @param initial_size The initial size of the puzzle.
+     */
+    SudokuModel(final int initial_size) {
+        detected_User_Choice_Size = initial_size;
+        puzzle = new SudokuPuzzle(initial_size);
+        words = new SudokuWords(initial_size);
+    }
 
     /**
      * Check what mode we're in
@@ -80,12 +90,20 @@ class SudokuModel {
     }
 
     /**
+     * Record that a hint was asked for a position on the grid.
+     * @param position  The position within the sudoku puzzle array
+     */
+    void logHint(final int position) {
+        words.numHints[puzzle.getValueAt(position)]++;
+    }
+
+    /**
      * Create a new random puzzle from a SudokuGenerator
      * Also generate new list of word pairs from current pairs.
      */
     void newPuzzle() {
         // generate Puzzle
-        puzzle.newPuzzle();
+        puzzle.generateNewPuzzle();
         // get Words for puzzle
         words.loadWordPairs();
     }
@@ -124,7 +142,9 @@ class SudokuModel {
         if (pairI==null) { restoreState_Log_Failed_null("pairIndexes"); return false; }
         if (hints==null) { restoreState_Log_Failed_null("numHints"); return false; }
         // All successful
-        puzzle.size = words.size = this.detected_User_Choice_Size = temp_size;
+        puzzle.setPuzzleSize(temp_size);
+        words.size = temp_size;
+        this.detected_User_Choice_Size = temp_size;
         puzzle.workingPuzzle = wp;
         puzzle.originalPuzzle = op;
         words.allEnglishWords = allEw;

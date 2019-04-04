@@ -22,7 +22,8 @@ import android.widget.TextView;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
 /**
- * The Sudoku Adapter allows Java to interact with the GUI
+ * The Sudoku Adapter allows dynamically populating the GridView
+ * with the appropriate number of TextView cells for the puzzle.
  */
 public class SudokuAdapter extends BaseAdapter {
 

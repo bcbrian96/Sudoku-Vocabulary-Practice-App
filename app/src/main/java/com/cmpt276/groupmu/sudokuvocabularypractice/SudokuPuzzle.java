@@ -36,9 +36,16 @@ class SudokuPuzzle {
     int[] solutionPuzzle;
     int difficulty;
 
+    /**
+     * Constructor for SudokuPuzzle. Sets the size.
+     * @param initial_size The initial size of the puzzle.
+     */
+    SudokuPuzzle(final int initial_size) {
+        setPuzzleSize(initial_size);
+    }
 
     /**
-     * Set the puzzle size and generate a new puzzle with that size.
+     * Set the puzzle size.
      * @param gridScale The size of the puzzle (width and height).
      */
     void setPuzzleSize (int gridScale){
@@ -57,7 +64,6 @@ class SudokuPuzzle {
                 break;
         }
         boxHeight = gridScale / boxWidth;
-        newPuzzle();
     }
 
 //    /**
@@ -155,7 +161,7 @@ class SudokuPuzzle {
     /**
      * Create a new random puzzle from a SudokuGenerator
      */
-    void newPuzzle() {
+    void generateNewPuzzle() {
         // generate Puzzle
         SudokuGenerator scalable = new SudokuGenerator(size,difficulty);
         scalable.generatePuzzle();

@@ -197,8 +197,8 @@ public class SudokuPuzzleTest {
     public void testNewPuzzle(){
         SudokuPuzzle puzzle = new SudokuPuzzle();
         int[] first_originalPuzzle = puzzle.originalPuzzle;
-        puzzle.newPuzzle();
-        // After newPuzzle(), the originalPuzzle should be different,
+        puzzle.generateNewPuzzle();
+        // After generateNewPuzzle(), the originalPuzzle should be different,
         // and it should also be a valid puzzle
         assertFalse(Arrays.equals(puzzle.originalPuzzle, first_originalPuzzle));
         assertFalse(puzzle.checkSudokuIncorrect());

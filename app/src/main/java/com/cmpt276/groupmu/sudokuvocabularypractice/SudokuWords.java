@@ -42,9 +42,18 @@ class SudokuWords {
      * (eg. englishWords) in the array of all words (eg. allEnglishWords).
      * It's also used with numHints.
      */
-    int[] pairIndexes = {0,1,2,3,4,5,6,7,8,9};
+    int[] pairIndexes = new int[size+1];
 //    private int currentPuzzleIndex = -1;
 
+    /**
+     * Constructor for SudokuWords. Sets initial size, hints, and word pairs.
+     * @param initial_size The initial size of the puzzle == number of words in list.
+     */
+    SudokuWords(final int initial_size) {
+        this.size = initial_size;
+        resetHints();
+        loadWordPairs();
+    }
 
     /**
      * Gets the list of words for each language (possible inputs).
@@ -130,7 +139,7 @@ class SudokuWords {
         tempNumHints[0] = -1; // Ignore the empty string when adding words.
         // add hinted: find top 3 most hinted words, and add them first
         if(allFrenchWords.length < size+1) {
-            //Log.d("newPuzzle","not enough words")
+            //Log.d("loadWordPairs","not enough words")
             // add all words
             // set first N words to permutation of all words
             for(int i=1; i<newPairIndexes.length; i++) {
@@ -168,8 +177,8 @@ class SudokuWords {
     void generatePuzzleWordlist() {
         englishWords = new String[size+1];
         frenchWords = new String[size+1];
-        int i=0;
-        for(; i<pairIndexes.length && i<allEnglishWords.length; i++){
+        int i;
+        for(i=0; i<pairIndexes.length && i<allEnglishWords.length; i++){
             englishWords[i] = allEnglishWords[pairIndexes[i]];
             frenchWords[i] = allFrenchWords[pairIndexes[i]];
         }
