@@ -7,6 +7,8 @@ import java.util.Locale;
 /**
  * SudokuWords class. Contains methods:
  * - Relating to words/languages of the puzzle
+ * - Generating new word list for puzzle from set of all word pairs
+ * - Keeping track of hints for different words
  */
 class SudokuWords {
 
@@ -26,10 +28,10 @@ class SudokuWords {
     String[] allFrenchWords = defaultFrenchWords.clone();
     String[] allEnglishWords = defaultEnglishWords.clone();
     // The words used in the visible puzzle:
-    String[] frenchWords = Arrays.copyOfRange(allFrenchWords, 0, size+2);
-    String[] englishWords = Arrays.copyOfRange(allEnglishWords, 0, size+2);
+    private String[] frenchWords = Arrays.copyOfRange(allFrenchWords, 0, size+2);
+    private String[] englishWords = Arrays.copyOfRange(allEnglishWords, 0, size+2);
 
-    String[][] Words = {englishWords, frenchWords};
+    private String[][] Words = {englishWords, frenchWords};
 
     /**
      * numHints stores the number of times a hint was asked for each pair.
@@ -79,11 +81,12 @@ class SudokuWords {
     }
 
     /**
-     * Gets the locale for the puzzle for Text to Speech
+     * Gets the locale for the puzzle for Text to Speech.
+     * This is always the locale of the foreign language.
      * @return  The locale
      */
     Locale getVoiceLocale() {
-        return locales[1]; // The foreign language
+        return locales[1];
     }
 
     /**
@@ -103,6 +106,9 @@ class SudokuWords {
         return languageNames[0];
     }
 
+    boolean currentLanguageIsNotForeignLanguage() {
+        return !getCurrentLanguage().equals(getForeignLanguage());
+    }
 
     /**
      * Load a new set of word pairs for use in a puzzle.

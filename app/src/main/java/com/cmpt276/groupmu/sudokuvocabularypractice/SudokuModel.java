@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * SudokuPuzzle class. Contains methods:
- * - Reading and converting from input streams of sudoku files
- * - Checking and verifying parameters of the sudoku
+ * SudokuModel class. Contains methods:
+ * - getWordAtPosition family, and other functions using both words and position
+ * - Listening mode data and methods
+ * - Restoring data from Bundle
  */
 class SudokuModel {
 
@@ -91,10 +92,10 @@ class SudokuModel {
 
     /**
      * Log the cause of the restore failing.
-     * @param varname The variable that was null in the bundle.
+     * @param missingVar The variable that was null in the bundle.
      */
-    private void restoreState_Log_Failed_null(String varname) {
-        Log.i("restoreState","Could not restore model state: "+varname+" was null");
+    private void restoreState_Log_Failed_null(String missingVar) {
+        Log.i("restoreState","Could not restore model state: "+missingVar+" was null");
     }
 
     /**

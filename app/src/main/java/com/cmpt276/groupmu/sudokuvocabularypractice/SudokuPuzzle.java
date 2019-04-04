@@ -111,7 +111,6 @@ class SudokuPuzzle {
      * @param value     The value to set the puzzle index to
      */
     void setValueAtPosition(int position, int value) {
-        //assert (0<=value) && (value<=9);
         workingPuzzle[position] = value;
     }
 

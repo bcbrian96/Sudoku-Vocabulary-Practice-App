@@ -49,9 +49,12 @@ public class SudokuAdapter extends BaseAdapter {
     }
 
     /**
-     * This is called everytime the app is started, or is restored from a landscape change
+     * This is called every time the app is started, or is restored from a landscape change
+     * This is called whenever Android needs to generate a TextView object in the GridView.
+     * For example, when the adapter is set through generateGrid(),
+     * or if the grid is scrolled so a new row is brought onto the screen.
      * @param position  The position within the GridView
-     * @param convertView   The reused view. Set to null so that we don't have recycling
+     * @param convertView   The reused view. If it is null, we generate the textView; otherwise we reuse the convertView.
      * @param parent    The parent of the view, used to inflate our textview to the proper
      *                  dimensions
      * @return  A TextView
