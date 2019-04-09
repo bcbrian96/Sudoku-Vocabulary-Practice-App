@@ -33,6 +33,16 @@ public class SudokuPuzzleTest {
     }
 
     @Test
+    public void testGetValueAt(){
+        SudokuPuzzle puzzle = new SudokuPuzzle(9);
+        for (int i=0; i<puzzle.workingPuzzle.length; i++){
+            assertEquals(puzzle.originalPuzzle[i], puzzle.getValueAt(i));
+            puzzle.setValueAt(i, i);
+            assertEquals(i, puzzle.getValueAt(i));
+        }
+    }
+
+    @Test
     public void testSetValueAtPosition() {
 
         SudokuPuzzle testPreset = new SudokuPuzzle(9);
@@ -75,7 +85,7 @@ public class SudokuPuzzleTest {
     }
 
     @Test
-    public void testGetBox(){
+    public void testGetBox9(){
             SudokuPuzzle testBox = new SudokuPuzzle(9);
             // Manually set the section of the puzzle (relies on 9x9 size)
             for (int i=0; i<9; i++) {
@@ -87,17 +97,35 @@ public class SudokuPuzzleTest {
     }
 
     @Test
-    public void testContainDuplicates (){
-            SudokuPuzzle testPuzzle = new SudokuPuzzle(9);
-            // Zero the array: containsDuplicates should ignore zeros (empty squares)
-            for (int i=0; i<testPuzzle.workingPuzzle.length; i++) {
-                testPuzzle.workingPuzzle[i] = 0;
+    public void testGetBox12(){
+        SudokuPuzzle puzzle = new SudokuPuzzle(12);
+        // Manually set the section of the puzzle we want
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 4; col++) {
+                puzzle.setValueAt(col + row*puzzle.size, col + row*4);
             }
-            assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
-            // Add duplicates
-            testPuzzle.workingPuzzle[0] = 1;
-            testPuzzle.workingPuzzle[1] = 1;
-            assertTrue(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
+        }
+        int[] expectBox = {0,1,2,3,4,5,6,7,8,9,10,11};
+        assertArrayEquals(expectBox, puzzle.getBox(0));
+    }
+
+    @Test
+    public void testContainDuplicates (){
+        SudokuPuzzle testPuzzle = new SudokuPuzzle(9);
+        // Zero the array: containsDuplicates should ignore zeros (empty squares)
+        for (int i=0; i<testPuzzle.workingPuzzle.length; i++) {
+            testPuzzle.workingPuzzle[i] = 0;
+        }
+        assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
+        // Set all to different values
+        for (int i=0; i<testPuzzle.workingPuzzle.length; i++) {
+            testPuzzle.workingPuzzle[i] = i;
+        }
+        assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
+        // Add duplicates
+        testPuzzle.workingPuzzle[0] = 1;
+        testPuzzle.workingPuzzle[1] = 1;
+        assertTrue(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
     }
 
     @Test
