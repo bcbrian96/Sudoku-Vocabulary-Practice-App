@@ -69,4 +69,20 @@ public class SudokuModelTest {
         assertFalse(model.puzzle.checkSudokuIncorrect());
     }
 
+    @Test
+    public void testHints(){
+        SudokuModel model = new SudokuModel(9);
+        // Set a cell so it's not empty.
+        model.puzzle.setValueAt(0,1);
+        String hinted_word = model.getWordAtPosition(0);
+        assertEquals(0, model.words.numHints[model.puzzle.getValueAt(0)]);
+        model.logHint(0);
+        assertEquals(1, model.words.numHints[model.puzzle.getValueAt(0)]);
+        // Get new words and reset hints (puzzle has not changed)
+        model.words.loadWordPairs();
+        assertEquals(0, model.words.numHints[model.puzzle.getValueAt(0)]);
+        // New words should contain the hinted word.
+        assertTrue(Arrays.asList(model.words.englishWords).contains(hinted_word));
+    }
+
 }
