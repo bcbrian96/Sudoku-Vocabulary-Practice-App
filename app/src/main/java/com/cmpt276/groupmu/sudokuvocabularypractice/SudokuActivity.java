@@ -90,7 +90,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         languageSwitch = findViewById(R.id.language_switch);
         languageSwitch.setOnClickListener(this);
         languageSwitch.setChecked(true);
-        languageSwitch.setText(model.words.getCurrentLanguage());
+        languageSwitch.setText(model.words.getPresetLanguage());
 
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
@@ -266,11 +266,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      */
     public void changeLanguage() {
         model.words.swapLanguage();
-        languageSwitch.setText(model.words.getCurrentLanguage());
+        languageSwitch.setText(model.words.getPresetLanguage());
         mTTS.setLanguage(model.words.getVoiceLocale());
 
         generateGrid();
-        Toast.makeText(this, "Language Switched: " + model.words.getCurrentLanguage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Language Switched: " + model.words.getPresetLanguage(), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -285,9 +285,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             modeSwitch.setText(R.string.mode_listening);
             // Listening mode: ensure foreign language is spoken (prefilled)
             // and native language is input.
-            if (model.words.currentLanguageIsNotForeignLanguage()) {
+            if (model.words.presetLanguageIsNotForeignLanguage()) {
                 model.words.swapLanguage();
-                languageSwitch.setText(model.words.getCurrentLanguage());
+                languageSwitch.setText(model.words.getPresetLanguage());
                 languageSwitch.setChecked(false);
             }
             languageSwitch.setEnabled(false); // disable changing language

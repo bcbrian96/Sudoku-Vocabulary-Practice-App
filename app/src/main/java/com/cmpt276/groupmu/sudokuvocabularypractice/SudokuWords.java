@@ -17,10 +17,10 @@ class SudokuWords {
     // Can be: 4, 6, 9, 12
     int difficulty;
 
+    /** languageIndex keeps track of which language is the 'choice' (input) language. */
     int languageIndex = 1;
-    private String languageNames[] = {"French","English"};
+    private String languageNames[] = {"English","French"};
     private Locale locales[] = {Locale.ENGLISH, Locale.FRENCH};
-    // Note: languageNames[] is in the opposite order of Words[].
     // Default words (numbers)
     private String[] defaultFrenchWords = {" ", "Un", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix", "Onze", "Douze"};
     private String[] defaultEnglishWords = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"};
@@ -53,6 +53,11 @@ class SudokuWords {
         this.size = initial_size;
         resetHints();
         loadWordPairs();
+    }
+
+    SudokuWords(final int initial_size, final int initial_language) {
+        this(initial_size);
+        languageIndex = initial_language;
     }
 
     /**
@@ -101,10 +106,10 @@ class SudokuWords {
     /**
      * Gets the current language. This is the language of the words
      * that are displayed in *Preset* cells.
-     * @return  The current language as a string
+     * @return  The preset language as a string
      */
-    String getCurrentLanguage() {
-        return languageNames[languageIndex];
+    String getPresetLanguage() {
+        return languageNames[languageIndex^1];
     }
 
     /**
@@ -112,11 +117,11 @@ class SudokuWords {
      * @return  The foreign language as a string
      */
     String getForeignLanguage() {
-        return languageNames[0];
+        return languageNames[1];
     }
 
-    boolean currentLanguageIsNotForeignLanguage() {
-        return !getCurrentLanguage().equals(getForeignLanguage());
+    boolean presetLanguageIsNotForeignLanguage() {
+        return !getPresetLanguage().equals(getForeignLanguage());
     }
 
     /**
