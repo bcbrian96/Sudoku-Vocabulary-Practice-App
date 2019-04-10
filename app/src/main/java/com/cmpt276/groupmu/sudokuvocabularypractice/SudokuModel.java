@@ -1,8 +1,5 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.os.Bundle;
-import android.util.Log;
-
 /**
  * SudokuModel class. Contains methods:
  * - getWordAtPosition family, and other functions using both words and position
@@ -120,56 +117,6 @@ class SudokuModel {
         puzzle.generateNewPuzzle();
         // get Words for puzzle
         words.loadWordPairs();
-    }
-
-    /**
-     * Log the cause of the restore failing.
-     * @param missingVar The variable that was null in the bundle.
-     */
-    private void restoreState_Log_Failed_null(String missingVar) {
-        Log.i("restoreState","Could not restore model state: "+missingVar+" was null");
-    }
-
-    /**
-     * Restores the state from bundle, eg. after a rotation.
-     * @param savedState The savedstate bundle, passed from the Activity class
-     * @return true if successful; otherwise (if any parameter not set) false.
-     */
-    boolean restoreState(Bundle savedState) {
-        int temp_size = savedState.getInt("gridSize", -1);
-        if (temp_size==-1) {
-            Log.i("restoreState", "No saved state to restore");
-            return false;
-        }
-        int[] wp = savedState.getIntArray("workingPuzzle");
-        int[] op = savedState.getIntArray("originalPuzzle");
-        String[] allFw = savedState.getStringArray("frenchWords");
-        String[] allEw = savedState.getStringArray("englishWords");
-        int[] pairI = savedState.getIntArray("pairIndexes");
-        int[] hints = savedState.getIntArray("numHints");
-        int lang = savedState.getInt("languageIndex", 1);
-        boolean normalMode = savedState.getBoolean("isNormalMode",true);
-        // if any were not restored correctly (null), fail and do not update anything.
-        if (wp==null) { restoreState_Log_Failed_null("workingPuzzle"); return false; }
-        if (op==null) { restoreState_Log_Failed_null("originalPuzzle"); return false; }
-        if (allFw==null) { restoreState_Log_Failed_null("frenchWords"); return false; }
-        if (allEw==null) { restoreState_Log_Failed_null("englishWords"); return false; }
-        if (pairI==null) { restoreState_Log_Failed_null("pairIndexes"); return false; }
-        if (hints==null) { restoreState_Log_Failed_null("numHints"); return false; }
-        // All successful
-        puzzle.setPuzzleSize(temp_size);
-        words.size = temp_size;
-        this.detected_User_Choice_Size = temp_size;
-        puzzle.workingPuzzle = wp;
-        puzzle.originalPuzzle = op;
-        words.allEnglishWords = allEw;
-        words.allFrenchWords = allFw;
-        words.pairIndexes = pairI;
-        words.numHints = hints;
-        words.languageIndex = lang;
-        if(!normalMode) mode = Mode.LISTENING;
-        words.generatePuzzleWordlist();
-        return true;
     }
 
 }

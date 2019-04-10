@@ -478,31 +478,60 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
+     * Log the cause of the restore failing.
+     * @param missingVar The variable that was null in the bundle.
+     */
+    private void restoreState_Log_Failed_null(String missingVar) {
+        Log.i("restoreState","Could not restore model state: "+missingVar+" was null");
+    }
+
+    /**
      * Restores the app to the state before the orientation of the devices was changed
      * @param savedInstanceState    The Bundle object to restore the state parameters from.
      */
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.i(null, "generate instance");
         super.onRestoreInstanceState(savedInstanceState);
 
         // Restore UI state from the savedInstanceState.
         // This bundle has also been passed to onCreate.
 
-        int temp_size = savedInstanceState.getInt("gridSize");
-        if (model.restoreState(savedInstanceState)) {
-            // update if successful
-            this.detected_User_Choice_Size = temp_size;
-            // Make sure listening mode is handled correctly.
-            // this is kind of a hack, since really it should be handled in the Model.
-            if (!model.isNormalMode()) {
-                model.swapMode();
-                changeMode(); // make sure switches are correct
-            }
-            Log.d("restoreInstance", "restoreState successful");
-        } else {
-            Log.d("restoreInstance", "restoreState failed");
+        int temp_size = savedInstanceState.getInt("gridSize", -1);
+        if (temp_size==-1) {
+            Log.i("restoreState", "No saved state to restore");
+            return;
         }
+        int[] wp = savedInstanceState.getIntArray("workingPuzzle");
+        int[] op = savedInstanceState.getIntArray("originalPuzzle");
+        String[] allFw = savedInstanceState.getStringArray("frenchWords");
+        String[] allEw = savedInstanceState.getStringArray("englishWords");
+        int[] pairI = savedInstanceState.getIntArray("pairIndexes");
+        int[] hints = savedInstanceState.getIntArray("numHints");
+        int lang = savedInstanceState.getInt("languageIndex", 1);
+        boolean normalMode = savedInstanceState.getBoolean("isNormalMode",true);
+        // if any were not restored correctly (null), fail and do not update anything.
+        if (wp==null) { restoreState_Log_Failed_null("workingPuzzle"); return; }
+        if (op==null) { restoreState_Log_Failed_null("originalPuzzle"); return; }
+        if (allFw==null) { restoreState_Log_Failed_null("frenchWords"); return; }
+        if (allEw==null) { restoreState_Log_Failed_null("englishWords"); return; }
+        if (pairI==null) { restoreState_Log_Failed_null("pairIndexes"); return; }
+        if (hints==null) { restoreState_Log_Failed_null("numHints"); return; }
+        // All successful
+        model.puzzle.setPuzzleSize(temp_size);
+        model.words.size = temp_size;
+        this.detected_User_Choice_Size = temp_size;
+        model.detected_User_Choice_Size = temp_size;
+        model.puzzle.workingPuzzle = wp;
+        model.puzzle.originalPuzzle = op;
+        model.words.allEnglishWords = allEw;
+        model.words.allFrenchWords = allFw;
+        model.words.pairIndexes = pairI;
+        model.words.numHints = hints;
+        model.words.languageIndex = lang;
+        model.words.generatePuzzleWordlist();
+        // Make sure listening mode is handled correctly.
+        if(!normalMode) changeMode(); // make sure switches are correct
+        Log.d("restoreInstance", "restoreState successful");
 
     }
 
