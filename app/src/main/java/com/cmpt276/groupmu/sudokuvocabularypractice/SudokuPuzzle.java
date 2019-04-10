@@ -46,12 +46,12 @@ class SudokuPuzzle {
 
     /**
      * Set the puzzle size.
-     * @param gridScale The size of the puzzle (width and height).
+     * @param newSize The size of the puzzle (width and height).
      */
-    void setPuzzleSize (int gridScale){
-        difficulty = (gridScale*gridScale)/3;
-        size = gridScale;
-        switch (gridScale) {
+    void setPuzzleSize (int newSize){
+        difficulty = (newSize*newSize)/3;
+        size = newSize;
+        switch (newSize) {
             case 4:
                 boxWidth = 2;
                 break;
@@ -63,7 +63,7 @@ class SudokuPuzzle {
                 boxWidth = 4;
                 break;
         }
-        boxHeight = gridScale / boxWidth;
+        boxHeight = newSize / boxWidth;
     }
 
 //    /**
@@ -162,7 +162,6 @@ class SudokuPuzzle {
      * Create a new random puzzle from a SudokuGenerator
      */
     void generateNewPuzzle() {
-        // generate Puzzle
         SudokuGenerator scalable = new SudokuGenerator(size,difficulty);
         scalable.generatePuzzle();
         scalable.scalablePuzzleGenerator();
@@ -264,7 +263,6 @@ class SudokuPuzzle {
                 return true; // we already saw this word
             }
             seen_yet[value] = true;
-
         }
         return false;
     }

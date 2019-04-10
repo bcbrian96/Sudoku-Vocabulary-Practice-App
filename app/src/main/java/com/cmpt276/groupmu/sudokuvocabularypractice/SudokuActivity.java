@@ -397,9 +397,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.i(null, "Uri: " + uri.getPath());
                     try {
                         // Parse the words within the CSV file
-                        parseCSV(uri);
+                        loadWordsFromCSV(uri);
                     } catch (Exception e) {
-                        Log.i(null, "parseCSV: " + e.toString());
+                        Log.i("loadWordsFromCSV", e.toString());
                     }
                 } else {
                     Log.i(null, "Uri is null from onActivityResult()");
@@ -413,7 +413,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
      * Parse the words from a CSV file given a file path URI variable. See format of CSV above.
      * @param uri   The URI of the CSV file to be parsed
      */
-    public void parseCSV(Uri uri) {
+    public void loadWordsFromCSV(Uri uri) {
         try {
 
             // Setup a buffer to read the CSV line by line
@@ -444,7 +444,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             generateGrid();
         }
         catch (Exception e) {
-            Log.e("TAG",e.toString());
+            Log.e("loadWordsFromCSV",e.toString());
         }
     }
 
