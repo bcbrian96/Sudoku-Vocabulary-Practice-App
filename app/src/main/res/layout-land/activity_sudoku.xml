@@ -121,14 +121,15 @@
     </LinearLayout>
 
 
-        <TextView
+
+        <Chronometer
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:layout_gravity="center"
-
+            android:id="@+id/time"
+            android:textColor="@color/colorAccent"
             android:layout_marginTop="10dp"
-            android:text="SUDOKU"/>
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 
