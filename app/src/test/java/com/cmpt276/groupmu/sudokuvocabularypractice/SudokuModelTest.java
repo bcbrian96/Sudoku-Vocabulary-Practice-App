@@ -35,7 +35,6 @@ public class SudokuModelTest {
         }
     }
 
-
     @Test
     public void testSwapMode(){
         SudokuModel testMode = new SudokuModel(9);
@@ -44,6 +43,26 @@ public class SudokuModelTest {
         testMode.swapMode();
         assertTrue(testMode.isNormalMode());
 
+    }
+
+    @Test
+    public void testGetDisplayedText(){
+        SudokuModel model = new SudokuModel(9);
+        assertTrue(model.isNormalMode());
+        int last_index = model.puzzle.workingPuzzle.length-1;
+        model.puzzle.setValueAt(0,0);
+        model.puzzle.setValueAt(1,1);
+        model.puzzle.setValueAt(last_index,1);
+        // test Normal mode
+        // Note: getWordAtPosition may return " " (space) instead of empty string.
+        assertEquals("",model.getDisplayedTextAt(0));
+        assertEquals(model.getWordAtPosition(1), model.getDisplayedTextAt(1));
+        assertEquals(model.getWordAtPosition(1), model.getDisplayedTextAt(last_index));
+        // test Listening mode
+        model.swapMode();
+        assertEquals("",model.getDisplayedTextAt(0));
+        assertEquals("1",model.getDisplayedTextAt(1));
+        assertEquals("1",model.getDisplayedTextAt(last_index));
     }
 
     @Test

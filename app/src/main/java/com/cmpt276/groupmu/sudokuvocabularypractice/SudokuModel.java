@@ -15,7 +15,6 @@ class SudokuModel {
     SudokuWords words;
 
     int detected_User_Choice_Size;
-    int difficulty;
 
 
     // Store Reading and Listening modes.
@@ -77,7 +76,7 @@ class SudokuModel {
     }
 
     /**
-     * Gets the translation for a word in the GridView
+     * Gets the translation for a word in the GridView (used for hints)
      * @param position  The position within the sudoku puzzle array
      * @return  The translation of the word as a string at the given position
      */
@@ -87,6 +86,21 @@ class SudokuModel {
             return words.getPresetWords()[wordIndex];
         }
         return words.getChoiceWords()[wordIndex];
+    }
+
+    /**
+     * Gets text that should be displayed on screen at position.
+     * Handles differences between Reading and Listening modes.
+     * @param position The position within the sudoku puzzle array
+     * @return  The text that should be displayed on screen for that cell
+     */
+    String getDisplayedTextAt(final int position) {
+        // Never show text for empty cells (0)
+        if (puzzle.getValueAt(position)==0) return "";
+        // In reading mode, show words
+        else if (isNormalMode()) return getWordAtPosition(position);
+        // In listening mode, show numbers
+        else return Integer.toString(puzzle.getValueAt(position));
     }
 
     /**

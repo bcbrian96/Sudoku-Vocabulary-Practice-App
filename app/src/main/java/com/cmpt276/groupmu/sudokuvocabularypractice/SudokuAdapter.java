@@ -93,16 +93,7 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            if (model.isNormalMode()) {
-                textView.setText(capitalize(model.getWordAtPosition(position)));
-            } else {
-                // In listening comprehension mode, display numbers.
-                if ((int)getItem(position)==0){
-                    textView.setText("");
-                } else {
-                    textView.setText(capitalize(getItem(position).toString()));
-                }
-            }
+            textView.setText(capitalize(model.getDisplayedTextAt(position)));
 
         } else {
             textView = (TextView) convertView;

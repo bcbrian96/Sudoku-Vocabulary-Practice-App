@@ -153,7 +153,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (dialogChoice != -1) {
                     model.puzzle.setValueAt(position, dialogChoice);
 
-                    set.setText(capitalize(model.getWordAtPosition(position)));
+                    set.setText(capitalize(model.getDisplayedTextAt(position)));
 
                 }
             }
