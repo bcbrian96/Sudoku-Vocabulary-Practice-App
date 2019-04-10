@@ -117,8 +117,8 @@ public class SudokuPuzzleTest {
             testPuzzle.workingPuzzle[i] = 0;
         }
         assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
-        // Set all to different values
-        for (int i=0; i<testPuzzle.workingPuzzle.length; i++) {
+        // Set the first <size> to different values 1..size
+        for (int i=1; i<testPuzzle.size+1; i++) {
             testPuzzle.workingPuzzle[i] = i;
         }
         assertFalse(testPuzzle.containsDuplicates(testPuzzle.workingPuzzle));
