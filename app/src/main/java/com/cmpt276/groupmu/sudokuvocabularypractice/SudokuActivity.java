@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.GridView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Timer;
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -48,6 +52,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     Switch modeSwitch;
     private static final int READ_REQUEST_CODE = 42;
 //    int GridSizeChoice;
+
+    private Chronometer timer;
+    Button pauseTimer;
+    private boolean running;
+    private long pauseOffset;
 
     /** TextToSpeech */
     private TextToSpeech mTTS;
@@ -94,6 +103,17 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
+
+        // Pause button initialization
+        pauseTimer = findViewById(R.id.setPauseButton);
+        pauseTimer.setOnClickListener(this);
+
+        // Chronometer initialization
+        pauseOffset = 0;
+        timer = findViewById(R.id.time);
+        timer.setBase(SystemClock.elapsedRealtime());
+        timer.start();
+        running = true;
 
         /*
           Method for initializing text to speech variable mTTS
@@ -208,6 +228,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     model.puzzle.resetPuzzle();
                     generateGrid();
+                    timer.setBase(SystemClock.elapsedRealtime());
+                    pauseOffset = 0;
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
                 }
@@ -245,9 +267,31 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("New Puzzle error:","" + e);
                 }
                 break;
+            case R.id.setPauseButton:
+                try {
+                    setPauseTimer();
+                } catch (Exception e){
+                    Log.d("Timer error:","" + e);
+                }
         }
     }
 
+    /**
+     * Function that pauses/starts the timer
+     */
+    public void setPauseTimer(){
+        if(running){
+            timer.stop();
+            pauseOffset = SystemClock.elapsedRealtime() - timer.getBase();
+            running = false;
+            pauseTimer.setText("Start");
+        } else{
+            timer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
+            timer.start();
+            running = true;
+            pauseTimer.setText("Pause");
+        }
+    }
     /**
      * Check the current progress of the user against the puzzle solution
      */
