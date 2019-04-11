@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@color/colorBackground">
+    android:background="@color/colorBackground"
+    android:baselineAligned="false">
 
 <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_weight="0.5">
@@ -19,7 +19,6 @@
         android:layout_gravity="start"
         android:horizontalSpacing="4dp"
         android:numColumns="9"
-        android:outlineSpotShadowColor="@color/colorAccent"
         android:stretchMode="columnWidth"
         android:textAlignment="center"
         android:verticalSpacing="4dp"
@@ -29,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="right">
+        android:gravity="start">
 
 
 
@@ -47,11 +46,10 @@
             android:fontFeatureSettings="bold"
 
             android:text="@string/mode_normal"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:textColor="@color/colorAccent"
 
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
 
@@ -61,20 +59,20 @@
         <Switch
             android:switchPadding="20dp"
             android:layoutDirection="rtl"
-            android:textSize="12dp"
-            android:paddingRight="10dp"
+            android:textSize="12sp"
+            android:paddingStart="10dp"
             android:id="@+id/language_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFeatureSettings="bold"
             android:textColor="@color/colorAccent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:text="English"
+            android:layout_marginStart="10dp"
+            android:text="@string/english"
 
             android:layout_marginBottom="10dp"
 
-            android:checked="false"/>
+            android:checked="false"
+            tools:ignore="RtlSymmetry" />
 
 
     </LinearLayout>
@@ -88,62 +86,63 @@
             android:id="@+id/resetBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:layout_marginTop="10dp"
-            android:text="Reset"/>
+            android:text="@string/reset"/>
         <Button
             android:id="@+id/newPuzzle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:background="@color/colorAccent"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_weight="2"
-            android:text="New Puzzle"/>
+            android:text="@string/new_puzzle"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkSudoku"
             android:background="@color/colorAccent"
             android:layout_weight="4"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:text="Check Sudoku"/>
+            android:layout_marginStart="10dp"
+            android:text="@string/check_sudoku"/>
         <Button xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/get_file"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             android:background="@color/colorAccent"
-            android:layout_gravity="right"
+            android:layout_gravity="start"
             android:layout_marginTop="10dp"
-            android:text="Open CSV"
-            android:onClick="openFile"/>
+            android:text="@string/open_csv"
+            />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/undoButton"
             android:background="@color/colorAccent"
             android:layout_marginTop="5dp"
-            android:layout_gravity="end"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="start"
             android:layout_marginEnd="10dp"
-            android:text="Undo"/>
+            android:text="@string/undo"/>
     </LinearLayout>
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:layout_gravity="center"
 
             android:layout_marginTop="10dp"
-            android:text="SUDOKU"/>
+            android:text="@string/sudoku"/>
 
     </LinearLayout>
 

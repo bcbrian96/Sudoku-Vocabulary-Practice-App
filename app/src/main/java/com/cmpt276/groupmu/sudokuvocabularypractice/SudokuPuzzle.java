@@ -1,13 +1,8 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-import static android.content.ContentValues.TAG;
 
 
 
@@ -44,8 +39,7 @@ class SudokuPuzzle {
     // boxHeight * boxWidth == size must be true
 
     int[] workingPuzzle = originalPuzzle.clone();
-    int[] solutionPuzzle;
-    int difficulty;
+    private int difficulty;
 
 //    private ArrayList<int[]> allPuzzles = new ArrayList<>();
     int undo = 0;
@@ -67,7 +61,7 @@ class SudokuPuzzle {
     String[] frenchWords = Arrays.copyOfRange(allFrenchWords,0,detected_User_Choice_Size+2);
     String[] englishWords = Arrays.copyOfRange(allEnglishWords,0,detected_User_Choice_Size+2);
 
-    String[][] Words = {englishWords, frenchWords};
+    private String[][] Words = {englishWords, frenchWords};
 
     /**
      * numHints stores the number of times a hint was asked for each pair.
@@ -309,7 +303,7 @@ class SudokuPuzzle {
         scalable.scalablePuzzleGenerator();
         originalPuzzle = scalable.gamePuzzle;
         workingPuzzle = originalPuzzle.clone();
-        solutionPuzzle = scalable.solutionPuzzle;
+//        int[] solutionPuzzle = scalable.solutionPuzzle;
         // get Words for puzzle
         loadWordPairs();
     }

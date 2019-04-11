@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.graphics.Color;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -25,7 +25,7 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -106,6 +106,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
 
+        // Undo button inititalization
         undoButton = findViewById(R.id.undoButton);
         undoButton.setOnClickListener(this);
 
@@ -172,6 +173,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     puzzle.undoPosition[puzzle.undo] = position;
                     puzzle.undo++;
 
+                    // Correct undo array indices if necessary
                     if(puzzle.undo > 9){
                         puzzle.undo = 0;
                     }
@@ -275,6 +277,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.undoButton:
                 try{
                     if(puzzle.countUndo == 0){
+                        // Max undo == 10 for now
                         Toast.makeText(this, "Can't Undo", Toast.LENGTH_SHORT).show();
                     } else{
                         puzzle.setUndo();
