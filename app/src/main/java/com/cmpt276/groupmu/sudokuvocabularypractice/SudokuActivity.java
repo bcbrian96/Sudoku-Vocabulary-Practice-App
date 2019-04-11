@@ -106,7 +106,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
 
-        // Undo button inititalization
+        // Undo button initialization
         undoButton = findViewById(R.id.undoButton);
         undoButton.setOnClickListener(this);
 
@@ -168,20 +168,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;
                 if (dialogChoice != -1) {
-                    // Store for the undo process
-                    puzzle.undoValue[puzzle.undo] = puzzle.getValueAtPosition(position);
-                    puzzle.undoPosition[puzzle.undo] = position;
-                    puzzle.undo++;
-
-                    // Correct undo array indices if necessary
-                    if(puzzle.undo > 9){
-                        puzzle.undo = 0;
-                    }
-                    if(puzzle.countUndo < 10){
-                        puzzle.countUndo++;
-                    }
                     // Set the new value from the dialogue builder
-                    puzzle.setValueAtPosition(position, dialogChoice);
+                    puzzle.setValueWithUndo(position, dialogChoice);
                     set.setText(capitalize(puzzle.getWordAtPosition(position)));
 
                 }
@@ -276,14 +264,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.undoButton:
                 try{
-                    if(puzzle.countUndo == 0){
-                        // Max undo == 10 for now
-                        Toast.makeText(this, "Can't Undo", Toast.LENGTH_SHORT).show();
-                    } else{
-                        puzzle.setUndo();
-                        generateGrid();
-                    }
-
+                    puzzle.undoLastMove();
+                    generateGrid();
                 } catch (Exception e){
                     Log.d("Undo Error:", "" + e);
                 }

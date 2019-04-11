@@ -1,9 +1,10 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.util.Pair;
+
 import java.util.Arrays;
 import java.util.Locale;
-
-
+import java.util.Stack;
 
 
 /**
@@ -42,10 +43,13 @@ class SudokuPuzzle {
     private int difficulty;
 
 //    private ArrayList<int[]> allPuzzles = new ArrayList<>();
-    int undo = 0;
-    int countUndo = 0;
-    int[] undoValue = {0,0,0,0,0,0,0,0,0,0};
-    int[] undoPosition = {0,0,0,0,0,0,0,0,0,0};
+    /**
+     * undoStack is a Stack of <position, previous_value>.
+     * Documentation recommends using Deque, but that is less intuitive.
+     * There may be slowdown because Stack (based on Vector) does
+     * synchronization (requests a lock) for every operation.
+     */
+    private Stack<Pair<Integer,Integer>> undoStack = new Stack<>();
 
     int languageIndex = 1;
     private String languageNames[] = {"French","English"};
@@ -95,16 +99,11 @@ class SudokuPuzzle {
         newPuzzle();
     }
 
-    void setUndo(){
-
-        undo--;
-        if(undo < 0){
-            undo = 9;
+    void undoLastMove(){
+        Pair<Integer, Integer> lastMove = undoStack.pop();
+        if (lastMove != null) {
+            setValueAtPosition(lastMove.first, lastMove.second);
         }
-
-        setValueAtPosition(undoPosition[undo], undoValue[undo]);
-
-        countUndo--;
     }
 
 //    /**
@@ -221,6 +220,12 @@ class SudokuPuzzle {
             return Words[languageIndex^1][workingPuzzle[position]];
         }
         return Words[languageIndex][workingPuzzle[position]];
+    }
+
+    void setValueWithUndo(final int position, final int value) {
+        // Record the position and the previous value there, before setting the new value.
+        undoStack.push(new Pair<>(position, workingPuzzle[position]));
+        setValueAtPosition(position, value);
     }
 
     /**
