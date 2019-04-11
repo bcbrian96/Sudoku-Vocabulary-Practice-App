@@ -1,6 +1,8 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
 import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -40,12 +42,16 @@ class SudokuPuzzle {
     private int boxHeight = 3;
     private int boxWidth = 3;
     // boxHeight * boxWidth == size must be true
+
     int[] workingPuzzle = originalPuzzle.clone();
     int[] solutionPuzzle;
     int difficulty;
 
 //    private ArrayList<int[]> allPuzzles = new ArrayList<>();
-
+    int undo = 0;
+    int countUndo = 0;
+    int[] undoValue = {0,0,0,0,0,0,0,0,0,0};
+    int[] undoPosition = {0,0,0,0,0,0,0,0,0,0};
 
     int languageIndex = 1;
     private String languageNames[] = {"French","English"};
@@ -93,6 +99,18 @@ class SudokuPuzzle {
         }
         boxHeight = gridScale / boxWidth;
         newPuzzle();
+    }
+
+    void setUndo(){
+
+        undo--;
+        if(undo < 0){
+            undo = 9;
+        }
+
+        setValueAtPosition(undoPosition[undo], undoValue[undo]);
+
+        countUndo--;
     }
 
 //    /**
@@ -154,6 +172,8 @@ class SudokuPuzzle {
     boolean isNormalMode() {
         return mode==Mode.NORMAL;
     }
+
+
 
     /**
      * Swap the mode from NORMAL (Reading) to LISTENING mode (and vise-versa)
@@ -217,6 +237,10 @@ class SudokuPuzzle {
     void setValueAtPosition(int position, int value) {
         //assert (0<=value) && (value<=9);
         workingPuzzle[position] = value;
+    }
+
+    int getValueAtPosition(int position){
+        return workingPuzzle[position];
     }
 
     /**

@@ -57,6 +57,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     //int detected_User_Choice_Size;
 //    int GridSizeChoice;
 
+    Button undoButton;
+
     /** TextToSpeech */
     private TextToSpeech mTTS;
     float pitch = (float)0.7;
@@ -103,6 +105,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
+
+        undoButton = findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(this);
 
         /*
           Method for initializing text to speech variable mTTS
@@ -162,8 +167,19 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(DialogInterface dialog, int which) {
                 dialogChoice = which;
                 if (dialogChoice != -1) {
-                    puzzle.setValueAtPosition(position, dialogChoice);
+                    // Store for the undo process
+                    puzzle.undoValue[puzzle.undo] = puzzle.getValueAtPosition(position);
+                    puzzle.undoPosition[puzzle.undo] = position;
+                    puzzle.undo++;
 
+                    if(puzzle.undo > 9){
+                        puzzle.undo = 0;
+                    }
+                    if(puzzle.countUndo < 10){
+                        puzzle.countUndo++;
+                    }
+                    // Set the new value from the dialogue builder
+                    puzzle.setValueAtPosition(position, dialogChoice);
                     set.setText(capitalize(puzzle.getWordAtPosition(position)));
 
                 }
@@ -256,6 +272,18 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("New Puzzle error:","" + e);
                 }
                 break;
+            case R.id.undoButton:
+                try{
+                    if(puzzle.countUndo == 0){
+                        Toast.makeText(this, "Can't Undo", Toast.LENGTH_SHORT).show();
+                    } else{
+                        puzzle.setUndo();
+                        generateGrid();
+                    }
+
+                } catch (Exception e){
+                    Log.d("Undo Error:", "" + e);
+                }
         }
     }
 
