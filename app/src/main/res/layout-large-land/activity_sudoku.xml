@@ -124,6 +124,15 @@
             android:layout_marginTop="10dp"
             android:text="Open CSV"
             android:onClick="openFile"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/undoButton"
+            android:background="@color/colorAccent"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:text="Undo"/>
     </LinearLayout>
 
 
