@@ -22,26 +22,27 @@ import android.widget.TextView;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
 /**
- * The Sudoku Adapter allows Java to interact with the GUI
+ * The Sudoku Adapter allows dynamically populating the GridView
+ * with the appropriate number of TextView cells for the puzzle.
  */
 public class SudokuAdapter extends BaseAdapter {
 
     // Global Variables
     private Context context;
-    private SudokuPuzzle puzzle;
+    private SudokuModel model;
 
     // Initialization
-    SudokuAdapter(Context c, SudokuPuzzle puzzle) {
+    SudokuAdapter(Context c, SudokuModel model) {
         this.context = c;
-        this.puzzle = puzzle;
+        this.model = model;
     }
 
     public int getCount() {
-        return puzzle.workingPuzzle.length;
+        return model.puzzle.workingPuzzle.length;
     }
 
     public Object getItem(int position) {
-        return puzzle.workingPuzzle[position];
+        return model.puzzle.getValueAt(position);
     }
 
     public long getItemId(int position) {
@@ -49,9 +50,12 @@ public class SudokuAdapter extends BaseAdapter {
     }
 
     /**
-     * This is called everytime the app is started, or is restored from a landscape change
+     * This is called every time the app is started, or is restored from a landscape change
+     * This is called whenever Android needs to generate a TextView object in the GridView.
+     * For example, when the adapter is set through generateGrid(),
+     * or if the grid is scrolled so a new row is brought onto the screen.
      * @param position  The position within the GridView
-     * @param convertView   The reused view. Set to null so that we don't have recycling
+     * @param convertView   The reused view. If it is null, we generate the textView; otherwise we reuse the convertView.
      * @param parent    The parent of the view, used to inflate our textview to the proper
      *                  dimensions
      * @return  A TextView
@@ -70,7 +74,7 @@ public class SudokuAdapter extends BaseAdapter {
 
             // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
             // scales to fit the parent, has the appropriate colours/contrasts etc...
-            if (puzzle.isNotPreset(position)) {
+            if (model.puzzle.isNotPreset(position)) {
                 textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
                 textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
             } else {
@@ -89,16 +93,7 @@ public class SudokuAdapter extends BaseAdapter {
             textView.setGravity(Gravity.CENTER);
             textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
 
-            if (puzzle.isNormalMode()) {
-                textView.setText(capitalize(puzzle.getWordAtPosition(position)));
-            } else {
-                // In listening comprehension mode, display numbers.
-                if ((int)getItem(position)==0){
-                    textView.setText("");
-                } else {
-                    textView.setText(capitalize(getItem(position).toString()));
-                }
-            }
+            textView.setText(capitalize(model.getDisplayedTextAt(position)));
 
         } else {
             textView = (TextView) convertView;
