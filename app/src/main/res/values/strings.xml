@@ -10,4 +10,5 @@
     <string name="reset">Reset</string>
     <string name="new_puzzle">New Puzzle</string>
     <string name="pause">Pause</string>
+    <string name="start">Start</string>
 </resources>
