@@ -79,6 +79,9 @@ class SudokuPuzzle {
         boxHeight = newSize / boxWidth;
     }
 
+    /**
+     * Undoes the last move by popping previous state from undoStack.
+     */
     void undoLastMove(){
         Pair<Integer, Integer> lastMove = undoStack.pop();
         if (lastMove != null) {
@@ -144,6 +147,11 @@ class SudokuPuzzle {
         workingPuzzle[position] = value;
     }
 
+    /**
+     * First adds the move to the undoStack so it can be undone, then sets the value.
+     * @param position  The position within the sudoku puzzle array
+     * @param value     The value to set the puzzle index to
+     */
     void setValueWithUndo(final int position, final int value) {
         // Record the position and the previous value there, before setting the new value.
         undoStack.push(new Pair<>(position, workingPuzzle[position]));
@@ -194,6 +202,8 @@ class SudokuPuzzle {
         originalPuzzle = scalable.gamePuzzle;
         workingPuzzle = originalPuzzle.clone();
 //        solutionPuzzle = scalable.solutionPuzzle;
+        // The old undo stack is now invalid, so clear it.
+        undoStack.clear();
     }
 
 
@@ -202,6 +212,8 @@ class SudokuPuzzle {
      */
     void resetPuzzle() {
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, size*size);
+        // The undo stack is now invalid, so clear it.
+        undoStack.clear();
     }
 
 
