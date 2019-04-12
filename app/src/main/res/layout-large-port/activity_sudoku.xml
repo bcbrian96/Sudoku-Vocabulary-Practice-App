@@ -137,7 +137,13 @@
             android:text="@string/undo"/>
     </LinearLayout>
 
-
+        <Button
+            android:id="@+id/setPauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:layout_marginStart="10dp"
+            android:text="Pause" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,6 +152,15 @@
 
             android:layout_marginTop="10dp"
             android:text="@string/sudoku"/>
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/time"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 

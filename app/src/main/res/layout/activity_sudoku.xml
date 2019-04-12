@@ -101,6 +101,13 @@
                 android:layout_marginStart="30dp"
                 android:text="@string/open_csv"
                 />
+            <Button
+                android:id="@+id/setPauseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:layout_marginStart="10dp"
+                android:text="Pause" />
 
         </LinearLayout>
     </LinearLayout>
@@ -166,8 +173,22 @@
             android:layout_height="wrap_content"
             android:textSize="40sp"
             android:layout_marginTop="10dp"
-            android:text="@string/sudoku"/>
+            android:text="@string/sudoku"
+            android:layout_gravity="center_horizontal"/>
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/time"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridText"/>
 
 
 
