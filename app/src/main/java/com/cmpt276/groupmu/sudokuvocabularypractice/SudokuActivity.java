@@ -24,8 +24,7 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
+
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -53,6 +52,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     private static final int READ_REQUEST_CODE = 42;
 //    int GridSizeChoice;
 
+    Button undoButton;
     private Chronometer timer;
     Button pauseTimer;
     private boolean running;
@@ -103,6 +103,10 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         modeSwitch = findViewById(R.id.mode_switch);
         modeSwitch.setOnClickListener(this);
+
+        // Undo button initialization
+        undoButton = findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(this);
 
         // Pause button initialization
         pauseTimer = findViewById(R.id.setPauseButton);
@@ -171,7 +175,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(DialogInterface dialog, int dialogChoice) {
                 if (dialogChoice != -1) {
-                    model.puzzle.setValueAt(position, dialogChoice);
+                    // Set the new value from the dialogue builder
+                    model.puzzle.setValueWithUndo(position, dialogChoice);
 
                     set.setText(capitalize(model.getDisplayedTextAt(position)));
 
@@ -267,12 +272,21 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d("New Puzzle error:","" + e);
                 }
                 break;
+            case R.id.undoButton:
+                try{
+                    model.puzzle.undoLastMove();
+                    generateGrid();
+                } catch (Exception e){
+                    Log.d("Undo Error:", "" + e);
+                }
+                break;
             case R.id.setPauseButton:
                 try {
                     setPauseTimer();
                 } catch (Exception e){
                     Log.d("Timer error:","" + e);
                 }
+                break;
         }
     }
 

@@ -1,5 +1,9 @@
 package com.cmpt276.groupmu.sudokuvocabularypractice;
 
+import android.util.Pair;
+
+import java.util.Stack;
+
 
 /**
  * SudokuPuzzle class. Contains methods:
@@ -32,9 +36,18 @@ class SudokuPuzzle {
     private int boxHeight = 3;
     private int boxWidth = 3;
     // boxHeight * boxWidth == size must be true
+
     int[] workingPuzzle = originalPuzzle.clone();
-    int[] solutionPuzzle;
-    int difficulty;
+//    int[] solutionPuzzle;
+    private int difficulty;
+
+    /**
+     * undoStack is a Stack of <position, previous_value>.
+     * Documentation recommends using Deque, but that is less intuitive.
+     * There may be slowdown because Stack (based on Vector) does
+     * synchronization (requests a lock) for every operation.
+     */
+    private Stack<Pair<Integer,Integer>> undoStack = new Stack<>();
 
     /**
      * Constructor for SudokuPuzzle. Sets the size.
@@ -64,6 +77,16 @@ class SudokuPuzzle {
                 break;
         }
         boxHeight = newSize / boxWidth;
+    }
+
+    /**
+     * Undoes the last move by popping previous state from undoStack.
+     */
+    void undoLastMove(){
+        Pair<Integer, Integer> lastMove = undoStack.pop();
+        if (lastMove != null) {
+            setValueAt(lastMove.first, lastMove.second);
+        }
     }
 
 //    /**
@@ -125,6 +148,17 @@ class SudokuPuzzle {
     }
 
     /**
+     * First adds the move to the undoStack so it can be undone, then sets the value.
+     * @param position  The position within the sudoku puzzle array
+     * @param value     The value to set the puzzle index to
+     */
+    void setValueWithUndo(final int position, final int value) {
+        // Record the position and the previous value there, before setting the new value.
+        undoStack.push(new Pair<>(position, workingPuzzle[position]));
+        setValueAt(position, value);
+    }
+
+    /**
      * Gets the value at a position in the puzzle.
      * @param position  The position within the sudoku puzzle array
      * @return          The value (number) at that position
@@ -167,7 +201,9 @@ class SudokuPuzzle {
         scalable.scalablePuzzleGenerator();
         originalPuzzle = scalable.gamePuzzle;
         workingPuzzle = originalPuzzle.clone();
-        solutionPuzzle = scalable.solutionPuzzle;
+//        solutionPuzzle = scalable.solutionPuzzle;
+        // The old undo stack is now invalid, so clear it.
+        undoStack.clear();
     }
 
 
@@ -176,6 +212,8 @@ class SudokuPuzzle {
      */
     void resetPuzzle() {
         System.arraycopy(originalPuzzle, 0, workingPuzzle, 0, size*size);
+        // The undo stack is now invalid, so clear it.
+        undoStack.clear();
     }
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -125,24 +126,41 @@
             android:layout_weight="1"
             android:background="@color/colorAccent"
 
-            android:text="@string/reset"/>
+            android:text="@string/reset"
+            tools:ignore="ButtonStyle" />
         <Button
             android:id="@+id/newPuzzle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:background="@color/colorAccent"
             android:layout_marginEnd="5dp"
             android:layout_weight="2"
-            android:text="@string/new_puzzle"/>
+            android:text="@string/new_puzzle"
+            tools:ignore="ButtonStyle" />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/checkSudoku"
             android:background="@color/colorAccent"
             android:layout_weight="4"
-            android:layout_gravity="right"
-            android:text="@string/check_sudoku"/>
+            android:layout_marginTop="10dp"
+            android:layout_gravity="start"
+            android:text="@string/check_sudoku"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/undoButton"
+            android:background="@color/colorAccent"
+            android:layout_gravity="end"
+            android:text="@string/undo"/>
     </LinearLayout>
 
     <LinearLayout
