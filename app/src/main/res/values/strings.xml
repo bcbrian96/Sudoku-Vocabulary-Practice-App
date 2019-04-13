@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sudoku Vocabulary Practice</string>
+    <string name="app_name">Sudoku Vocab</string>
     <string name="mode_normal">Reading Mode</string>
     <string name="mode_listening">Listening Mode</string>
     <string name="open_csv">Open CSV</string>
