@@ -296,14 +296,15 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     public void setPauseTimer(){
         if(running){
             timer.stop();
+
             pauseOffset = SystemClock.elapsedRealtime() - timer.getBase();
             running = false;
-            pauseTimer.setText("Start");
+            pauseTimer.setText(getString(R.string.start));
         } else{
             timer.setBase(SystemClock.elapsedRealtime() - pauseOffset);
             timer.start();
             running = true;
-            pauseTimer.setText("Pause");
+            pauseTimer.setText(getString(R.string.pause));
         }
     }
     /**
@@ -528,6 +529,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         // Save current mode information.
         savedInstanceState.putInt("languageIndex", model.words.languageIndex);
         savedInstanceState.putBoolean("isNormalMode", model.isNormalMode());
+        savedInstanceState.putLong("timer", timer.getBase());
 
 
         // etc.
@@ -566,6 +568,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         int[] pairI = savedInstanceState.getIntArray("pairIndexes");
         int[] hints = savedInstanceState.getIntArray("numHints");
         int lang = savedInstanceState.getInt("languageIndex", 1);
+        long tim = savedInstanceState.getLong("timer");
         boolean normalMode = savedInstanceState.getBoolean("isNormalMode",true);
         // if any were not restored correctly (null), fail and do not update anything.
         if (wp==null) { restoreState_Log_Failed_null("workingPuzzle"); return; }
@@ -587,6 +590,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         model.words.numHints = hints;
         model.words.languageIndex = lang;
         model.words.generatePuzzleWordlist();
+        timer.setBase(tim);
         // Make sure listening mode is handled correctly.
         if(!normalMode) changeMode(); // make sure switches are correct
         Log.d("restoreInstance", "restoreState successful");

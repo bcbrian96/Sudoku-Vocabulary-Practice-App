@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"
                 android:layout_marginStart="10dp"
-                android:text="Pause" />
+                android:text="@string/pause" />
 
         </LinearLayout>
     </LinearLayout>
