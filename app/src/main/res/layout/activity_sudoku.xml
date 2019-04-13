@@ -5,6 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorBackground">
+    <ProgressBar
+        android:id="@+id/sudokuProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        android:background="#455a64"
+        android:progressTint="@color/colorWhite"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:padding="8dp"
+        />
+
 
     <RelativeLayout
         android:layout_width="match_parent"

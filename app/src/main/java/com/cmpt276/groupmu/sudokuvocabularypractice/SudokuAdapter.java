@@ -85,7 +85,7 @@ public class SudokuAdapter extends BaseAdapter {
                 textView.isAllCaps();
             }
 
-            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 100));
             //textView.setTextSize(32);
 //            textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
             TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
