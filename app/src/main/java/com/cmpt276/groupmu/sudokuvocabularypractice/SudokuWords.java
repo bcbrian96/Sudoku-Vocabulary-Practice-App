@@ -13,7 +13,7 @@ import java.util.Locale;
 class SudokuWords {
 
     /** VARIABLES */
-    int size = 9;
+    int size = 12;
     // Can be: 4, 6, 9, 12
     int difficulty;
 

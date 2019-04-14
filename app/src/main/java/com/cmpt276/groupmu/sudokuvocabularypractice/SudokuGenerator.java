@@ -15,7 +15,28 @@ class SudokuGenerator {
     Double randomNum;
       List<Integer> puzzleSolution = new ArrayList<Integer>();
       List<Integer> puzzleForGame = new ArrayList<Integer>();
-
+    int [] default6x6Sudoku = {
+            0,0,6, 1,5,0,
+            1,5,0, 0,0,3,
+            0,6,0, 5,3,2,
+            2,0,5, 4,6,0,
+            6,4,2, 3,1,5,
+            5,0,0, 0,0,6
+    };
+    int [] default12x12Sudoku = {
+            11,0,1,0, 0,0,7,0, 0,0,3,8,
+            7,9,10,0, 0,0,12,0, 11,0,1,0,
+            0,0,0,0, 11,0,0,6, 0,0,5,9,
+            0,6,0,0, 9,8,0,12, 0,0,0,0,
+            0,0,4,9, 0,0,6,0, 12,11,0,0,
+            3,12,0,0, 4,0,0,0, 8,0,0,0,
+            0,0,0,7, 0,0,0,8, 0,0,10,11,
+            0,0,11,3, 0,6,0,0, 5,9,0,0,
+            0,0,0,0, 2,0,3,11, 0,0,6,0,
+            2,11,0,0, 12,0,0,10, 0,0,0,0,
+            0,5,0,8, 0,1,0,0, 0,3,11,2,
+            6,7,0,0, 0,11,0,0, 0,5,0,4,
+    };
     /**
      * Constructor for Sudoku Generator class
      * @param puzzleSize    Size of the puzzle
@@ -35,6 +56,20 @@ class SudokuGenerator {
      */
     void generatePuzzle(){
         int insertNum;
+        if (sizeOfPuzzle == 6){
+            gamePuzzle = new int [6*6];
+            for (int i = 0; i<36;i++ ){
+               gamePuzzle[i]=default6x6Sudoku[i];
+            }
+            return;
+        }
+        if (sizeOfPuzzle == 12){
+            gamePuzzle = new int [12*12];
+            for (int i = 0; i<144;i++ ){
+                gamePuzzle[i]=default12x12Sudoku[i];
+            }
+            return;
+        }
         for (int i =0 ; i<sizeOfPuzzle; i+=sizeOfRegion){
             for (int j = 0; j<sizeOfRegion; j++){
                 for (int k = 0; k < sizeOfRegion; k++){
