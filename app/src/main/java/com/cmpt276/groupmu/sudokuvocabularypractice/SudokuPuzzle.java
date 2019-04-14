@@ -29,7 +29,7 @@ class SudokuPuzzle {
     };
 //    String[] gridSizeArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
-
+    int user_selected_size;
     int size = 9;
     // Can be: 4, 6, 9, 12
     // boxes: 2x2, 2x3, 3x3, 3x4
@@ -55,6 +55,8 @@ class SudokuPuzzle {
      * @param initial_size The initial size of the puzzle.
      */
     SudokuPuzzle(final int initial_size) {
+
+        this.user_selected_size = initial_size;
         setPuzzleSize(initial_size);
     }
 
@@ -212,9 +214,14 @@ class SudokuPuzzle {
     void generateNewPuzzle() {
         SudokuGenerator scalable = new SudokuGenerator(size,difficulty);
         scalable.generatePuzzle();
+        if (user_selected_size == 6 || user_selected_size ==12){
+            originalPuzzle = scalable.gamePuzzle;
+            workingPuzzle = originalPuzzle.clone();
+        }
+        else {
         scalable.scalablePuzzleGenerator();
         originalPuzzle = scalable.gamePuzzle;
-        workingPuzzle = originalPuzzle.clone();
+        workingPuzzle = originalPuzzle.clone();}
 //        solutionPuzzle = scalable.solutionPuzzle;
         // The old undo stack is now invalid, so clear it.
         undoStack.clear();

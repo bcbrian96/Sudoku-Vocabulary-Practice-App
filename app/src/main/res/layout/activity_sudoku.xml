@@ -173,6 +173,15 @@
             android:background="@color/colorAccent"
             android:layout_gravity="end"
             android:text="@string/undo"/>
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:id="@+id/time"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -183,18 +192,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40sp"
-            android:layout_marginTop="10dp"
+            android:textSize="30sp"
+            android:layout_marginTop="5dp"
             android:text="@string/sudoku"
             android:layout_gravity="center_horizontal"/>
-        <Chronometer
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/time"
-            android:textColor="@color/colorAccent"
-            android:layout_marginTop="10dp"
-            android:textSize="30sp"
-            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
     <TextView

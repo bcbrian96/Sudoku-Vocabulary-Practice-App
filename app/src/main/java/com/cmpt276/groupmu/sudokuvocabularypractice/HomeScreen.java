@@ -48,8 +48,8 @@ public class HomeScreen extends AppCompatActivity implements View.OnClickListene
         gridChoice = 9;
 //        String[] gridSizeArray= {"4 x 4", "6 x 6", "9 x 9", "12 x 12"};
 //        final int[] gridsize_choices = {4, 6, 9, 12};
-        String[] gridSizeArray= {"4 x 4", "9 x 9"};
-        final int[] gridsize_choices = {4, 9};
+        String[] gridSizeArray= {"4 x 4", "6 x 6", "9 x 9","12 x 12"};
+        final int[] gridsize_choices = {4, 6, 9, 12};
         gridSelect.setTitle("Select a grid size");
         gridSelect.setItems(gridSizeArray, new DialogInterface.OnClickListener() {
             @Override
