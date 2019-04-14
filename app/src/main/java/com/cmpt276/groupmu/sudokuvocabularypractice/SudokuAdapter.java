@@ -75,7 +75,8 @@ public class SudokuAdapter extends BaseAdapter {
             // Set a bunch of parameters for the TextView. Most of them are to ensure that the text
             // scales to fit the parent, has the appropriate colours/contrasts etc...
             if (model.puzzle.isNotPreset(position)) {
-                textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
+                textView.setBackground(context.getResources().getDrawable(R.drawable.textview_selector));
+//                textView.setBackgroundColor(context.getResources().getColor(R.color.input_background));
                 textView.setTextColor(context.getResources().getColor(R.color.colorAccent));
             } else {
                 textView.setBackgroundColor(context.getResources().getColor(R.color.preset_background));
@@ -85,7 +86,7 @@ public class SudokuAdapter extends BaseAdapter {
                 textView.isAllCaps();
             }
 
-            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 124));
+            textView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, 100));
             //textView.setTextSize(32);
 //            textView.setTextSize(context.getResources().getDimension(R.dimen.textsize));
             TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);

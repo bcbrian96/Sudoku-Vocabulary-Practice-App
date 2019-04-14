@@ -11,10 +11,13 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +27,6 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -63,6 +65,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float pitch = (float)0.7;
     float speed = (float)0.7;
     int detected_User_Choice_Size;
+
+    ProgressBar progressBar;
+//    int previousSelectedItem = -1;
 //    String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
     /**
@@ -74,6 +79,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
         // For every activity
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sudoku);
 
         // Declared Variables Initialization
@@ -119,6 +126,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         timer.start();
         running = true;
 
+        // Progress bar initialization
+        progressBar = findViewById(R.id.sudokuProgress);
+        progressBar.setMax(model.puzzle.emptyCount);
         /*
           Method for initializing text to speech variable mTTS
          */
@@ -177,7 +187,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (dialogChoice != -1) {
                     // Set the new value from the dialogue builder
                     model.puzzle.setValueWithUndo(position, dialogChoice);
-
+                    updateProgressBar();
                     set.setText(capitalize(model.getDisplayedTextAt(position)));
 
                 }
@@ -203,6 +213,17 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (v != null) {
                     /* Empty cell, dropdown menu */
                     if (model.puzzle.isNotPreset(position)) {
+//                        TextView cellView = (TextView) v;
+//                        cellView.setSelected(true);
+//                        cellView.setBackgroundColor(getResources().getColor(R.color.selected_background));
+//                        if (previousSelectedItem != -1 && previousSelectedItem != position) {
+//                            TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
+//                            previousSelectedView.setSelected(false);
+//                            previousSelectedView.setBackgroundColor(getResources().getColor(R.color.input_background));
+//                        }
+                        v.setSelected(true);
+
+//                        previousSelectedItem = position;
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
                         /* Reading Comprehension (normal) Mode: Toast hint */
@@ -235,6 +256,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     generateGrid();
                     timer.setBase(SystemClock.elapsedRealtime());
                     pauseOffset = 0;
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
                 }
@@ -268,6 +290,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     model.newPuzzle();
                     generateGrid();
+                    progressBar.setMax(model.puzzle.emptyCount);
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
                 }
@@ -276,6 +300,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 try{
                     model.puzzle.undoLastMove();
                     generateGrid();
+                    updateProgressBar();
                 } catch (Exception e){
                     Log.d("Undo Error:", "" + e);
                 }
@@ -597,6 +622,15 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    /**
+     * Update the progress bar when the puzzle changes.
+     */
+    void updateProgressBar(){
+        progressBar.setProgress(model.puzzle.getProgress());
+        if (progressBar.getProgress() == progressBar.getMax()){
+            Toast.makeText(this,"All cells are filled, please click CheckSudoku Button",Toast.LENGTH_LONG).show();
+        }
+    }
 }
 
 
