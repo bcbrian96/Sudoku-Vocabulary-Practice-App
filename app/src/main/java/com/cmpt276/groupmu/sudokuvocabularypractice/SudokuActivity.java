@@ -3,7 +3,6 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -28,7 +27,6 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -69,7 +67,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     int detected_User_Choice_Size;
 
     ProgressBar progressBar;
-    int previousSelectedItem = -1;
+//    int previousSelectedItem = -1;
 //    String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
     /**
@@ -215,15 +213,17 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (v != null) {
                     /* Empty cell, dropdown menu */
                     if (model.puzzle.isNotPreset(position)) {
-                        TextView cellView = (TextView) v;
-                        cellView.setBackgroundColor(getResources().getColor(R.color.selected_background));
-                        TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
-                        if (previousSelectedItem != -1 && previousSelectedItem != position) {
-                            previousSelectedView.setSelected(false);
-                            previousSelectedView.setBackgroundColor(getResources().getColor(R.color.input_background));
-                        }
+//                        TextView cellView = (TextView) v;
+//                        cellView.setSelected(true);
+//                        cellView.setBackgroundColor(getResources().getColor(R.color.selected_background));
+//                        if (previousSelectedItem != -1 && previousSelectedItem != position) {
+//                            TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
+//                            previousSelectedView.setSelected(false);
+//                            previousSelectedView.setBackgroundColor(getResources().getColor(R.color.input_background));
+//                        }
+                        v.setSelected(true);
 
-                        previousSelectedItem = position;
+//                        previousSelectedItem = position;
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
                         /* Reading Comprehension (normal) Mode: Toast hint */

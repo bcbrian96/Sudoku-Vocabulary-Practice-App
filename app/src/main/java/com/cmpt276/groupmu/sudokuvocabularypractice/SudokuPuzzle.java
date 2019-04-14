@@ -218,6 +218,11 @@ class SudokuPuzzle {
 //        solutionPuzzle = scalable.solutionPuzzle;
         // The old undo stack is now invalid, so clear it.
         undoStack.clear();
+        // Count number of empty cells in new puzzle
+        emptyCount = 0;
+        for (int i : originalPuzzle) {
+            if (i==0) emptyCount++;
+        }
     }
 
 
