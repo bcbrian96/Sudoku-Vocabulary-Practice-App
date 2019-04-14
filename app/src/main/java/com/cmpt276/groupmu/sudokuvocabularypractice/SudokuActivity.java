@@ -67,10 +67,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float pitch = (float)0.7;
     float speed = (float)0.7;
     int detected_User_Choice_Size;
-    ProgressBar sudokuProgress;
-    int progressCount = 0;
-    int emptyCellsCount = 0;
-    int updatedCellCount = 0;
+
+    ProgressBar progressBar;
     int previousSelectedItem = -1;
 //    String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
@@ -130,8 +128,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         timer.start();
         running = true;
 
-        sudokuProgress = findViewById(R.id.sudokuProgress);
-        sudokuProgress.setMax(getProgressBarLength(model.puzzle.originalPuzzle));
+        // Progress bar initialization
+        progressBar = findViewById(R.id.sudokuProgress);
+        progressBar.setMax(model.puzzle.emptyCount);
         /*
           Method for initializing text to speech variable mTTS
          */
@@ -258,7 +257,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     generateGrid();
                     timer.setBase(SystemClock.elapsedRealtime());
                     pauseOffset = 0;
-                    sudokuProgress.setProgress(0);
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
                 }
@@ -292,7 +291,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     model.newPuzzle();
                     generateGrid();
-                    sudokuProgress.setProgress(0);
+                    progressBar.setMax(model.puzzle.emptyCount);
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
                 }
@@ -622,27 +622,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         Log.d("restoreInstance", "restoreState successful");
 
     }
-    int getProgressBarLength(int[] puzzle){
-        int puzzleLength = model.detected_User_Choice_Size*model.detected_User_Choice_Size;
-        for (int i = 0; i< puzzleLength; i++){
-            if (puzzle[i]==0)
-                emptyCellsCount++;
-        }
-        return emptyCellsCount;
-    }
-    int  updatedEmptyCell (int[] puzzle) {
-        updatedCellCount =0;
-        for (int i = 0; i<model.detected_User_Choice_Size*model.detected_User_Choice_Size; i++){
-            if (puzzle[i]==0)
-                updatedCellCount++;
-        }
-        return updatedCellCount;
-    }
+
+    /**
+     * Update the progress bar when the puzzle changes.
+     */
     void updateProgressBar(){
-        updatedCellCount =  updatedEmptyCell(model.puzzle.workingPuzzle);
-        progressCount = emptyCellsCount - updatedCellCount;
-        sudokuProgress.setProgress(progressCount);
-        if (progressCount == emptyCellsCount){
+        progressBar.setProgress(model.puzzle.getProgress());
+        if (progressBar.getProgress() == progressBar.getMax()){
             Toast.makeText(this,"All cells are filled, please click CheckSudoku Button",Toast.LENGTH_LONG).show();
         }
     }
