@@ -216,12 +216,11 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     /* Empty cell, dropdown menu */
                     if (model.puzzle.isNotPreset(position)) {
                         TextView cellView = (TextView) v;
-                        cellView.setBackgroundColor(Color.parseColor("#009faf"));
+                        cellView.setBackgroundColor(getResources().getColor(R.color.selected_background));
                         TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
-                        if (previousSelectedItem != -1)
-                        {   if(previousSelectedItem != position){
+                        if (previousSelectedItem != -1 && previousSelectedItem != position) {
                             previousSelectedView.setSelected(false);
-                            previousSelectedView.setBackgroundColor(Color.parseColor("#007080"));}
+                            previousSelectedView.setBackgroundColor(getResources().getColor(R.color.input_background));
                         }
 
                         previousSelectedItem = position;
