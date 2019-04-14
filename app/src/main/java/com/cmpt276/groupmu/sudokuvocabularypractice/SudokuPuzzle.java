@@ -48,6 +48,7 @@ class SudokuPuzzle {
      * synchronization (requests a lock) for every operation.
      */
     private Stack<Pair<Integer,Integer>> undoStack = new Stack<>();
+    int emptyCount; // Keep track of # empty cells (difficulty)
 
     /**
      * Constructor for SudokuPuzzle. Sets the size.
@@ -178,6 +179,19 @@ class SudokuPuzzle {
         return originalPuzzle[position]==0;
     }
 
+    /**
+     * Get the progress towards completion of the puzzle. Does not check correctness.
+     * @return The number of cells filled in in the puzzle.
+     */
+    int getProgress() {
+        int filled_in = 0;
+        for (int i=0; i<workingPuzzle.length; i++) {
+            if (workingPuzzle[i] != originalPuzzle[i]) {
+                filled_in++;
+            }
+        }
+        return filled_in;
+    }
 
 //    /**
 //     * Checks that the puzzleIndex is within the bounds of the puzzle size and then copies the
@@ -211,6 +225,11 @@ class SudokuPuzzle {
 //        solutionPuzzle = scalable.solutionPuzzle;
         // The old undo stack is now invalid, so clear it.
         undoStack.clear();
+        // Count number of empty cells in new puzzle
+        emptyCount = 0;
+        for (int i : originalPuzzle) {
+            if (i==0) emptyCount++;
+        }
     }
 
 

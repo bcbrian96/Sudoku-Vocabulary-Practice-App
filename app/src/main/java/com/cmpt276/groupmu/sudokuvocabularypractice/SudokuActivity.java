@@ -3,7 +3,6 @@ package com.cmpt276.groupmu.sudokuvocabularypractice;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -28,7 +27,6 @@ import com.opencsv.CSVReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
 
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 
@@ -67,11 +65,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
     float pitch = (float)0.7;
     float speed = (float)0.7;
     int detected_User_Choice_Size;
-    ProgressBar sudokuProgress;
-    int progressCount = 0;
-    int emptyCellsCount = 0;
-    int updatedCellCount = 0;
-    int previousSelectedItem = -1;
+
+    ProgressBar progressBar;
+//    int previousSelectedItem = -1;
 //    String[] newGameArray= {"4 x 4", "6 x 6","9 x 9", "12 x 12"};
 
     /**
@@ -130,8 +126,9 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         timer.start();
         running = true;
 
-        sudokuProgress = findViewById(R.id.sudokuProgress);
-        sudokuProgress.setMax(getProgressBarLength(model.puzzle.originalPuzzle));
+        // Progress bar initialization
+        progressBar = findViewById(R.id.sudokuProgress);
+        progressBar.setMax(model.puzzle.emptyCount);
         /*
           Method for initializing text to speech variable mTTS
          */
@@ -216,16 +213,17 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 if (v != null) {
                     /* Empty cell, dropdown menu */
                     if (model.puzzle.isNotPreset(position)) {
-                        TextView cellView = (TextView) v;
-                        cellView.setBackgroundColor(Color.parseColor("#009faf"));
-                        TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
-                        if (previousSelectedItem != -1)
-                        {   if(previousSelectedItem != position){
-                            previousSelectedView.setSelected(false);
-                            previousSelectedView.setBackgroundColor(Color.parseColor("#007080"));}
-                        }
+//                        TextView cellView = (TextView) v;
+//                        cellView.setSelected(true);
+//                        cellView.setBackgroundColor(getResources().getColor(R.color.selected_background));
+//                        if (previousSelectedItem != -1 && previousSelectedItem != position) {
+//                            TextView previousSelectedView = (TextView) grid.getChildAt(previousSelectedItem);
+//                            previousSelectedView.setSelected(false);
+//                            previousSelectedView.setBackgroundColor(getResources().getColor(R.color.input_background));
+//                        }
+                        v.setSelected(true);
 
-                        previousSelectedItem = position;
+//                        previousSelectedItem = position;
                         dialogBuilder((TextView) v, position); // Choose a value for the cell.
                     } else {
                         /* Reading Comprehension (normal) Mode: Toast hint */
@@ -258,7 +256,7 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                     generateGrid();
                     timer.setBase(SystemClock.elapsedRealtime());
                     pauseOffset = 0;
-                    sudokuProgress.setProgress(0);
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("Can not reset", " " + e);
                 }
@@ -292,7 +290,8 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     model.newPuzzle();
                     generateGrid();
-                    sudokuProgress.setProgress(0);
+                    progressBar.setMax(model.puzzle.emptyCount);
+                    progressBar.setProgress(0);
                 } catch (Exception e) {
                     Log.d("New Puzzle error:","" + e);
                 }
@@ -622,27 +621,13 @@ public class SudokuActivity extends AppCompatActivity implements View.OnClickLis
         Log.d("restoreInstance", "restoreState successful");
 
     }
-    int getProgressBarLength(int[] puzzle){
-        int puzzleLength = model.detected_User_Choice_Size*model.detected_User_Choice_Size;
-        for (int i = 0; i< puzzleLength; i++){
-            if (puzzle[i]==0)
-                emptyCellsCount++;
-        }
-        return emptyCellsCount;
-    }
-    int  updatedEmptyCell (int[] puzzle) {
-        updatedCellCount =0;
-        for (int i = 0; i<model.detected_User_Choice_Size*model.detected_User_Choice_Size; i++){
-            if (puzzle[i]==0)
-                updatedCellCount++;
-        }
-        return updatedCellCount;
-    }
+
+    /**
+     * Update the progress bar when the puzzle changes.
+     */
     void updateProgressBar(){
-        updatedCellCount =  updatedEmptyCell(model.puzzle.workingPuzzle);
-        progressCount = emptyCellsCount - updatedCellCount;
-        sudokuProgress.setProgress(progressCount);
-        if (progressCount == emptyCellsCount){
+        progressBar.setProgress(model.puzzle.getProgress());
+        if (progressBar.getProgress() == progressBar.getMax()){
             Toast.makeText(this,"All cells are filled, please click CheckSudoku Button",Toast.LENGTH_LONG).show();
         }
     }
